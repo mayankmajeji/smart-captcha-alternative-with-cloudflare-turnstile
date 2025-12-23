@@ -6,8 +6,8 @@
  * @package TurnstileWP
  */
 
-if (! function_exists('render_setting_field')) {
-	function render_setting_field($field, $value)
+if (! function_exists('turnstilewp_render_setting_field')) {
+	function turnstilewp_render_setting_field($field, $value)
 	{
 		$type = $field['type'] ?? 'text';
 		// Special case: content field type should be rendered as a standalone block
@@ -111,8 +111,8 @@ if (! function_exists('render_setting_field')) {
 	}
 }
 
-if (! function_exists('render_setting_fields_grouped')) {
-	function render_setting_fields_grouped($fields, $values)
+if (! function_exists('turnstilewp_render_setting_fields_grouped')) {
+	function turnstilewp_render_setting_fields_grouped($fields, $values)
 	{
 		$last_group = null;
 		$open_group = false;
@@ -147,10 +147,10 @@ if (! function_exists('render_setting_fields_grouped')) {
 			if (empty($group) && ! empty($field['field_id']) && in_array($field['field_id'], array('tswp_show_for_logged_in', 'tswp_guest_only'), true)) {
 				echo '<div class="turnstilewp-field-group turnstilewp-field turnstilewp-field-type-checkbox">';
 				echo '<div class="turnstilewp-group-title"></div>';
-				render_setting_field($field, $values[$field['field_id']] ?? $field['default'] ?? '');
+				turnstilewp_render_setting_field($field, $values[$field['field_id']] ?? $field['default'] ?? '');
 				echo '</div>';
 			} else {
-				render_setting_field($field, $values[$field['field_id']] ?? $field['default'] ?? '');
+				turnstilewp_render_setting_field($field, $values[$field['field_id']] ?? $field['default'] ?? '');
 			}
 			if ($group && $group !== $next_group) {
 				echo '</div>';

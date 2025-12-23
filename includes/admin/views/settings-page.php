@@ -104,7 +104,7 @@ echo 'nav-tab-active';}
 						<h3><?php echo esc_html(ucwords(str_replace('_', ' ', $section_id))); ?></h3>
 						<div class="turnstilewp-sub-section">
 							<?php foreach ( $fields as $field ) : ?>
-								<?php render_setting_field($field, $values[ $field['field_id'] ] ?? $field['default'] ?? ''); ?>
+								<?php turnstilewp_render_setting_field($field, $values[ $field['field_id'] ] ?? $field['default'] ?? ''); ?>
 							<?php endforeach; ?>
 						</div>
 					</div>

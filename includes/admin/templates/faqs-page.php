@@ -1,4 +1,5 @@
 <?php
+
 /**
  * FAQs Page Template
  *
@@ -109,7 +110,7 @@ $theme = wp_get_theme();
 										printf(
 											/* translators: %s: WordPress.org support forum link */
 											esc_html__('Support is provided through the %s.', 'smart-cloudflare-turnstile'),
-											'<a href="https://wordpress.org/support/plugin/smart-captcha-alternative-cloudflare-turnstile/" target="_blank" rel="noopener">' . esc_html__('official WordPress.org plugin support forum', 'smart-cloudflare-turnstile') . '</a>'
+											'<a href="https://wordpress.org/support/plugin/smart-cloudflare-turnstile/" target="_blank" rel="noopener">' . esc_html__('official WordPress.org plugin support forum', 'smart-cloudflare-turnstile') . '</a>'
 										);
 										?>
 									</p>
@@ -118,7 +119,7 @@ $theme = wp_get_theme();
 										printf(
 											/* translators: %s: GitHub repository link */
 											esc_html__('Bug reports and development discussions can also be submitted via the %s.', 'smart-cloudflare-turnstile'),
-											'<a href="https://github.com/mayankmajeji/smart-captcha-alternative-cloudflare-turnstile" target="_blank" rel="noopener">' . esc_html__('plugin\'s GitHub repository', 'smart-cloudflare-turnstile') . '</a>'
+											'<a href="https://github.com/mayankmajeji/smart-cloudflare-turnstile" target="_blank" rel="noopener">' . esc_html__('plugin\'s GitHub repository', 'smart-cloudflare-turnstile') . '</a>'
 										);
 										?>
 									</p>
@@ -132,7 +133,7 @@ $theme = wp_get_theme();
 										printf(
 											/* translators: %s: GitHub repository link */
 											esc_html__('If you discover a security issue, please report it responsibly via the %s or through a recognized vulnerability disclosure program. Do not post security issues publicly.', 'smart-cloudflare-turnstile'),
-											'<a href="https://github.com/mayankmajeji/smart-captcha-alternative-cloudflare-turnstile" target="_blank" rel="noopener">' . esc_html__('plugin\'s GitHub repository', 'smart-cloudflare-turnstile') . '</a>'
+											'<a href="https://github.com/mayankmajeji/smart-cloudflare-turnstile" target="_blank" rel="noopener">' . esc_html__('plugin\'s GitHub repository', 'smart-cloudflare-turnstile') . '</a>'
 										);
 										?>
 									</p>

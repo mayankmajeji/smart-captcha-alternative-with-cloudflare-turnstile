@@ -1,15 +1,14 @@
 # Files
 /composer.lock
+.DS_Store
+**/.DS_Store
+__MACOSX
+**/__MACOSX
 
 # Directories
 /vendor
 /node_modules
-assets/.DS_Store
-.DS_Store
-
 .github/
 .vscode/
 .specify/
 Wordpress/
-.DS_Store
-.DS_Store

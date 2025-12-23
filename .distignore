@@ -43,6 +43,9 @@ TurnstileWP-Documentation.html
 
 # OS files
 .DS_Store
+**/.DS_Store
+__MACOSX
+**/__MACOSX
 Thumbs.db
 
 # Source files (keep compiled only)

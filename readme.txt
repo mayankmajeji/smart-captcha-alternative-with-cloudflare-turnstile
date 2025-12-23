@@ -31,7 +31,7 @@ Smart CAPTCHA Alternative integrates [Cloudflare Turnstile](https://www.cloudfla
 
 == Installation ==
 
-1. Upload the `smart-captcha-alternative-cloudflare-turnstile` folder to `/wp-content/plugins/`, or install via Plugins → Add New.
+1. Upload the `smart-cloudflare-turnstile` folder to `/wp-content/plugins/`, or install via Plugins → Add New.
 2. Activate "Smart CAPTCHA Alternative with Cloudflare Turnstile".
 3. Go to Settings → Smart CAPTCHA Alternative and enter your Cloudflare Turnstile Site & Secret keys.
 
@@ -47,7 +47,7 @@ Yes. Turnstile is available for WooCommerce Login, Registration, Reset Password,
 The script is loaded only when required and can be deferred. The plugin aims to keep a minimal footprint.
 
 = Where can I find full documentation? =
-Visit the [plugin support forum](https://wordpress.org/support/plugin/smart-captcha-alternative-cloudflare-turnstile/) or check the [GitHub repository](https://github.com/mayankmajeji/smart-captcha-alternative-cloudflare-turnstile) for documentation and examples.
+Visit the [plugin support forum](https://wordpress.org/support/plugin/smart-cloudflare-turnstile/) or check the [GitHub repository](https://github.com/mayankmajeji/smart-cloudflare-turnstile) for documentation and examples.
 
 
 == Trademark Notice ==

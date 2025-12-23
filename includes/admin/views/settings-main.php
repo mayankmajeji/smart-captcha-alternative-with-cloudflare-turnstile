@@ -174,10 +174,10 @@ $keys_verified = get_option('turnstilewp_keys_verified', 0);
 									'content' => $constants_table,
 									'group' => 'api_keys',
 								);
-								render_setting_fields_grouped(array_values($section_fields_filtered), $values);
+								turnstilewp_render_setting_fields_grouped(array_values($section_fields_filtered), $values);
 							} else {
 								foreach ( $selected_tab as $section_id => $section_fields_arr ) {
-									render_setting_fields_grouped(array_values($section_fields_arr), $values);
+									turnstilewp_render_setting_fields_grouped(array_values($section_fields_arr), $values);
 								}
 							}
 							?>

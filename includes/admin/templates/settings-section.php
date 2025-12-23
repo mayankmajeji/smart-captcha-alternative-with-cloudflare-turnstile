@@ -27,7 +27,7 @@ $fields = $fields_structure[ $tab ] ?? array();
 	<div class="turnstilewp-section" id="section-<?php echo esc_attr($tab); ?>">
 		<div class="turnstilewp-sub-section">
 			<?php foreach ( $fields as $section_id => $section_fields ) : ?>
-				<?php render_setting_fields_grouped(array_values($section_fields), $values); ?>
+				<?php turnstilewp_render_setting_fields_grouped(array_values($section_fields), $values); ?>
 			<?php endforeach; ?>
 		</div>
 		<div class="turnstilewp-actions" style="margin-top:16px;">
