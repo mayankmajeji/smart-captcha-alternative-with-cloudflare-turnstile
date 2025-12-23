@@ -1,0 +1,48 @@
+// Accordion styles for TurnstileWP
+.turnstilewp-accordion {
+	margin-bottom: 32px;
+}
+.turnstilewp-accordion-item {
+	background: $color-bg;
+	border-radius: 10px;
+	box-shadow: 0 2px 8px rgba(60, 60, 60, 0.06);
+	margin-bottom: 18px;
+	border: 1px solid $color-border;
+	overflow: hidden;
+}
+.turnstilewp-accordion-header {
+	width: 100%;
+	background: #e9eef3;
+	border: none;
+	outline: none;
+	font-size: 1.15em;
+	font-weight: 600;
+	padding: 18px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+	transition: background 0.2s;
+	&:hover {
+		background: #dde4ec;
+	}
+}
+.turnstilewp-accordion-arrow {
+	font-size: 1.2em;
+	margin-left: 10px;
+	transition: transform 0.2s;
+}
+.turnstilewp-accordion-item .turnstilewp-accordion-content {
+	display: block;
+	padding: 24px 24px 18px 24px;
+	border-top: 1px solid $color-border;
+}
+.turnstilewp-accordion-item:not(.open) .turnstilewp-accordion-content {
+	display: none;
+}
+.turnstilewp-accordion-item.open .turnstilewp-accordion-arrow {
+	transform: rotate(0deg);
+}
+.turnstilewp-accordion-item:not(.open) .turnstilewp-accordion-arrow {
+	transform: rotate(180deg);
+}

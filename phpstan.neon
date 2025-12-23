@@ -1,0 +1,52 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 5
+    paths:
+        - includes
+        - turnstilewp.php
+        - uninstall.php
+    bootstrapFiles:
+        - turnstilewp.php
+    excludePaths:
+        - vendor
+        - assets
+        - wordpress
+        - tests
+        - node_modules
+    # autoload_files removed; PHPStan uses Composer autoloader by default
+    # Deprecated options removed; use ignoreErrors identifiers below
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
+        - '#Call to undefined function __(.*)#'
+        - '#Call to undefined function add_action#'
+        - '#Call to undefined function apply_filters#'
+        - '#Call to undefined function esc_attr#'
+        - '#Call to undefined function wp_nonce_field#'
+        - '#Call to undefined function is_admin#'
+        - '#Call to undefined function wp_remote_post#'
+        - '#Call to undefined function wp_remote_retrieve_body#'
+        - '#Call to undefined function is_wp_error#'
+        - '#Call to undefined function load_plugin_textdomain#'
+        - '#Call to undefined function register_activation_hook#'
+        - '#Call to undefined function register_deactivation_hook#'
+        - '#Call to undefined function plugin_dir_path#'
+        - '#Call to undefined function plugin_dir_url#'
+        - '#Call to undefined function plugin_basename#'
+        - '#Call to undefined function get_option#'
+        - '#Call to undefined function update_option#'
+        - '#Call to undefined function delete_option#'
+        - '#Call to undefined function add_filter#'
+        - '#Call to undefined function remove_filter#'
+        - '#Call to undefined function do_action#'
+        - '#Call to undefined function current_user_can#'
+        - '#Call to undefined function check_ajax_referer#'
+        - '#Call to undefined function wp_send_json_success#'
+        - '#Call to undefined function wp_send_json_error#'
+        - '#Call to undefined function sanitize_text_field#'
+        - '#Call to undefined function wp_unslash#'
+        - '#Call to undefined function error_log#'
+    inferPrivatePropertyTypeFromConstructor: true
+    reportUnmatchedIgnoredErrors: false

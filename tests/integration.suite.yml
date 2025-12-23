@@ -1,0 +1,35 @@
+actor: IntegrationTester
+modules:
+    enabled:
+        - WPLoader
+        - WPDb
+        - Asserts
+        - \Helper\Integration
+    config:
+        WPLoader:
+            wpRootFolder: "%WP_ROOT_FOLDER%"
+            dbName: "%TEST_DB_NAME%"
+            dbHost: "%TEST_DB_HOST%"
+            dbUser: "%TEST_DB_USER%"
+            dbPassword: "%TEST_DB_PASSWORD%"
+            tablePrefix: "%TEST_TABLE_PREFIX%"
+            domain: "%TEST_SITE_DOMAIN%"
+            adminEmail: "%TEST_SITE_ADMIN_EMAIL%"
+            title: "TurnstileWP Tests"
+            plugins:
+                - turnstilewp/turnstilewp.php
+            activatePlugins:
+                - turnstilewp/turnstilewp.php
+        WPDb:
+            dsn: "mysql:host=%TEST_DB_HOST%;dbname=%TEST_DB_NAME%"
+            user: "%TEST_DB_USER%"
+            password: "%TEST_DB_PASSWORD%"
+            dump: tests/_data/dump.sql
+            populate: true
+            cleanup: true
+            waitlock: 10
+            url: "%TEST_SITE_URL%"
+            tablePrefix: "%TEST_TABLE_PREFIX%"
+            urlReplacement: true
+            checkExistence: true
+

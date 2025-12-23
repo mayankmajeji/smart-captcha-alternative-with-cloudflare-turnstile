@@ -1,0 +1,16 @@
+// Card styles for TurnstileWP
+.turnstilewp-card {
+	@include card;
+	text-align: left;
+}
+.turnstilewp-card h2 {
+	margin-top: 0;
+	font-size: 1.3em;
+	font-weight: 600;
+	margin-bottom: 18px;
+	color: #222;
+	letter-spacing: 0.01em;
+}
+.turnstilewp-card + .turnstilewp-card {
+	margin-top: 32px;
+}

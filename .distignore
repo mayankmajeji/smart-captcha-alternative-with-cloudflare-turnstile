@@ -1,0 +1,63 @@
+# Development files
+node_modules/
+vendor/
+.git/
+.gitignore
+.gitattributes
+
+# Build files
+*.log
+*.zip
+build/
+dist/
+
+# Development dependencies
+composer.json
+composer.lock
+composer.phar
+package.json
+package-lock.json
+gulpfile.js
+phpcs.xml.dist
+phpcs56.xml
+phpstan.neon
+codeception.yml
+
+# Test files
+tests/
+codeception.yml
+.phpunit.result.cache
+
+# Documentation (keep only essential)
+docs/archive/
+*.plan.md
+DOCUMENTATION-CONSOLIDATION-PLAN.md
+TurnstileWP-Documentation.html
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Source files (keep compiled only)
+*.scss
+*.sass
+!assets/css/turnstile.css
+!assets/css/admin.css
+
+# Binaries
+bin/
+
+# Example files
+example-single-settings.php
+
+# Development scripts
+CHANGELOG.md
+README.md
+

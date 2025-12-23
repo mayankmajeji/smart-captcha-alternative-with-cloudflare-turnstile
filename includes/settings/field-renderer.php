@@ -1,0 +1,165 @@
+<?php
+
+/**
+ * Field Renderer Helper
+ *
+ * @package TurnstileWP
+ */
+
+if (! function_exists('render_setting_field')) {
+	function render_setting_field($field, $value)
+	{
+		$type = $field['type'] ?? 'text';
+		// Special case: content field type should be rendered as a standalone block
+		if ($type === 'content') {
+			if (! empty($field['content'])) {
+				echo '<div class="turnstilewp-content-field">' . wp_kses_post($field['content']) . '</div>';
+			}
+			return;
+		}
+		$id = esc_attr($field['field_id']);
+		$label = esc_html($field['label'] ?? '');
+		$desc = esc_html($field['description'] ?? '');
+		$options = $field['options'] ?? array();
+		$attrs = $field['attrs'] ?? array();
+		$attr_str = '';
+		foreach ($attrs as $k => $v) {
+			$attr_str .= ' ' . esc_attr($k) . '="' . esc_attr($v) . '"';
+		}
+		echo '<div class="turnstilewp-field turnstilewp-field-type-' . esc_attr($type) . '">';
+		// Label column
+		echo '<div class="turnstilewp-label">';
+		// For all fields, show the label in the label column
+		echo '<label for="' . esc_attr($id) . '"><strong>' . esc_html($label) . '</strong></label>';
+		echo '</div>';
+		// Option column
+		echo '<div class="turnstilewp-option">';
+		echo '<div class="turnstilewp-input">';
+		switch ($type) {
+			case 'text':
+			case 'email':
+			case 'url':
+			case 'number':
+				printf(
+					'<input type="%s" id="%s" name="turnstilewp_settings[%s]" value="%s" class="regular-text"%s />',
+					esc_attr($type),
+					esc_attr($id),
+					esc_attr($id),
+					esc_attr($value),
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attr_str is already escaped HTML attributes
+					$attr_str
+				);
+				break;
+			case 'password':
+				printf(
+					'<input type="password" id="%s" name="turnstilewp_settings[%s]" value="%s" class="regular-text"%s />',
+					esc_attr($id),
+					esc_attr($id),
+					esc_attr($value),
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attr_str is already escaped HTML attributes
+					$attr_str
+				);
+				break;
+			case 'checkbox':
+				// Add a hidden field to ensure unchecked values are saved
+				printf(
+					'<input type="hidden" name="turnstilewp_settings[%s]" value="0" />',
+					esc_attr($id)
+				);
+				echo '<label class="turnstilewp-toggle">';
+				printf(
+					'<input type="checkbox" id="%s" name="turnstilewp_settings[%s]" value="1" %s%s />',
+					esc_attr($id),
+					esc_attr($id),
+					checked($value, true, false),
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attr_str is already escaped HTML attributes
+					$attr_str
+				);
+				echo '<span class="turnstilewp-toggle-slider"></span></label> ';
+				break;
+			case 'select':
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attr_str is already escaped HTML attributes
+				echo '<select id="' . esc_attr($id) . '" name="turnstilewp_settings[' . esc_attr($id) . ']"' . $attr_str . '>';
+				foreach ($options as $opt_value => $opt_label) {
+					printf('<option value="%s" %s>%s</option>', esc_attr($opt_value), selected($value, $opt_value, false), esc_html($opt_label));
+				}
+				echo '</select>';
+				break;
+			case 'textarea':
+				printf(
+					'<textarea id="%s" name="turnstilewp_settings[%s]" rows="4" cols="50"%s>%s</textarea>',
+					esc_attr($id),
+					esc_attr($id),
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attr_str is already escaped HTML attributes
+					$attr_str,
+					esc_textarea($value)
+				);
+				break;
+				// Add more field types as needed
+		}
+		echo '</div>'; // .turnstilewp-input
+		if (! empty($desc)) {
+			// Allow for multiple lines/paragraphs in description
+			echo '<div class="turnstilewp-description">' . wp_kses_post(wpautop($desc)) . '</div>';
+		}
+		// Optional note support
+		if (! empty($field['note'])) {
+			echo '<div class="turnstilewp-note"><p>' . esc_html($field['note']) . '</p></div>';
+		}
+		echo '</div>';
+		echo '</div>';
+	}
+}
+
+if (! function_exists('render_setting_fields_grouped')) {
+	function render_setting_fields_grouped($fields, $values)
+	{
+		$last_group = null;
+		$open_group = false;
+		$fields = array_values($fields); // Ensure numeric keys
+		$count = count($fields);
+		foreach ($fields as $idx => $field) {
+			$group = $field['group'] ?? null;
+			$next_field = $fields[$idx + 1] ?? null;
+			$next_group = $next_field['group'] ?? null;
+			if ($group && $group !== $last_group) {
+				if ($open_group) {
+					echo '</div>';
+					$open_group = false;
+				}
+				// Group wrapper
+				$group_classes = 'turnstilewp-field-group';
+				// For the specific field tswp_show_for_logged_in, mirror checkbox row classes
+				if (! empty($field['field_id']) && $field['field_id'] === 'tswp_show_for_logged_in') {
+					$group_classes .= ' turnstilewp-field-group turnstilewp-field turnstilewp-field-type-checkbox';
+				}
+				echo '<div class="' . esc_attr($group_classes) . '">';
+				// Output group title if present on the first field of the group
+				if (! empty($field['group_title'])) {
+					echo '<div class="turnstilewp-group-title">' . wp_kses_post($field['group_title']) . '</div>';
+				} elseif (! empty($field['field_id']) && $field['field_id'] === 'tswp_show_for_logged_in') {
+					// Ensure a group-title element exists for this checkbox so styles apply uniformly
+					echo '<div class="turnstilewp-group-title"></div>';
+				}
+				$open_group = true;
+			}
+			// Special-case wrapper for standalone checkbox fields to sync styles with grouped rows
+			if (empty($group) && ! empty($field['field_id']) && in_array($field['field_id'], array('tswp_show_for_logged_in', 'tswp_guest_only'), true)) {
+				echo '<div class="turnstilewp-field-group turnstilewp-field turnstilewp-field-type-checkbox">';
+				echo '<div class="turnstilewp-group-title"></div>';
+				render_setting_field($field, $values[$field['field_id']] ?? $field['default'] ?? '');
+				echo '</div>';
+			} else {
+				render_setting_field($field, $values[$field['field_id']] ?? $field['default'] ?? '');
+			}
+			if ($group && $group !== $next_group) {
+				echo '</div>';
+				$open_group = false;
+			}
+			$last_group = $group;
+		}
+		if ($open_group) {
+			echo '</div>';
+		}
+	}
+}

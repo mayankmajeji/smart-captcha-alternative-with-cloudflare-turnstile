@@ -1,0 +1,658 @@
+/*
+ * Admin styles for TurnstileWP (SCSS source)
+ */
+
+/* Copy of admin.css, now as SCSS for further modularization and nesting */
+
+/* --- Begin admin.css content --- */
+
+// Ensure variables are available before module imports
+@use 'modules/variables';
+// Header (SCSS module)
+@use 'modules/header';
+// Layout additions (vertical tabs, body header)
+@use 'modules/layout';
+
+/* Brand color variables (scoped via CSS variables for easy theming) */
+:root {
+	--tswp-color-primary: #5344f4;
+	--tswp-color-accent: #9b51e0;
+	--tswp-color-text: #14101f;
+	--tswp-color-text-secondary: #545473;
+	--tswp-color-bg-dark: #150f1f;
+	--tswp-gradient: linear-gradient(130.29deg, #4d35fa 5.36%, #af35fa 96.02%);
+}
+
+/**
+ * Admin styles for TurnstileWP
+ */
+
+.turnstilewp-info {
+	margin-top: 2em;
+	padding: 1.5em;
+	background: #fff;
+	border: 1px solid #ccd0d4;
+	box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
+}
+
+.turnstilewp-info h2 {
+	margin-top: 0;
+	padding-bottom: 0.5em;
+	border-bottom: 1px solid #eee;
+}
+
+.turnstilewp-info p {
+	margin: 1em 0;
+}
+
+.turnstilewp-info a {
+	text-decoration: none;
+	color: var(--tswp-color-primary);
+}
+
+.faq-answer p {
+	font-size: 15px;
+	line-height: 1.5;
+	color: #222;
+
+	a {
+		color: var(--tswp-color-primary);
+	}
+}
+
+.turnstilewp-info a:hover {
+	text-decoration: underline;
+}
+
+/* Settings form styles */
+.form-table th {
+	width: 200px;
+}
+
+.form-table td {
+	padding: 15px 10px;
+}
+
+.form-table .description {
+	margin-top: 5px;
+	color: var(--tswp-color-text-secondary);
+}
+
+/* Checkbox field styles */
+.form-table input[type='checkbox'] {
+	margin-top: 2px;
+}
+
+/* Select field styles */
+.form-table select {
+	min-width: 200px;
+}
+
+/* Text field styles */
+.form-table input[type='text'],
+.form-table input[type='password'] {
+	width: 100%;
+	max-width: 400px;
+}
+
+/* Verification status styles */
+.turnstilewp-verification-status {
+	margin: 10px 0;
+	padding: 10px;
+	background: #f8f9fa;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.turnstilewp-admin {
+	#wpcontent {
+		padding-left: 0;
+
+		.wrap {
+			margin-inline: 0;
+		}
+	}
+
+	.wp-core-ui {
+		.button-primary {
+			color: #fff;
+			background: var(--tswp-color-primary);
+			border: 1px solid var(--tswp-color-primary);
+		}
+	}
+}
+
+.turnstilewp-verification-status .status-indicator {
+	display: inline-block;
+	padding: 4px 8px;
+	margin-right: 10px;
+	border-radius: 3px;
+	font-weight: 500;
+}
+
+.turnstilewp-verification-status .status-indicator.verified {
+	background: #d4edda;
+	color: #155724;
+	border: 1px solid #c3e6cb;
+}
+
+.turnstilewp-verification-status .status-indicator.unverified {
+	background: #fff3cd;
+	color: #856404;
+	border: 1px solid #ffeeba;
+}
+
+.turnstilewp-verification-status .spinner {
+	float: none;
+	margin: 4px 10px;
+	visibility: hidden;
+}
+
+.turnstilewp-verification-status .spinner.is-active {
+	visibility: visible;
+}
+
+.turnstilewp-verification-status .button {
+	margin-right: 10px;
+}
+
+.turnstilewp-field-verified {
+	background-color: #f8f8f8 !important;
+	border-color: #ddd !important;
+	color: #666 !important;
+	cursor: not-allowed !important;
+	opacity: 0.8;
+	pointer-events: none !important;
+}
+
+.turnstilewp-field-verified:focus {
+	box-shadow: none !important;
+	border-color: #ddd !important;
+}
+
+.turnstilewp-field-verified + .description {
+	color: #666;
+	font-style: italic;
+	margin-top: 0.5em;
+}
+
+.turnstilewp-spinner {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 3px solid #ccc;
+	border-top: 3px solid #0073aa;
+	border-radius: 50%;
+	animation: turnstilewp-spin 0.8s linear infinite;
+	vertical-align: middle;
+	margin-left: 10px;
+}
+
+@keyframes turnstilewp-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* Modern settings page background */
+.turnstilewp-settings-bg {
+	background: #f5f6fa;
+	padding: 40px 0;
+	min-height: 100vh;
+}
+
+/* Modern card style for each section */
+.turnstilewp-card {
+	padding: 32px 32px 24px 32px;
+}
+
+.turnstilewp-card h2 {
+	margin-top: 0;
+	font-size: 1.3em;
+	font-weight: 600;
+	margin-bottom: 18px;
+	color: var(--tswp-color-text);
+	letter-spacing: 0.01em;
+}
+
+.turnstilewp-card + .turnstilewp-card {
+	margin-top: 32px;
+}
+
+.turnstilewp-admin-layout {
+	display: grid;
+	grid-template-columns: 1fr 350px;
+	gap: 40px;
+
+	.turnstilewp-admin-sidebar {
+		position: sticky;
+		top: 100px;
+		margin-top: 50px;
+
+		.turnstilewp-sidebar-section,
+		.turnstilewp-quick-links {
+			padding: 22px;
+			background: #fff;
+			margin-bottom: 40px;
+			border: 1px solid #d9d7d8;
+		}
+	}
+
+	.button.button-primary {
+		background: var(--tswp-color-primary);
+		border-color: var(--tswp-color-primary);
+
+		&:hover,
+		&:focus {
+			background: var(--tswp-color-accent);
+			border-color: var(--tswp-color-accent);
+		}
+	}
+}
+
+.turnstilewp-section {
+	margin-top: 20px;
+	padding: 20px 0;
+
+	h3 {
+		font-style: normal;
+		font-weight: 600;
+		font-size: 22px;
+		line-height: 27px;
+		color: var(--tswp-color-text);
+		margin: 0;
+	}
+
+	.turnstilewp-sub-section h2 {
+		margin-bottom: 16px;
+	}
+
+	.turnstilewp-sub-section {
+		background-color: #fcfcfd;
+		border: solid 1px #d8d8d8;
+		margin-top: 10px;
+		padding: 0 1rem 1rem 1rem;
+
+		.turnstilewp-field {
+			display: -webkit-box;
+			display: -moz-box;
+			display: flexbox;
+			display: flex;
+			display: flex;
+			border-top: solid 1px #d8d8d8;
+			background-color: #fcfcfd;
+			margin: 0;
+			padding: 22px 0 22px 22px;
+
+			.turnstilewp-label {
+				display: -webkit-inline-box;
+				display: -moz-inline-box;
+				display: inline-flex;
+				display: -ms-inline-flexbox;
+				display: inline-flex;
+				-webkit-box-direction: normal;
+				-webkit-box-orient: horizontal;
+				-moz-box-direction: normal;
+				-moz-box-orient: horizontal;
+				flex-direction: row;
+				width: 200px;
+				min-width: 200px;
+				color: #1d2327;
+				font-weight: 400;
+				text-shadow: none;
+				vertical-align: baseline;
+			}
+
+			.turnstilewp-option {
+				/* -webkit-box-flex: 1;-webkit-box-flex 
+				 -moz-box-flex: 1;-moz-box-flex
+				 -webkit-flex-grow: 1;-webkit-flex-grow
+				 -ms-flex: 1;-ms-flex
+				 flex-grow: 1;flex-grow	 */
+				display: -webkit-inline-box;
+				display: -moz-inline-box;
+				display: inline-flex;
+				display: -ms-inline-flexbox;
+				display: inline-flex;
+				padding-left: 40px;
+				-webkit-box-direction: normal;
+				-webkit-box-orient: vertical;
+				-moz-box-direction: normal;
+				-moz-box-orient: vertical;
+				flex-direction: column;
+				padding-right: 20px;
+
+				.turnstilewp-description {
+					p {
+						color: #999;
+						margin-top: 6px;
+
+						&:last-child {
+							/* margin-bottom: 0; */
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.turnstilewp-field-group {
+		border-bottom: 1px solid #e5e7eb;
+		position: relative;
+		padding: 32px;
+		min-width: 255px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+		background: #fff;
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		.turnstilewp-group-title {
+			h2 {
+				margin: 0;
+				line-height: 1;
+
+				padding-bottom: 24px;
+				font-size: 18px;
+				font-weight: 700;
+				color: #333;
+
+				align-items: center;
+				display: flex;
+			}
+		}
+
+		.turnstilewp-field {
+			border-top: none;
+
+			&:not(:last-child) {
+				padding-bottom: 0;
+			}
+		}
+	}
+
+	.turnstilewp-content-field {
+		margin-bottom: 32px;
+
+		&:last-child {
+			padding-bottom: 22px;
+		}
+	}
+
+	.turnstilewp-preview-box {
+		border-bottom: 1px solid #e5e7eb;
+		position: relative;
+		min-width: 255px;
+		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+		background: #fff;
+
+		.twp-status-indicator-box {
+			padding: 32px;
+
+			&.unverified {
+				background: #fff7f6;
+			}
+
+			&.verified {
+				background: #f8fff8;
+
+				.dashicons {
+					height: 28px;
+					width: 28px;
+					font-size: 28px;
+					display: inline-block;
+					margin-top: -2px;
+					margin-left: -5px;
+				}
+			}
+
+			.twp-status-indicator {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				color: #1e8c1e;
+			}
+		}
+	}
+}
+
+.turnstilewp-section:last-child {
+	border-bottom: none;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+@media (width <= 600px) {
+	.turnstilewp-card {
+		padding: 18px 8px 12px;
+	}
+
+	.faq-question,
+	.faq-answer {
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+
+	.faq-answer {
+		padding-left: 2em;
+	}
+}
+
+/* Modern toggle switch styles */
+.turnstilewp-toggle {
+	position: relative;
+	display: inline-block;
+	width: 46px;
+	height: 24px;
+	vertical-align: middle;
+	margin-right: 10px;
+}
+
+.turnstilewp-toggle input[type='checkbox'] {
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.turnstilewp-toggle-slider {
+	position: absolute;
+	cursor: pointer;
+	inset: 0;
+	background-color: #e4e4e4;
+	border-radius: 24px;
+	transition: background 0.2s;
+	box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+}
+
+.turnstilewp-toggle-slider::before {
+	position: absolute;
+	content: '';
+	height: 18px;
+	width: 18px;
+	left: 3px;
+	bottom: 3px;
+	background-color: #fff;
+	border-radius: 50%;
+	transition: transform 0.2s;
+	box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+}
+
+.turnstilewp-toggle input:checked + .turnstilewp-toggle-slider {
+	background-color: var(--tswp-color-primary);
+}
+
+.turnstilewp-toggle input:checked + .turnstilewp-toggle-slider::before {
+	transform: translateX(22px);
+}
+
+/* Accordion styles for WordPress Forms */
+.turnstilewp-accordion {
+	margin-bottom: 32px;
+}
+
+.turnstilewp-accordion-item {
+	background: #fff;
+	border-radius: 10px;
+	box-shadow: 0 2px 8px rgb(60 60 60 / 6%);
+	margin-bottom: 18px;
+	border: 1px solid #e5e7eb;
+	overflow: hidden;
+}
+
+.turnstilewp-accordion-header {
+	width: 100%;
+	background: #e9eef3;
+	border: none;
+	outline: none;
+	font-size: 1.15em;
+	font-weight: 600;
+	padding: 18px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.turnstilewp-accordion-header:hover {
+	background: var(--tswp-gradient);
+	color: #fff;
+}
+
+.turnstilewp-accordion-arrow {
+	font-size: 1.2em;
+	margin-left: 10px;
+	transition: transform 0.2s;
+}
+
+.turnstilewp-accordion-item .turnstilewp-accordion-content {
+	display: block;
+	padding: 24px 24px 18px;
+	border-top: 1px solid #e5e7eb;
+}
+
+.turnstilewp-accordion-item:not(.open) .turnstilewp-accordion-content {
+	display: none;
+}
+
+.turnstilewp-accordion-item.open .turnstilewp-accordion-arrow {
+	transform: rotate(0deg);
+}
+
+.turnstilewp-accordion-item:not(.open) .turnstilewp-accordion-arrow {
+	transform: rotate(180deg);
+}
+
+/* FAQ Accordion Styles */
+
+.turnstilewp-faqs-wrapper {
+	max-width: 576px;
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	padding: 14px 24px;
+}
+
+.faq-block {
+	border-bottom: 1px solid;
+	border-color: #eee transparent;
+
+	&:last-child {
+		border-bottom: none;
+	}
+}
+
+.faq-question {
+	padding: 1em 0;
+	color: var(--tswp-color-text);
+	font-size: 16px !important;
+	margin: 1em 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.faq-question[aria-expanded='true'] {
+	// background: #f1f5f9;
+}
+
+.faq-icon {
+	display: inline-block;
+	width: 1.2em;
+	height: 1.2em;
+	margin-right: 0.8em;
+	flex-shrink: 0;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 1em 1em;
+	transition: transform 0.2s;
+	transform: rotate(180deg);
+
+	svg {
+		path {
+			stroke: #8a8a9e;
+		}
+	}
+}
+
+.faq-question[aria-expanded='true'] .faq-icon {
+	transform: rotate(0deg);
+}
+
+.faq-answer {
+	padding: 1.1em 1.3em;
+	color: #222;
+	font-size: 1em;
+	border-top: 1px solid #e5e7eb;
+	line-height: 1.7;
+	background: #f9f9f9;
+}
+
+.faq-answer ul {
+	margin: 0.5em 0 0 1.2em;
+}
+
+.faq-question:focus {
+	z-index: 1;
+}
+
+@media (max-width: 600px) {
+	.faq-question,
+	.faq-answer {
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+
+	.faq-answer {
+		padding-left: 2em;
+
+		background: linear-gradient(
+			90deg,
+			rgba(253, 227, 212, 0.25) 0%,
+			rgba(249, 218, 233, 0.25) 50%,
+			rgba(162, 209, 239, 0.25) 100%
+		);
+
+		background: linear-gradient(
+			135deg,
+			rgba(253, 227, 212, 0.25) 0%,
+			rgba(249, 218, 233, 0.25) 48.96%,
+			rgba(162, 209, 239, 0.25) 100%
+		);
+	}
+}
+// --- End admin.css content ---
+
+/* Tabs styling (used on Integrations screen) */
+.nav-tab-wrapper {
+	.nav-tab-active {
+		background: var(--tswp-color-primary);
+		border-color: var(--tswp-color-primary);
+		color: #fff;
+	}
+}

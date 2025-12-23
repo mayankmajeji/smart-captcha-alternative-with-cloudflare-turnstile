@@ -1,0 +1,82 @@
+// Common TurnstileWP header
+.turnstilewp-header {
+	padding: 12px 22px;
+	border-bottom: 1px solid #e5e7eb;
+	background: #fff;
+	margin-bottom: 12px;
+	.twp-header-inner {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+	}
+	.twp-left {
+		display: flex;
+		align-items: center;
+		.twp-logo {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			color: var(--tswp-color-text);
+			text-decoration: none;
+			img {
+				width: 24px;
+				height: 24px;
+				display: block;
+			}
+		}
+	}
+	.twp-brand {
+		font-weight: 700;
+		font-size: 16px;
+	}
+	.twp-nav {
+		display: inline-flex;
+		align-items: center;
+		gap: 12px;
+	}
+	.twp-nav-item {
+		text-decoration: none;
+		color: var(--tswp-color-text);
+		padding: 6px 10px;
+		border-radius: 4px;
+		&:hover {
+			background: rgba(0, 0, 0, 0.04);
+		}
+		&.is-active {
+			color: var(--tswp-color-primary);
+			background: rgba(83, 68, 244, 0.1);
+		}
+	}
+	.twp-link-highlight {
+		color: #fff;
+		background: var(--tswp-color-primary);
+		border: 1px solid var(--tswp-color-primary);
+		&:hover {
+			background: var(--tswp-color-accent);
+			border-color: var(--tswp-color-accent);
+		}
+	}
+	.twp-badge {
+		display: inline-block;
+		padding: 4px 8px;
+		border-radius: 999px;
+		background: rgba(83, 68, 244, 0.12);
+		color: var(--tswp-color-primary);
+		font-weight: 600;
+		font-size: 12px;
+		line-height: 1;
+	}
+	.twp-version {
+		color: var(--tswp-color-text-secondary);
+		font-size: 12px;
+	}
+}
+
+// Body container after header
+.turnstilewp-body {
+	margin: 32px 22px;
+	border: 1px solid #e2e2e2;
+	border-radius: 6px;
+	background: #f9f9f9;
+}

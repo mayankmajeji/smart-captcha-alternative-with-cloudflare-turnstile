@@ -1,0 +1,6 @@
+{
+	"extends": ["htmlhint:recommended"],
+	"rules": {
+		// Customize as needed
+	}
+}

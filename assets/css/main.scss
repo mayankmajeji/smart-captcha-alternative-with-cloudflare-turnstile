@@ -1,0 +1,12 @@
+// Main SCSS entry for TurnstileWP
+@import "modules/variables";
+@import "modules/mixins";
+@import "modules/base";
+@import "modules/layout";
+@import "modules/card";
+@import "modules/forms";
+@import "modules/toggle";
+@import "modules/accordion";
+@import "modules/faq";
+@import "modules/turnstile-frontend";
+@import "plugins/woocommerce";

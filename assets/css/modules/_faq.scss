@@ -1,0 +1,63 @@
+// FAQ Accordion styles for TurnstileWP
+.turnstilewp-faq-accordion {
+	margin-top: 1.5em;
+}
+.faq-block {
+	border-bottom: 1px solid;
+	border-color: $color-faq-border transparent;
+	&:last-child {
+		border-bottom: none;
+	}
+}
+.faq-question {
+	padding: $faq-padding;
+	color: $color-faq-question;
+	font-size: 1.3em !important;
+	margin: 1em 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	&[aria-expanded="true"] {
+		background: $color-faq-bg;
+	}
+	&:focus {
+		box-shadow: 0 0 0 2px #2563eb33;
+		z-index: 1;
+	}
+}
+.faq-icon {
+	display: inline-block;
+	width: 1.2em;
+	height: 1.2em;
+	margin-right: 0.8em;
+	flex-shrink: 0;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 1em 1em;
+	transition: transform 0.2s;
+	background-image: url('data:image/svg+xml;utf8,<svg fill="none" stroke="%23667" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 9l6 6 6-6"/></svg>');
+}
+.faq-question[aria-expanded="true"] .faq-icon {
+	transform: rotate(90deg);
+}
+.faq-answer {
+	padding: 1.1em 0 1.3em 0;
+	background: $color-bg;
+	color: $color-faq-answer;
+	font-size: 1em;
+	border-top: 1px solid $color-border;
+	line-height: 1.7;
+	ul {
+		margin: 0.5em 0 0 1.2em;
+	}
+}
+@media (max-width: 600px) {
+	.faq-question,
+	.faq-answer {
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+	.faq-answer {
+		padding-left: 2em;
+	}
+}

@@ -1,0 +1,20 @@
+modules:
+    config:
+        WPLoader:
+            wpRootFolder: "/Users/mayankmajeji/Local Sites/cloudflare-turnstile/app/public"
+            dbName: "local"
+            dbHost: "localhost"
+            dbUser: "root"
+            dbPassword: "root"
+            tablePrefix: "wp_"
+            domain: "cloudflare-turnstile.local"
+            adminEmail: "admin@example.com"
+            title: "TurnstileWP Tests"
+        WPDb:
+            dsn: "mysql:host=localhost;dbname=local"
+            user: "root"
+            password: "root"
+            url: "http://cloudflare-turnstile.local"
+        WebDriver:
+            url: "http://cloudflare-turnstile.local"
+

@@ -1,0 +1,11 @@
+// Frontend styles for TurnstileWP
+.turnstilewp-container {
+	margin: 1em 0;
+	text-align: center;
+}
+.login form .turnstilewp-container,
+.register form .turnstilewp-container,
+.lostpassword-form .turnstilewp-container,
+.comment-form .turnstilewp-container {
+	margin: 1em 0 1.5em;
+}

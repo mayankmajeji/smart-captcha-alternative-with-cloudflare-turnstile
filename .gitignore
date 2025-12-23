@@ -1,0 +1,15 @@
+# Files
+/composer.lock
+
+# Directories
+/vendor
+/node_modules
+assets/.DS_Store
+.DS_Store
+
+.github/
+.vscode/
+.specify/
+Wordpress/
+.DS_Store
+.DS_Store

@@ -1,0 +1,10 @@
+.woocommerce-page{
+    .woocommerce-form{
+        .cf-turnstile{
+            iframe{
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+	"extends": [
+		"@wordpress/stylelint-config/scss"
+	],
+	"rules": {
+		"selector-class-pattern": null,
+		"scss/at-import-partial-extension": null,
+		"value-keyword-case": null,
+		"property-no-unknown": [
+			true,
+			{
+				"ignoreProperties": [
+					"/^--/"
+				]
+			}
+		]
+	},
+	"ignoreFiles": [
+		"node_modules/**",
+		"vendor/**",
+		"wordpress/**",
+		"build/**",
+		"dist/**"
+	]
+}
