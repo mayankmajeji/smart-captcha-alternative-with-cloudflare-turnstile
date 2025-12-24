@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<ruleset name="TurnstileWP">
+<ruleset name="SmartCT">
 
-	<description>WordPress Coding Standards for TurnstileWP Plugin</description>
+	<description>WordPress Coding Standards for SmartCT Plugin</description>
 
 	<!-- Minimum PHP version: 7.4 -->
 	<config name="testVersion" value="7.4-"/>
@@ -81,7 +81,7 @@
 	</rule>
 
 	<!-- Paths to scan -->
-	<file>./turnstilewp.php</file>
+	<file>./smart-cloudflare-turnstile.php</file>
 	<file>./includes</file>
 	<file>./uninstall.php</file>
 </ruleset>

@@ -34,7 +34,7 @@ Created a centralized utility function in `includes/functions-common.php` with:
 **Usage Example:**
 ```php
 // Anywhere in the plugin
-$client_ip = \TurnstileWP\get_client_ip();
+$client_ip = \SmartCT\get_client_ip();
 
 // With custom filtering
 add_filter('turnstilewp_client_ip', function($ip) {
@@ -282,7 +282,7 @@ function get_client_ip(): string {
 }
 
 // All classes now use:
-'remoteip' => \TurnstileWP\get_client_ip(),
+'remoteip' => \SmartCT\get_client_ip(),
 ```
 
 ### Before: Dual Key Pattern
@@ -368,7 +368,7 @@ Since this is a **new plugin** without established users:
 
 ```php
 // ✅ DO THIS
-$ip = \TurnstileWP\get_client_ip();
+$ip = \SmartCT\get_client_ip();
 
 // ❌ AVOID
 $ip = $_SERVER['REMOTE_ADDR'] ?? '';
@@ -410,26 +410,26 @@ add_filter('turnstilewp_settings', function($fields) {
 ```php
 // Test direct connection
 $_SERVER['REMOTE_ADDR'] = '192.168.1.1';
-$ip = \TurnstileWP\get_client_ip();
+$ip = \SmartCT\get_client_ip();
 assert($ip === '192.168.1.1');
 
 // Test proxied connection
 $_SERVER['HTTP_X_FORWARDED_FOR'] = '10.0.0.1, 192.168.1.1';
-$ip = \TurnstileWP\get_client_ip();
+$ip = \SmartCT\get_client_ip();
 assert($ip === '10.0.0.1');
 
 // Test filter hook
 add_filter('turnstilewp_client_ip', function() {
     return '127.0.0.1';
 });
-$ip = \TurnstileWP\get_client_ip();
+$ip = \SmartCT\get_client_ip();
 assert($ip === '127.0.0.1');
 ```
 
 ### 2. Settings Key Pattern Testing
 
 ```php
-$settings = new \TurnstileWP\Settings();
+$settings = new \SmartCT\Settings();
 
 // Single pattern
 $value = $settings->get_option('tswp_site_key');

@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2025-11-10
 ### Added
-- Initial release of TurnstileWP.
+- Initial release of SmartCT.
 - Core WordPress integrations: Login, Registration, Lost Password, Comments.
 - WooCommerce integrations: Login, Registration, Reset Password, Checkout, Pay for Order.
 - Centralized settings system with theme/size/options.

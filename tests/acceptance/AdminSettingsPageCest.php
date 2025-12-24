@@ -1,6 +1,6 @@
 <?php
 
-namespace TurnstileWP\Tests\Acceptance;
+namespace SmartCT\Tests\Acceptance;
 
 use AcceptanceTester;
 
@@ -10,7 +10,7 @@ class AdminSettingsPageCest
 	{
 		$I->loginAsAdmin();
 		$I->amOnAdminPage('admin.php?page=turnstilewp-settings');
-		$I->see('TurnstileWP');
+		$I->see('SmartCT');
 	}
 
 	public function testSettingsPageHasSiteKeyField(AcceptanceTester $I)

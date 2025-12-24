@@ -4,16 +4,16 @@
  * Plugin settings class
  *
  * Handles all plugin settings with backwards-compatible key naming.
- * This class uses a dual-key naming pattern (tswp_* and legacy unprefixed keys)
+ * This class uses a dual-key naming pattern (smartct_* and legacy unprefixed keys)
  * to maintain backwards compatibility.
  *
  * @see SETTINGS-KEYS.md for detailed documentation on key naming patterns
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP;
+namespace SmartCT;
 
 /**
  * Class Settings
@@ -23,7 +23,7 @@ class Settings {
 	/**
 	 * Option name in WordPress options table
 	 */
-	private const OPTION_NAME = 'turnstilewp_settings';
+	private const OPTION_NAME = 'smartct_settings';
 
 	/**
 	 * Default settings
@@ -31,24 +31,24 @@ class Settings {
 	 * @var array
 	 */
 	private array $defaults = array(
-		'tswp_site_key' => '',
-		'tswp_secret_key' => '',
-		'tswp_theme' => 'auto',
-		'tswp_show_for_logged_in' => false,
-		'tswp_enable_login' => true,
-		'tswp_enable_register' => true,
-		'tswp_enable_lost_password' => true,
-		'tswp_enable_comments' => true,
-		'tswp_debug_mode' => false,
-		'tswp_keys_verified' => false,
+		'smartct_site_key' => '',
+		'smartct_secret_key' => '',
+		'smartct_theme' => 'auto',
+		'smartct_show_for_logged_in' => false,
+		'smartct_enable_login' => true,
+		'smartct_enable_register' => true,
+		'smartct_enable_lost_password' => true,
+		'smartct_enable_comments' => true,
+		'smartct_debug_mode' => false,
+		'smartct_keys_verified' => false,
 		// WooCommerce fields
-		'tswp_woo_login' => false,
-		'tswp_woo_register' => false,
-		'tswp_woo_reset_password' => false,
-		'tswp_woo_checkout' => false,
-		'tswp_woo_checkout_guest_only' => false,
-		'tswp_woo_checkout_location' => 'before_payment',
-		'tswp_woo_pay_for_order' => false,
+		'smartct_woo_login' => false,
+		'smartct_woo_register' => false,
+		'smartct_woo_reset_password' => false,
+		'smartct_woo_checkout' => false,
+		'smartct_woo_checkout_guest_only' => false,
+		'smartct_woo_checkout_location' => 'before_payment',
+		'smartct_woo_pay_for_order' => false,
 	);
 
 	/**
@@ -69,7 +69,7 @@ class Settings {
 	/**
 	 * Get plugin settings
 	 *
-	 * Returns all settings with the tswp_* prefix.
+	 * Returns all settings with the smartct_* prefix.
 	 *
 	 * @return array
 	 */
@@ -81,21 +81,21 @@ class Settings {
 	/**
 	 * Get a specific option
 	 *
-	 * Retrieves a setting value. All keys must use the tswp_* prefix.
+	 * Retrieves a setting value. All keys must use the smartct_* prefix.
 	 * Constants defined in wp-config.php take priority over database values.
 	 *
 	 * Example:
-	 *   $settings->get_option('tswp_site_key');
+	 *   $settings->get_option('smartct_site_key');
 	 *
-	 * @param string $key Option key (must include tswp_ prefix).
+	 * @param string $key Option key (must include smartct_ prefix).
 	 * @param mixed  $default Default value if option not found.
 	 * @return mixed
 	 */
 	public function get_option( string $key, $default = null ) {
 		// Constants override (allow keys defined in wp-config.php)
 		$const_map = array(
-			'tswp_site_key'   => 'TURNSTILEWP_SITE_KEY',
-			'tswp_secret_key' => 'TURNSTILEWP_SECRET_KEY',
+			'smartct_site_key'   => 'SMARTCT_SITE_KEY',
+			'smartct_secret_key' => 'SMARTCT_SECRET_KEY',
 		);
 		
 		if ( isset($const_map[ $key ]) && defined($const_map[ $key ]) ) {
@@ -120,13 +120,13 @@ class Settings {
 	 */
 	public function register_settings(): void {
 		register_setting(
-			'turnstilewp_settings',
+			'smartct_settings',
 			self::OPTION_NAME,
 			array(
 				'type' => 'array',
 				'sanitize_callback' => array( $this, 'sanitize_settings' ),
 				'show_in_rest' => false,
-				'error_bag' => 'turnstilewp_settings_errors',
+				'error_bag' => 'smartct_settings_errors',
 			)
 		);
 		// No section/field registration here; handled by centralized system and renderer.
@@ -193,21 +193,21 @@ class Settings {
 		}
 
 		// If keys changed or either key is empty (without constants), reset verification status
-		$saved_site   = $sanitized['tswp_site_key'] ?? '';
-		$saved_secret = $sanitized['tswp_secret_key'] ?? '';
-		$prev_site    = $existing_settings['tswp_site_key'] ?? '';
-		$prev_secret  = $existing_settings['tswp_secret_key'] ?? '';
-		$has_const_site   = defined('TURNSTILEWP_SITE_KEY') && TURNSTILEWP_SITE_KEY;
-		$has_const_secret = defined('TURNSTILEWP_SECRET_KEY') && TURNSTILEWP_SECRET_KEY;
+		$saved_site   = $sanitized['smartct_site_key'] ?? '';
+		$saved_secret = $sanitized['smartct_secret_key'] ?? '';
+		$prev_site    = $existing_settings['smartct_site_key'] ?? '';
+		$prev_secret  = $existing_settings['smartct_secret_key'] ?? '';
+		$has_const_site   = defined('SMARTCT_SITE_KEY') && SMARTCT_SITE_KEY;
+		$has_const_secret = defined('SMARTCT_SECRET_KEY') && SMARTCT_SECRET_KEY;
 		if (
 			( ! $has_const_site || ! $has_const_secret ) &&
 			( ( empty($saved_site) || empty($saved_secret) ) || ( $saved_site !== $prev_site || $saved_secret !== $prev_secret ) )
 		) {
-			update_option('turnstilewp_keys_verified', 0);
+			update_option('smartct_keys_verified', 0);
 		}
 
 		add_settings_error(
-			'turnstilewp_settings_errors',
+			'smartct_settings_errors',
 			'settings_updated',
 			__('Settings saved successfully.', 'smart-cloudflare-turnstile'),
 			'updated'
@@ -220,7 +220,7 @@ class Settings {
 	 * Add admin menu
 	 */
 	public function add_admin_menu(): void {
-		$svg_path = TURNSTILEWP_PLUGIN_DIR . 'assets/images/turnstilewp-plugin-icon.svg';
+		$svg_path = SMARTCT_PLUGIN_DIR . 'assets/images/smartct-plugin-icon.svg';
 		$svg_data = @file_get_contents($svg_path);
 		$icon_data_uri = $svg_data ? ( 'data:image/svg+xml;base64,' . base64_encode($svg_data) ) : 'dashicons-shield-alt';
 
@@ -229,45 +229,45 @@ class Settings {
 			__('Smart Cloudflare Turnstile', 'smart-cloudflare-turnstile'),
 			__('Smart Cloudflare Turnstile', 'smart-cloudflare-turnstile'),
 			'manage_options',
-			'turnstilewp-settings',
+			'smartct-settings',
 			array( $this, 'render_settings_main_page' ),
 			$icon_data_uri,
 			65
 		);
 		// Settings submenu (same slug as top-level)
 		add_submenu_page(
-			'turnstilewp-settings',
+			'smartct-settings',
 			__('Settings', 'smart-cloudflare-turnstile'),
 			__('Settings', 'smart-cloudflare-turnstile'),
 			'manage_options',
-			'turnstilewp-settings',
+			'smartct-settings',
 			array( $this, 'render_settings_main_page' )
 		);
 		// Integrations submenu (cards)
 		add_submenu_page(
-			'turnstilewp-settings',
+			'smartct-settings',
 			__('Integrations', 'smart-cloudflare-turnstile'),
 			__('Integrations', 'smart-cloudflare-turnstile'),
 			'manage_options',
-			'turnstilewp-integrations',
+			'smartct-integrations',
 			array( $this, 'render_integrations_page' )
 		);
 		// Tools
 		add_submenu_page(
-			'turnstilewp-settings',
+			'smartct-settings',
 			__('Tools', 'smart-cloudflare-turnstile'),
 			__('Tools', 'smart-cloudflare-turnstile'),
 			'manage_options',
-			'turnstilewp-tools',
+			'smartct-tools',
 			array( $this, 'render_tools_page' )
 		);
 		// Help
 		add_submenu_page(
-			'turnstilewp-settings',
+			'smartct-settings',
 			__('Help', 'smart-cloudflare-turnstile'),
 			__('Help', 'smart-cloudflare-turnstile'),
 			'manage_options',
-			'turnstilewp-help',
+			'smartct-help',
 			array( $this, 'render_help_page' )
 		);
 	}
@@ -280,7 +280,7 @@ class Settings {
 			return;
 		}
 
-		require_once TURNSTILEWP_PLUGIN_DIR . 'includes/admin/views/settings-main.php';
+		require_once SMARTCT_PLUGIN_DIR . 'includes/admin/views/settings-main.php';
 	}
 
 	/**
@@ -288,8 +288,8 @@ class Settings {
 	 */
 	public function register_centralized_fields(): void {
 		$fields = array();
-		$fields = apply_filters('turnstilewp_settings', $fields);
-		// Normalize field IDs to tswp_ prefix
+		$fields = apply_filters('smartct_settings', $fields);
+		// Normalize field IDs to smartct_ prefix
 		foreach ( $fields as &$field ) {
 			if ( ! empty($field['field_id']) ) {
 				$id = (string) $field['field_id'];
@@ -297,9 +297,9 @@ class Settings {
 				if ( strpos($id, 'turnstile_') === 0 ) {
 					$id = substr($id, strlen('turnstile_'));
 				}
-				// Ensure tswp_ prefix
-				if ( strpos($id, 'tswp_') !== 0 ) {
-					$id = 'tswp_' . $id;
+				// Ensure smartct_ prefix
+				if ( strpos($id, 'smartct_') !== 0 ) {
+					$id = 'smartct_' . $id;
 				}
 				$field['field_id'] = $id;
 			}
@@ -351,22 +351,22 @@ class Settings {
 		if ( ! current_user_can('manage_options') ) {
 			return;
 		}
-		require_once TURNSTILEWP_PLUGIN_DIR . 'includes/admin/views/dashboard.php';
+		require_once SMARTCT_PLUGIN_DIR . 'includes/admin/views/dashboard.php';
 	}
 	public function render_integrations_page(): void {
-		require_once TURNSTILEWP_PLUGIN_DIR . 'includes/admin/views/integrations-main.php';
+		require_once SMARTCT_PLUGIN_DIR . 'includes/admin/views/integrations-main.php';
 	}
 	public function render_tools_page(): void {
 		// Use the Tools_Tab class to render the tools page
-		require_once __DIR__ . '/settings/tabs/class-tools-tab.php';
-		$tools_tab = new \TurnstileWP\Settings\Tabs\Tools_Tab();
+		require_once SMARTCT_PLUGIN_DIR . 'includes/settings/tabs/class-tools-tab.php';
+		$tools_tab = new \SmartCT\Settings\Tabs\Tools_Tab();
 		$tools_tab->render_tools_page();
 	}
 	public function render_faqs_page(): void {
-		require_once TURNSTILEWP_PLUGIN_DIR . 'includes/admin/templates/faqs-page.php';
+		require_once SMARTCT_PLUGIN_DIR . 'includes/admin/templates/faqs-page.php';
 	}
 
 	public function render_help_page(): void {
-		require_once TURNSTILEWP_PLUGIN_DIR . 'includes/admin/templates/help-page.php';
+		require_once SMARTCT_PLUGIN_DIR . 'includes/admin/templates/help-page.php';
 	}
 }

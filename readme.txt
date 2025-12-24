@@ -47,7 +47,7 @@ Yes. Turnstile is available for WooCommerce Login, Registration, Reset Password,
 The script is loaded only when required and can be deferred. The plugin aims to keep a minimal footprint.
 
 = Where can I find full documentation? =
-Visit the [plugin support forum](https://wordpress.org/support/plugin/smart-cloudflare-turnstile/) or check the [GitHub repository](https://github.com/mayankmajeji/smart-cloudflare-turnstile) for documentation and examples.
+Visit the [plugin support forum](https://wordpress.org/support/plugin/smart-captcha-alternative-with-cloudflare-turnstile/) or check the [GitHub repository](https://github.com/mayankmajeji/smart-captcha-alternative-with-cloudflare-turnstile) for documentation and examples.
 
 
 == Trademark Notice ==

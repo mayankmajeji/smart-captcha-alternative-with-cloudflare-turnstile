@@ -3,12 +3,12 @@
 /**
  * Core WordPress integration
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP;
+namespace SmartCT;
 
 /**
  * Class Core_WP
@@ -44,25 +44,25 @@ class Core_WP {
 	 */
 	private function init_hooks(): void {
 		// Login form
-		if ( $this->settings->get_option('tswp_enable_login') ) {
+		if ( $this->settings->get_option('smartct_enable_login') ) {
 			add_action('login_form', array( $this, 'render_turnstile_field' ));
 			add_filter('authenticate', array( $this, 'verify_login' ), 30, 3);
 		}
 
 		// Registration form
-		if ( $this->settings->get_option('tswp_enable_register') ) {
+		if ( $this->settings->get_option('smartct_enable_register') ) {
 			add_action('register_form', array( $this, 'render_turnstile_field' ));
 			add_action('registration_errors', array( $this, 'verify_registration' ), 10, 3);
 		}
 
 		// Lost password form
-		if ( $this->settings->get_option('tswp_enable_lost_password') ) {
+		if ( $this->settings->get_option('smartct_enable_lost_password') ) {
 			add_action('lostpassword_form', array( $this, 'render_turnstile_field' ));
 			add_action('lostpassword_post', array( $this, 'verify_lost_password' ));
 		}
 
 		// Comment form
-		if ( $this->settings->get_option('tswp_enable_comments') ) {
+		if ( $this->settings->get_option('smartct_enable_comments') ) {
 			// Hook to add Turnstile right before submit button (works for both logged-in and logged-out users)
 			add_filter('comment_form_submit_field', array( $this, 'add_turnstile_before_submit' ), 10, 2);
 			add_action('preprocess_comment', array( $this, 'verify_comment' ));
@@ -73,18 +73,18 @@ class Core_WP {
 	 * Render Turnstile field using the new dynamic method
 	 */
 	public function render_turnstile_field(): void {
-		if ( ! get_option('turnstilewp_keys_verified', 0) ) {
+		if ( ! get_option('smartct_keys_verified', 0) ) {
 			return;
 		}
 		if ( ! $this->should_show_turnstile() ) {
 			return;
 		}
 
-		$turnstile = new \TurnstileWP\Turnstile();
+		$turnstile = new \SmartCT\Turnstile();
 		$turnstile->render_dynamic(array(
 			'form_name' => $this->get_form_context(),
 			'unique_id' => uniqid(),
-			'class'     => 'turnstilewp-core-form',
+			'class'     => 'smartct-core-form',
 		));
 	}
 
@@ -96,7 +96,7 @@ class Core_WP {
 	 * @return string
 	 */
 	public function add_turnstile_before_submit( string $submit_field, array $args ): string {
-		if ( ! get_option('turnstilewp_keys_verified', 0) ) {
+		if ( ! get_option('smartct_keys_verified', 0) ) {
 			return $submit_field;
 		}
 		if ( ! $this->should_show_turnstile() ) {
@@ -104,16 +104,16 @@ class Core_WP {
 		}
 
 		ob_start();
-		$turnstile = new \TurnstileWP\Turnstile();
+		$turnstile = new \SmartCT\Turnstile();
 		$turnstile->render_dynamic(array(
 			'form_name' => 'wordpress-comment',
 			'unique_id' => uniqid(),
-			'class'     => 'turnstilewp-core-form',
+			'class'     => 'smartct-core-form',
 		));
 		$turnstile_html = ob_get_clean();
 
 		// Prepend Turnstile widget before submit button
-		return '<div class="turnstilewp-comment-before-submit" style="margin-bottom: 1em;">' . $turnstile_html . '</div>' . $submit_field;
+		return '<div class="smartct-comment-before-submit" style="margin-bottom: 1em;">' . $turnstile_html . '</div>' . $submit_field;
 	}
 
 	/**
@@ -245,20 +245,20 @@ class Core_WP {
 	private function should_show_turnstile(): bool {
 		// Don't show for logged-in users unless configured
 		if ( is_user_logged_in() ) {
-			// Use Settings class to get the option (handles tswp_ prefix automatically)
-			$show_for_logged_in = $this->settings->get_option('tswp_show_for_logged_in', false);
+			// Use Settings class to get the option (handles smartct_ prefix automatically)
+			$show_for_logged_in = $this->settings->get_option('smartct_show_for_logged_in', false);
 			if ( ! $show_for_logged_in ) {
 				return false;
 			}
 		}
 
 		// Allow developers to filter this
-		return apply_filters('turnstilewp_should_show', true);
+		return apply_filters('smartct_should_show', true);
 	}
 }
 
 // Register core WordPress form fields for centralized settings
-add_filter('turnstilewp_settings', function ( $fields ) {
+add_filter('smartct_settings', function ( $fields ) {
 	// Login & Registration Section
 	$fields[] = array(
 		'field_id'    => 'enable_login',

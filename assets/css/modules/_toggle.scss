@@ -1,5 +1,5 @@
-// Toggle switch styles for TurnstileWP
-.turnstilewp-toggle {
+// Toggle switch styles for SmartCT
+.smartct-toggle {
 	position: relative;
 	display: inline-block;
 	width: 46px;
@@ -35,10 +35,10 @@
 			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 		}
 	}
-	input:checked + .turnstilewp-toggle-slider {
+	input:checked + .smartct-toggle-slider {
 		background-color: $color-accent;
 	}
-	input:checked + .turnstilewp-toggle-slider:before {
+	input:checked + .smartct-toggle-slider:before {
 		transform: translateX(22px);
 	}
 }

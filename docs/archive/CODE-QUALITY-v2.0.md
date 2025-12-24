@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a quick reference for the code quality improvements made to the TurnstileWP plugin.
+This document provides a quick reference for the code quality improvements made to the SmartCT plugin.
 
 ## What Was Fixed
 
@@ -63,7 +63,7 @@ This document provides a quick reference for the code quality improvements made 
 
 ```php
 // ✅ DO THIS (anywhere in the plugin)
-$ip = \TurnstileWP\get_client_ip();
+$ip = \SmartCT\get_client_ip();
 
 // ❌ AVOID
 $ip = $_SERVER['REMOTE_ADDR'] ?? '';
@@ -129,7 +129,7 @@ All modified files have been:
 No immediate action required. The improvements are complete and ready to use.
 
 For future development:
-- Always use `\TurnstileWP\get_client_ip()` for IP detection
+- Always use `\SmartCT\get_client_ip()` for IP detection
 - Always use `tswp_*` prefixed keys for settings
 - Reference documentation when needed
 

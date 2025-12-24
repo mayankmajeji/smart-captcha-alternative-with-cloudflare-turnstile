@@ -3,14 +3,14 @@
 /**
  * Settings Page Class
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP\Settings;
+namespace SmartCT\Settings;
 
-use TurnstileWP\Settings\Tabs\WooCommerce_Tab;
+use SmartCT\Settings\Tabs\WooCommerce_Tab;
 
 class Settings_Page
 {
@@ -58,7 +58,7 @@ class Settings_Page
 			__('Smart Cloudflare Turnstile Settings', 'smart-cloudflare-turnstile'),
 			__('Smart Cloudflare Turnstile', 'smart-cloudflare-turnstile'),
 			'manage_options',
-			'turnstilewp-settings',
+			'smartct-settings',
 			array($this, 'render_page'),
 			'dashicons-shield',
 			30
@@ -70,7 +70,7 @@ class Settings_Page
 	 */
 	public function register_settings(): void
 	{
-		register_setting('turnstilewp_settings', 'turnstilewp_settings', array(
+		register_setting('smartct_settings', 'smartct_settings', array(
 			'type' => 'array',
 			'sanitize_callback' => array($this, 'sanitize_settings'),
 		));
@@ -108,8 +108,8 @@ class Settings_Page
 		<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
 		<h2 class="nav-tab-wrapper">
 			<?php foreach ($tabs as $tab) : ?>
-				<a href="?page=turnstilewp-settings&tab=<?php echo esc_attr($tab->get_id()); ?>"
-					class="nav-tab <?php echo $active_tab === $tab->get_id() ? 'nav-tab-active' : ''; ?>">
+			<a href="?page=smartct-settings&tab=<?php echo esc_attr($tab->get_id()); ?>"
+				class="nav-tab <?php echo esc_attr( $active_tab === $tab->get_id() ? 'nav-tab-active' : '' ); ?>">
 					<span class="dashicons <?php echo esc_attr($tab->get_icon()); ?>"></span>
 					<?php echo esc_html($tab->get_label()); ?>
 				</a>
@@ -117,8 +117,8 @@ class Settings_Page
 		</h2>
 		<form method="post" action="options.php">
 			<?php
-			settings_fields('turnstilewp_settings');
-			do_settings_sections('turnstilewp_settings');
+			settings_fields('smartct_settings');
+			do_settings_sections('smartct_settings');
 			$this->render_tab_content($active_tab);
 			submit_button();
 			?>
@@ -151,8 +151,9 @@ class Settings_Page
 		$tabs = $this->get_tabs();
 		foreach ($tabs as $tab) {
 			if ($tab->get_id() === $active_tab) {
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Content is already escaped by the tab
-				echo $tab->get_content();
+				// Use wp_kses_post() to allow safe HTML tags for admin content
+				// All variables within the content are already escaped at the source
+				echo wp_kses_post( $tab->get_content() );
 				break;
 			}
 		}
@@ -178,7 +179,7 @@ class Settings_Page
 			}
 
 			$output .= sprintf(
-				'<input type="hidden" name="turnstilewp_settings[%s]" value="%s" />',
+				'<input type="hidden" name="smartct_settings[%s]" value="%s" />',
 				esc_attr($key),
 				esc_attr($value)
 			);

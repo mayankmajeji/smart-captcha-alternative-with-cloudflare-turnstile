@@ -1,8 +1,8 @@
 <?php
 
-namespace TurnstileWP\Tests\Unit;
+namespace SmartCT\Tests\Unit;
 
-use TurnstileWP\Ajax_Handlers;
+use SmartCT\Ajax_Handlers;
 use Codeception\Test\Unit;
 
 class AjaxHandlersTest extends Unit

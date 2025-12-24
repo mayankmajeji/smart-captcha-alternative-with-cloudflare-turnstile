@@ -1,8 +1,8 @@
 <?php
 
-namespace TurnstileWP\Tests\Unit;
+namespace SmartCT\Tests\Unit;
 
-use TurnstileWP\Verify;
+use SmartCT\Verify;
 use Codeception\Test\Unit;
 
 class VerifyTest extends Unit

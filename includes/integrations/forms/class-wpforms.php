@@ -1,15 +1,15 @@
 <?php
 /**
- * WPForms Integration for TurnstileWP
+ * WPForms Integration for SmartCT
  *
- * @package TurnstileWP
- * @subpackage TurnstileWP/integrations
+ * @package SmartCT
+ * @subpackage SmartCT/integrations
  */
 
-namespace TurnstileWP\Integrations;
+namespace SmartCT\Integrations;
 
-use TurnstileWP\Settings;
-use TurnstileWP\Turnstile;
+use SmartCT\Settings;
+use SmartCT\Turnstile;
 
 if ( ! defined('ABSPATH') ) {
 	exit;
@@ -30,7 +30,7 @@ class WPForms {
 		$this->settings = new Settings();
 
 		// Register settings fields in centralized system
-		add_filter('turnstilewp_settings', array( $this, 'register_settings_fields' ));
+		add_filter('smartct_settings', array( $this, 'register_settings_fields' ));
 
 		// Render widget before/after submit (WPForms passes 1 param: $form_data)
 		add_action('wpforms_display_submit_before', array( $this, 'render_before_submit' ), 20, 1);
@@ -40,7 +40,7 @@ class WPForms {
 		add_action('wpforms_process', array( $this, 'validate_submission' ), 5, 3);
 
 		// Expose status to Dashboard "Other Integrations"
-		add_filter('turnstilewp_integrations', array( $this, 'register_dashboard_status' ));
+		add_filter('smartct_integrations', array( $this, 'register_dashboard_status' ));
 	}
 
 	private function is_wpforms_active(): bool {
@@ -52,7 +52,7 @@ class WPForms {
 	 */
 	public function register_settings_fields( array $fields ): array {
 		$fields[] = array(
-			'field_id'    => 'tswp_wpforms_enable',
+			'field_id'    => 'smartct_wpforms_enable',
 			'label'       => __('Enable on WPForms', 'smart-cloudflare-turnstile'),
 			'description' => __('Add Turnstile verification to WPForms forms.', 'smart-cloudflare-turnstile'),
 			'type'        => 'checkbox',
@@ -65,7 +65,7 @@ class WPForms {
 		);
 
 		$fields[] = array(
-			'field_id'    => 'tswp_wpforms_position',
+			'field_id'    => 'smartct_wpforms_position',
 			'label'       => __('Widget Position', 'smart-cloudflare-turnstile'),
 			'description' => __('Where to display the widget within the form.', 'smart-cloudflare-turnstile'),
 			'type'        => 'select',
@@ -84,11 +84,11 @@ class WPForms {
 	}
 
 	public function render_before_submit( $form_data ): void {
-		$enabled = (bool) $this->settings->get_option('tswp_wpforms_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_wpforms_enable', false);
 		if ( ! $enabled ) {
 			return;
 		}
-		$position = (string) $this->settings->get_option('tswp_wpforms_position', 'before_submit');
+		$position = (string) $this->settings->get_option('smartct_wpforms_position', 'before_submit');
 		if ( $position !== 'before_submit' ) {
 			return;
 		}
@@ -97,7 +97,7 @@ class WPForms {
 	}
 
 	public function render_after_submit( $form_data ): void {
-		$enabled = (bool) $this->settings->get_option('tswp_wpforms_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_wpforms_enable', false);
 		if ( ! $enabled ) {
 			return;
 		}
@@ -147,7 +147,7 @@ class WPForms {
 		$items[] = array(
 			'label' => 'WPForms',
 			'enabled' => $enabled,
-			'configure_url' => admin_url('admin.php?page=turnstilewp-integrations&integration_tab=form_plugins'),
+			'configure_url' => admin_url('admin.php?page=smartct-integrations&integration_tab=form_plugins'),
 		);
 		return $items;
 	}

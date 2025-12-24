@@ -1,14 +1,14 @@
 <?php
 
 /**
- * AJAX handlers for TurnstileWP
+ * AJAX handlers for SmartCT
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP;
+namespace SmartCT;
 
 /**
  * Class Ajax_Handlers
@@ -19,7 +19,7 @@ class Ajax_Handlers {
 	 * Initialize AJAX handlers
 	 */
 	public function __construct() {
-		add_action('wp_ajax_turnstilewp_export_settings', array( $this, 'export_settings' ));
+		add_action('wp_ajax_smartct_export_settings', array( $this, 'export_settings' ));
 	}
 
 	/**
@@ -32,7 +32,7 @@ class Ajax_Handlers {
 		}
 
 		// Verify nonce
-		if ( ! isset($_GET['_wpnonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_wpnonce'])), 'turnstilewp_tools_export') ) {
+		if ( ! isset($_GET['_wpnonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_wpnonce'])), 'smartct_tools_export') ) {
 			wp_die('Invalid nonce', 403);
 		}
 
@@ -41,7 +41,7 @@ class Ajax_Handlers {
 		$all = $settings->get_settings();
 		$data = array();
 		foreach ( $all as $key => $val ) {
-			if ( strpos( (string) $key, 'tswp_') === 0 ) {
+			if ( strpos( (string) $key, 'smartct_') === 0 ) {
 				$data[ $key ] = $val;
 			}
 		}
@@ -51,7 +51,7 @@ class Ajax_Handlers {
 
 		// Set headers for download
 		header('Content-Type: application/json');
-		header('Content-Disposition: attachment; filename=turnstilewp-settings-export.json');
+		header('Content-Disposition: attachment; filename=smartct-settings-export.json');
 		header('Content-Length: ' . strlen($json));
 
 		// Output JSON and exit

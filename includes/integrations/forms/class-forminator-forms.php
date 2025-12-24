@@ -1,15 +1,15 @@
 <?php
 /**
- * Forminator Integration for TurnstileWP
+ * Forminator Integration for SmartCT
  *
- * @package TurnstileWP
- * @subpackage TurnstileWP/integrations
+ * @package SmartCT
+ * @subpackage SmartCT/integrations
  */
 
-namespace TurnstileWP\Integrations;
+namespace SmartCT\Integrations;
 
-use TurnstileWP\Settings;
-use TurnstileWP\Turnstile;
+use SmartCT\Settings;
+use SmartCT\Turnstile;
 
 if ( ! defined('ABSPATH') ) {
 	exit;
@@ -29,7 +29,7 @@ class Forminator_Forms {
 		$this->settings = new Settings();
 
 		// Settings
-		add_filter('turnstilewp_settings', array( $this, 'register_settings_fields' ));
+		add_filter('smartct_settings', array( $this, 'register_settings_fields' ));
 
 		// Placement: modify submit markup (before/after)
 		add_filter('forminator_render_form_submit_markup', array( $this, 'filter_submit_markup' ), 10, 4);
@@ -38,7 +38,7 @@ class Forminator_Forms {
 		add_action('forminator_custom_form_submit_errors', array( $this, 'validate_submission' ), 10, 3);
 
 		// Dashboard status
-		add_filter('turnstilewp_integrations', array( $this, 'register_dashboard_status' ));
+		add_filter('smartct_integrations', array( $this, 'register_dashboard_status' ));
 	}
 
 	private function is_active(): bool {
@@ -47,7 +47,7 @@ class Forminator_Forms {
 
 	public function register_settings_fields( array $fields ): array {
 		$fields[] = array(
-			'field_id'    => 'tswp_forminator_enable',
+			'field_id'    => 'smartct_forminator_enable',
 			'label'       => __('Enable on Forminator', 'smart-cloudflare-turnstile'),
 			'description' => __('Add Turnstile verification to Forminator forms.', 'smart-cloudflare-turnstile'),
 			'type'        => 'checkbox',
@@ -60,7 +60,7 @@ class Forminator_Forms {
 		);
 
 		$fields[] = array(
-			'field_id'    => 'tswp_forminator_position',
+			'field_id'    => 'smartct_forminator_position',
 			'label'       => __('Widget Position', 'smart-cloudflare-turnstile'),
 			'description' => __('Choose where to display the widget.', 'smart-cloudflare-turnstile'),
 			'type'        => 'select',
@@ -88,28 +88,28 @@ class Forminator_Forms {
 	 * @return string
 	 */
 	public function filter_submit_markup( $html, $form_id, $post_id, $nonce ) {
-		$enabled = (bool) $this->settings->get_option('tswp_forminator_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_forminator_enable', false);
 		if ( ! $enabled ) {
 			return $html;
 		}
-		$site_key = (string) $this->settings->get_option('tswp_site_key', '');
+		$site_key = (string) $this->settings->get_option('smartct_site_key', '');
 		if ( ! $site_key ) {
 			return $html;
 		}
-		$position = (string) $this->settings->get_option('tswp_forminator_position', 'after_submit');
+		$position = (string) $this->settings->get_option('smartct_forminator_position', 'after_submit');
 
-	// Ensure Turnstile API script is present
-	wp_enqueue_script(
-		'cloudflare-turnstile',
+		// Ensure Turnstile API script is present
+		wp_enqueue_script(
+			'cloudflare-turnstile',
 		'https://challenges.cloudflare.com/turnstile/v0/api.js', // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent -- Cloudflare Turnstile API must be loaded from their CDN per terms of service
-		array(),
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, version controlled by Cloudflare
-		null,
-		true
-	);
+			array(),
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, version controlled by Cloudflare
+			null,
+			true
+		);
 
 		$widget = sprintf(
-			'<div class="turnstilewp-forminator-container" style="display:block;margin:10px 0;"><div class="cf-turnstile" data-sitekey="%s"></div></div>',
+			'<div class="smartct-forminator-container" style="display:block;margin:10px 0;"><div class="cf-turnstile" data-sitekey="%s"></div></div>',
 			esc_attr($site_key)
 		);
 
@@ -120,7 +120,7 @@ class Forminator_Forms {
 	}
 
 	public function validate_submission( $submit_errors, $form_id, $field_data_array ) {
-		$enabled = (bool) $this->settings->get_option('tswp_forminator_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_forminator_enable', false);
 		if ( ! $enabled ) {
 			return $submit_errors;
 		}
@@ -140,7 +140,7 @@ class Forminator_Forms {
 		$items[] = array(
 			'label' => 'Forminator',
 			'enabled' => $enabled,
-			'configure_url' => admin_url('admin.php?page=turnstilewp-integrations&integration_tab=form_plugins'),
+			'configure_url' => admin_url('admin.php?page=smartct-integrations&integration_tab=form_plugins'),
 		);
 		return $items;
 	}

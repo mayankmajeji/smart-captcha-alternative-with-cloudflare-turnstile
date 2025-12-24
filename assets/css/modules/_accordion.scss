@@ -1,8 +1,8 @@
-// Accordion styles for TurnstileWP
-.turnstilewp-accordion {
+// Accordion styles for SmartCT
+.smartct-accordion {
 	margin-bottom: 32px;
 }
-.turnstilewp-accordion-item {
+.smartct-accordion-item {
 	background: $color-bg;
 	border-radius: 10px;
 	box-shadow: 0 2px 8px rgba(60, 60, 60, 0.06);
@@ -10,7 +10,7 @@
 	border: 1px solid $color-border;
 	overflow: hidden;
 }
-.turnstilewp-accordion-header {
+.smartct-accordion-header {
 	width: 100%;
 	background: #e9eef3;
 	border: none;
@@ -27,22 +27,22 @@
 		background: #dde4ec;
 	}
 }
-.turnstilewp-accordion-arrow {
+.smartct-accordion-arrow {
 	font-size: 1.2em;
 	margin-left: 10px;
 	transition: transform 0.2s;
 }
-.turnstilewp-accordion-item .turnstilewp-accordion-content {
+.smartct-accordion-item .smartct-accordion-content {
 	display: block;
 	padding: 24px 24px 18px 24px;
 	border-top: 1px solid $color-border;
 }
-.turnstilewp-accordion-item:not(.open) .turnstilewp-accordion-content {
+.smartct-accordion-item:not(.open) .smartct-accordion-content {
 	display: none;
 }
-.turnstilewp-accordion-item.open .turnstilewp-accordion-arrow {
+.smartct-accordion-item.open .smartct-accordion-arrow {
 	transform: rotate(0deg);
 }
-.turnstilewp-accordion-item:not(.open) .turnstilewp-accordion-arrow {
+.smartct-accordion-item:not(.open) .smartct-accordion-arrow {
 	transform: rotate(180deg);
 }

@@ -91,7 +91,7 @@
 			"phpstan analyze -v --memory-limit=1024M includes"
 		],
 		"test:plugin-check": [
-			"@php -r \"if (file_exists('../../../../wp-cli.phar')) { passthru('php ../../../../wp-cli.phar plugin check turnstilewp/turnstilewp.php --require=../../plugin-check/cli.php'); } else { echo 'WP-CLI not found. Install WP-CLI or run: wp plugin check turnstilewp/turnstilewp.php --require=wp-content/plugins/plugin-check/cli.php'; exit(1); }\""
+			"@php -r \"if (file_exists('../../../../wp-cli.phar')) { passthru('php ../../../../wp-cli.phar plugin check smart-cloudflare-turnstile/smart-cloudflare-turnstile.php --require=../../plugin-check/cli.php'); } else { echo 'WP-CLI not found. Install WP-CLI or run: wp plugin check smart-cloudflare-turnstile/smart-cloudflare-turnstile.php --require=wp-content/plugins/plugin-check/cli.php'; exit(1); }\""
 		],
 		"test:start": [
 			"tests-start"
@@ -108,8 +108,8 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"TurnstileWP\\": "includes/",
-			"TurnstileWP\\Integrations\\": "integrations/"
+			"SmartCT\\": "includes/",
+			"SmartCT\\Integrations\\": "integrations/"
 		}
 	}
 }

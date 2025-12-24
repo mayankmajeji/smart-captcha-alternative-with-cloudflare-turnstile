@@ -1,12 +1,12 @@
 @use 'variables';
 
-// Layout styles for TurnstileWP
-.turnstilewp-admin-layout {
+// Layout styles for SmartCT
+.smartct-admin-layout {
 	display: grid;
 	grid-template-columns: 1fr 350px;
 	gap: 40px;
 }
-.turnstilewp-section {
+.smartct-section {
 	margin-top: 0;
 	padding: 0;
 	h3 {
@@ -16,11 +16,11 @@
 		margin: 0;
 	}
 }
-.turnstilewp-admin-sidebar {
+.smartct-admin-sidebar {
 	position: sticky;
 	top: 100px;
 	margin-top: 75px;
-	.turnstilewp-sidebar-section {
+	.smartct-sidebar-section {
 		padding: 22px;
 		background: variables.$color-bg;
 		margin-bottom: 40px;
@@ -28,7 +28,7 @@
 	}
 }
 
-// Body header (per-page header area inside .turnstilewp-body)
+// Body header (per-page header area inside .smartct-body)
 .twp-body-header {
 	display: flex;
 	align-items: center;
@@ -201,7 +201,7 @@
 }
 
 // Common subsection styling across all admin pages
-.turnstilewp-sub-section {
+.smartct-sub-section {
 	background: #fff;
 }
 
@@ -227,28 +227,28 @@
 }
 
 // Ensure brand primary applies to Save buttons (increase specificity + correct hierarchy)
-.wp-core-ui .turnstilewp-page .button.button-primary,
-.wp-core-ui .turnstilewp-page input.button-primary,
-.wp-core-ui.turnstilewp-admin .button.button-primary,
-.wp-core-ui.turnstilewp-admin input.button-primary {
+.wp-core-ui .smartct-page .button.button-primary,
+.wp-core-ui .smartct-page input.button-primary,
+.wp-core-ui.smartct-admin .button.button-primary,
+.wp-core-ui.smartct-admin input.button-primary {
 	color: #fff !important;
 	background: var(--tswp-color-primary) !important;
 	border-color: var(--tswp-color-primary) !important;
 }
-.wp-core-ui .turnstilewp-page .button.button-primary:hover,
-.wp-core-ui .turnstilewp-page .button.button-primary:focus,
-.wp-core-ui .turnstilewp-page input.button-primary:hover,
-.wp-core-ui .turnstilewp-page input.button-primary:focus,
-.wp-core-ui.turnstilewp-admin .button.button-primary:hover,
-.wp-core-ui.turnstilewp-admin .button.button-primary:focus,
-.wp-core-ui.turnstilewp-admin input.button-primary:hover,
-.wp-core-ui.turnstilewp-admin input.button-primary:focus {
+.wp-core-ui .smartct-page .button.button-primary:hover,
+.wp-core-ui .smartct-page .button.button-primary:focus,
+.wp-core-ui .smartct-page input.button-primary:hover,
+.wp-core-ui .smartct-page input.button-primary:focus,
+.wp-core-ui.smartct-admin .button.button-primary:hover,
+.wp-core-ui.smartct-admin .button.button-primary:focus,
+.wp-core-ui.smartct-admin input.button-primary:hover,
+.wp-core-ui.smartct-admin input.button-primary:focus {
 	background: var(--tswp-color-accent) !important;
 	border-color: var(--tswp-color-accent) !important;
 }
 
 // Integrations services grid and cards (scoped under page wrapper)
-.turnstilewp-integrations {
+.smartct-integrations {
 	padding: 32px;
 	max-width: 1440px;
 	.twp-services-grid {
@@ -326,21 +326,21 @@
 			color: #1e8c1e;
 		}
 	}
-	.turnstilewp-content {
+	.smartct-content {
 		font-size: 15px;
 		line-height: 26px;
 	}
-	.turnstilewp-buttons {
+	.smartct-buttons {
 		margin-top: 16px;
 	}
 }
 
 // Generic buttons wrapper spacing (outside integrations too)
-.turnstilewp-buttons {
+.smartct-buttons {
 	margin-top: 16px;
 }
 // Help page: System Info styling
-.turnstilewp-page--help {
+.smartct-page--help {
 	.twp-system-info {
 		max-width: 576px;
 		background: #fff;
@@ -374,7 +374,7 @@
 		li + li {
 			margin-top: 8px;
 		}
-		.turnstilewp-buttons {
+		.smartct-buttons {
 			margin-top: 20px;
 		}
 	}
@@ -391,7 +391,7 @@
 		}
 	}
 	.twp-support-card,
-	.turnstilewp-box {
+	.smartct-box {
 		background: #fff;
 		border: 1px solid #e5e7eb;
 		border-radius: 10px;
@@ -437,14 +437,14 @@
 			display: grid;
 			gap: 16px;
 		}
-		.turnstilewp-buttons {
+		.smartct-buttons {
 			margin-top: 0;
 		}
 	}
 }
 // Brand secondary button (used e.g. Reset on Tools)
-.wp-core-ui .turnstilewp-page .button.button-secondary,
-.wp-core-ui.turnstilewp-admin .button.button-secondary {
+.wp-core-ui .smartct-page .button.button-secondary,
+.wp-core-ui.smartct-admin .button.button-secondary {
 	color: var(--tswp-color-primary) !important;
 	background: #fff !important;
 	border-color: var(--tswp-color-primary) !important;
@@ -459,10 +459,10 @@
 		pointer-events: none !important;
 	}
 }
-.wp-core-ui .turnstilewp-page .button.button-secondary:hover,
-.wp-core-ui .turnstilewp-page .button.button-secondary:focus,
-.wp-core-ui.turnstilewp-admin .button.button-secondary:hover,
-.wp-core-ui.turnstilewp-admin .button.button-secondary:focus {
+.wp-core-ui .smartct-page .button.button-secondary:hover,
+.wp-core-ui .smartct-page .button.button-secondary:focus,
+.wp-core-ui.smartct-admin .button.button-secondary:hover,
+.wp-core-ui.smartct-admin .button.button-secondary:focus {
 	color: #fff !important;
 	background: var(--tswp-color-primary) !important;
 	border-color: var(--tswp-color-primary) !important;

@@ -1,8 +1,8 @@
 <?php
 
-namespace TurnstileWP\Tests\Unit;
+namespace SmartCT\Tests\Unit;
 
-use TurnstileWP\Turnstile;
+use SmartCT\Turnstile;
 use Codeception\Test\Unit;
 
 class TurnstileTest extends Unit

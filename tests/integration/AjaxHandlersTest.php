@@ -1,8 +1,8 @@
 <?php
 
-namespace TurnstileWP\Tests\Integration;
+namespace SmartCT\Tests\Integration;
 
-use TurnstileWP\Ajax_Handlers;
+use SmartCT\Ajax_Handlers;
 use Codeception\TestCase\WPTestCase;
 
 class AjaxHandlersTest extends WPTestCase

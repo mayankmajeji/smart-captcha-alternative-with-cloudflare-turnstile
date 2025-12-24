@@ -5,10 +5,10 @@ parameters:
     level: 5
     paths:
         - includes
-        - turnstilewp.php
+        - smart-cloudflare-turnstile.php
         - uninstall.php
     bootstrapFiles:
-        - turnstilewp.php
+        - smart-cloudflare-turnstile.php
     excludePaths:
         - vendor
         - assets

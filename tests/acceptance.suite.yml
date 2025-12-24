@@ -16,11 +16,11 @@ modules:
             tablePrefix: "%TEST_TABLE_PREFIX%"
             domain: "%TEST_SITE_DOMAIN%"
             adminEmail: "%TEST_SITE_ADMIN_EMAIL%"
-            title: "TurnstileWP Tests"
+            title: "SmartCT Tests"
             plugins:
-                - turnstilewp/turnstilewp.php
+                - smart-cloudflare-turnstile/smart-cloudflare-turnstile.php
             activatePlugins:
-                - turnstilewp/turnstilewp.php
+                - smart-cloudflare-turnstile/smart-cloudflare-turnstile.php
         WPDb:
             dsn: "mysql:host=%TEST_DB_HOST%;dbname=%TEST_DB_NAME%"
             user: "%TEST_DB_USER%"

@@ -1,32 +1,33 @@
 /*
- * Frontend SCSS for TurnstileWP (SCSS source)
+ * Frontend SCSS for SmartCT (SCSS source)
  */
 
-// Copy of turnstile.css, now as SCSS for further modularization
+// Import WooCommerce styles
+@use 'plugins/woocommerce';
 
-.turnstilewp-container {
+.smartct-container {
 	margin: 1em 0;
 	text-align: center;
 }
 
 /* Lost password form specific styles */
-.lostpassword-form .turnstilewp-container {
+.lostpassword-form .smartct-container {
 	margin: 1em 0 1.5em;
 }
 
 /* Comments form specific styles */
-.comment-form .turnstilewp-container {
+.comment-form .smartct-container {
 	margin: 1em 0 1.5em;
 }
 
 /* Login form specific styles */
-.login form .turnstilewp-container {
+.login form .smartct-container {
 	margin: 1em 0 1.5em;
 }
 
 /* Fix Turnstile widget width on login form */
-body.login form#loginform .turnstilewp-core-form,
-.login form .turnstilewp-core-form {
+body.login form#loginform .smartct-core-form,
+.login form .smartct-core-form {
 	display: flex;
 	justify-content: center;
 	margin: 1em 0;
@@ -44,22 +45,7 @@ body.login form#loginform .turnstilewp-core-form,
 }
 
 /* Registration form specific styles */
-.register form .turnstilewp-container {
+.register form .smartct-container {
 	margin: 1em 0 1.5em;
-}
-
-/* WooCommerce form styles */
-.woocommerce .cf-turnstile iframe,
-.woocommerce-page .cf-turnstile iframe,
-.woocommerce form .cf-turnstile iframe,
-.woocommerce form.login .cf-turnstile iframe,
-.woocommerce form.register .cf-turnstile iframe,
-.woocommerce form.checkout .cf-turnstile iframe,
-.woocommerce form.lost_reset_password .cf-turnstile iframe,
-.woocommerce .woocommerce-form-login .cf-turnstile iframe,
-.woocommerce .woocommerce-form-register .cf-turnstile iframe,
-.woocommerce .woocommerce-checkout .cf-turnstile iframe {
-	width: 100% !important;
-	max-width: 100% !important;
 }
 

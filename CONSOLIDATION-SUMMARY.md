@@ -2,7 +2,7 @@
 
 ## ✅ Consolidation Complete
 
-The TurnstileWP documentation has been successfully consolidated and reorganized.
+The SmartCT documentation has been successfully consolidated and reorganized.
 
 ### What Changed
 
@@ -44,7 +44,7 @@ turnstilewp/
    - `SETTINGS-KEYS.md` → integrated into `docs/API-REFERENCE.md`
 
 2. **Moved & Renamed:**
-   - `TurnstileWP-Documentation.md` → `docs/API-REFERENCE.md`
+   - `SmartCT-Documentation.md` → `docs/API-REFERENCE.md`
    - `WORDPRESS-ORG-CHECKLIST.md` → `docs/WORDPRESS-ORG.md`
 
 3. **Archived:**
@@ -108,7 +108,7 @@ $theme = $settings->get_option('tswp_theme', 'auto');
 
 **Use centralized IP detection:**
 ```php
-$ip = \TurnstileWP\get_client_ip();
+$ip = \SmartCT\get_client_ip();
 ```
 
 ### Next Steps

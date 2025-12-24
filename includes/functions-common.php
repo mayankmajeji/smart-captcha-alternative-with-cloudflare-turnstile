@@ -3,12 +3,12 @@
 /**
  * Common functions
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP;
+namespace SmartCT;
 
 /**
  * Check if current page is login page
@@ -88,5 +88,5 @@ function get_client_ip(): string {
 	 * @since 1.0.0
 	 * @param string $ip The detected IP address
 	 */
-	return apply_filters('turnstilewp_client_ip', $ip);
+	return apply_filters('smartct_client_ip', $ip);
 }

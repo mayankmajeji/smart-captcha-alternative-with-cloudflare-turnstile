@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Contact Form 7 Integration for TurnstileWP
+ * Contact Form 7 Integration for SmartCT
  *
- * @package TurnstileWP
- * @subpackage TurnstileWP/integrations
+ * @package SmartCT
+ * @subpackage SmartCT/integrations
  */
 
-namespace TurnstileWP\Integrations;
+namespace SmartCT\Integrations;
 
-use TurnstileWP\Settings;
-use TurnstileWP\Turnstile;
+use SmartCT\Settings;
+use SmartCT\Turnstile;
 
 if ( ! defined('ABSPATH') ) {
 	exit;
@@ -31,7 +31,7 @@ class Contact_Form7 {
 		$this->settings = new Settings();
 
 		// Register settings fields in centralized system
-		add_filter('turnstilewp_settings', array( $this, 'register_settings_fields' ));
+		add_filter('smartct_settings', array( $this, 'register_settings_fields' ));
 
 		// Inject widget into CF7 forms (late to ensure current form is set)
 		add_filter('wpcf7_form_elements', array( $this, 'inject_widget' ), 99);
@@ -40,7 +40,7 @@ class Contact_Form7 {
 		add_filter('wpcf7_spam', array( $this, 'validate_submission' ), 10, 2);
 
 		// Expose status to Dashboard "Other Integrations"
-		add_filter('turnstilewp_integrations', array( $this, 'register_dashboard_status' ));
+		add_filter('smartct_integrations', array( $this, 'register_dashboard_status' ));
 	}
 
 	private function is_cf7_active(): bool {
@@ -52,7 +52,7 @@ class Contact_Form7 {
 	 */
 	public function register_settings_fields( array $fields ): array {
 		$fields[] = array(
-			'field_id'    => 'tswp_cf7_enable',
+			'field_id'    => 'smartct_cf7_enable',
 			'label'       => __('Enable on Contact Form 7', 'smart-cloudflare-turnstile'),
 			'description' => __('Add Turnstile verification to Contact Form 7 forms.', 'smart-cloudflare-turnstile'),
 			'type'        => 'checkbox',
@@ -65,7 +65,7 @@ class Contact_Form7 {
 		);
 
 		$fields[] = array(
-			'field_id'    => 'tswp_cf7_position',
+			'field_id'    => 'smartct_cf7_position',
 			'label'       => __('Widget Position', 'smart-cloudflare-turnstile'),
 			'description' => __('Where to display the widget within the form.', 'smart-cloudflare-turnstile'),
 			'type'        => 'select',
@@ -87,12 +87,12 @@ class Contact_Form7 {
 	 * Inject Turnstile widget into CF7 form HTML
 	 */
 	public function inject_widget( string $form_html ): string {
-		$enabled = (bool) $this->settings->get_option('tswp_cf7_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_cf7_enable', false);
 		if ( ! $enabled ) {
 			return $form_html;
 		}
 
-		$position = (string) $this->settings->get_option('tswp_cf7_position', 'before_submit');
+		$position = (string) $this->settings->get_option('smartct_cf7_position', 'before_submit');
 
 		// Capture widget HTML output
 		ob_start();
@@ -128,7 +128,7 @@ class Contact_Form7 {
 	 * @return bool
 	 */
 	public function validate_submission( $is_spam, $submission ) {
-		$enabled = (bool) $this->settings->get_option('tswp_cf7_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_cf7_enable', false);
 		if ( ! $enabled ) {
 			return $is_spam;
 		}
@@ -146,11 +146,11 @@ class Contact_Form7 {
 	 * Add status row to Dashboard "Other Integrations"
 	 */
 	public function register_dashboard_status( array $items ): array {
-		$enabled = (bool) $this->settings->get_option('tswp_cf7_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_cf7_enable', false);
 		$items[] = array(
 			'label' => 'Contact Form 7',
 			'enabled' => $enabled,
-			'configure_url' => admin_url('admin.php?page=turnstilewp-integrations&integration_tab=form_plugins'),
+			'configure_url' => admin_url('admin.php?page=smartct-integrations&integration_tab=form_plugins'),
 		);
 		return $items;
 	}

@@ -1,15 +1,15 @@
 <?php
 /**
- * Fluent Forms Integration for TurnstileWP
+ * Fluent Forms Integration for SmartCT
  *
- * @package TurnstileWP
- * @subpackage TurnstileWP/integrations
+ * @package SmartCT
+ * @subpackage SmartCT/integrations
  */
 
-namespace TurnstileWP\Integrations;
+namespace SmartCT\Integrations;
 
-use TurnstileWP\Settings;
-use TurnstileWP\Turnstile;
+use SmartCT\Settings;
+use SmartCT\Turnstile;
 
 if ( ! defined('ABSPATH') ) {
 	exit;
@@ -30,7 +30,7 @@ class Fluent_Forms {
 		$this->settings = new Settings();
 
 		// Register settings fields in centralized system
-		add_filter('turnstilewp_settings', array( $this, 'register_settings_fields' ));
+		add_filter('smartct_settings', array( $this, 'register_settings_fields' ));
 
 		// Render widget after the form using Fluent Forms hook
 		add_action('fluentform/after_form_render', array( $this, 'render_after_form' ), 999, 1);
@@ -42,7 +42,7 @@ class Fluent_Forms {
 		add_action('fluentform/before_insert_submission', array( $this, 'validate_submission' ), 10, 3);
 
 		// Expose to Dashboard "Other Integrations"
-		add_filter('turnstilewp_integrations', array( $this, 'register_dashboard_status' ));
+		add_filter('smartct_integrations', array( $this, 'register_dashboard_status' ));
 	}
 
 	private function is_ff_active(): bool {
@@ -54,7 +54,7 @@ class Fluent_Forms {
 	 */
 	public function register_settings_fields( array $fields ): array {
 		$fields[] = array(
-			'field_id'    => 'tswp_fluent_enable',
+			'field_id'    => 'smartct_fluent_enable',
 			'label'       => __('Enable on Fluent Forms', 'smart-cloudflare-turnstile'),
 			'description' => __('Add Turnstile verification to Fluent Forms.', 'smart-cloudflare-turnstile'),
 			'type'        => 'checkbox',
@@ -67,7 +67,7 @@ class Fluent_Forms {
 		);
 
 		$fields[] = array(
-			'field_id'    => 'tswp_fluent_position',
+			'field_id'    => 'smartct_fluent_position',
 			'label'       => __('Widget Position', 'smart-cloudflare-turnstile'),
 			'description' => __('Choose where to display the widget.', 'smart-cloudflare-turnstile'),
 			'type'        => 'select',
@@ -86,11 +86,11 @@ class Fluent_Forms {
 	}
 
 	public function render_after_form( $form ): void {
-		$enabled = (bool) $this->settings->get_option('tswp_fluent_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_fluent_enable', false);
 		if ( ! $enabled ) {
 			return;
 		}
-		$position = (string) $this->settings->get_option('tswp_fluent_position', 'after_form');
+		$position = (string) $this->settings->get_option('smartct_fluent_position', 'after_form');
 		if ( $position !== 'after_form' ) {
 			return;
 		}
@@ -99,7 +99,7 @@ class Fluent_Forms {
 	}
 
 	public function validate_submission( $insertData, $data, $form ): void {
-		$enabled = (bool) $this->settings->get_option('tswp_fluent_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_fluent_enable', false);
 		if ( ! $enabled ) {
 			return;
 		}
@@ -132,7 +132,7 @@ class Fluent_Forms {
 		$items[] = array(
 			'label' => 'Fluent Forms',
 			'enabled' => $enabled,
-			'configure_url' => admin_url('admin.php?page=turnstilewp-integrations&integration_tab=form_plugins'),
+			'configure_url' => admin_url('admin.php?page=smartct-integrations&integration_tab=form_plugins'),
 		);
 		return $items;
 	}

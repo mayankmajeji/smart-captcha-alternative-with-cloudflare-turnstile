@@ -100,7 +100,7 @@ grep -r "'turnstilewp'" ./includes --include="*.php" | wc -l
 ### 3.3 $_SERVER Access
 **Issue**: Direct `$_SERVER['REMOTE_ADDR']` access  
 **Status**: ✅ ALREADY FIXED in previous refactoring
-- All IP detection now uses centralized `\TurnstileWP\get_client_ip()` function
+- All IP detection now uses centralized `\SmartCT\get_client_ip()` function
 - Proper sanitization applied in `includes/functions-common.php`
 
 ---

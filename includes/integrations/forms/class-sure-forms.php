@@ -1,16 +1,16 @@
 <?php
 /**
- * SureForms Integration for TurnstileWP
+ * SureForms Integration for SmartCT
  *
- * @package TurnstileWP
- * @subpackage TurnstileWP/integrations
+ * @package SmartCT
+ * @subpackage SmartCT/integrations
  */
 declare(strict_types=1);
 
-namespace TurnstileWP\Integrations;
+namespace SmartCT\Integrations;
 
-use TurnstileWP\Settings;
-use TurnstileWP\Turnstile;
+use SmartCT\Settings;
+use SmartCT\Turnstile;
 
 if ( ! defined('ABSPATH') ) {
 	exit;
@@ -31,7 +31,7 @@ class Sure_Forms {
 		$this->settings = new Settings();
 
 		// Register settings fields in centralized system
-		add_filter('turnstilewp_settings', array( $this, 'register_settings_fields' ));
+		add_filter('smartct_settings', array( $this, 'register_settings_fields' ));
 
 		// Render widget before/after submit
 		add_action('srfm_before_submit_button', array( $this, 'render_before_submit' ), 20, 1);
@@ -41,7 +41,7 @@ class Sure_Forms {
 		add_filter('srfm_before_fields_processing', array( $this, 'validate_submission' ), 5);
 
 		// Expose status to Dashboard "Other Integrations"
-		add_filter('turnstilewp_integrations', array( $this, 'register_dashboard_status' ));
+		add_filter('smartct_integrations', array( $this, 'register_dashboard_status' ));
 	}
 
 	private function is_active(): bool {
@@ -53,7 +53,7 @@ class Sure_Forms {
 	 */
 	public function register_settings_fields( array $fields ): array {
 		$fields[] = array(
-			'field_id'    => 'tswp_sureforms_enable',
+			'field_id'    => 'smartct_sureforms_enable',
 			'label'       => __('Enable on SureForms', 'smart-cloudflare-turnstile'),
 			'description' => __('Add Turnstile verification to SureForms forms.', 'smart-cloudflare-turnstile'),
 			'type'        => 'checkbox',
@@ -66,7 +66,7 @@ class Sure_Forms {
 		);
 
 		$fields[] = array(
-			'field_id'    => 'tswp_sureforms_position',
+			'field_id'    => 'smartct_sureforms_position',
 			'label'       => __('Widget Position', 'smart-cloudflare-turnstile'),
 			'description' => __('Where to display the widget within the form.', 'smart-cloudflare-turnstile'),
 			'type'        => 'select',
@@ -85,11 +85,11 @@ class Sure_Forms {
 	}
 
 	public function render_before_submit( $form_id ): void {
-		$enabled = (bool) $this->settings->get_option('tswp_sureforms_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_sureforms_enable', false);
 		if ( ! $enabled ) {
 			return;
 		}
-		$position = (string) $this->settings->get_option('tswp_sureforms_position', 'before_submit');
+		$position = (string) $this->settings->get_option('smartct_sureforms_position', 'before_submit');
 		if ( $position !== 'before_submit' ) {
 			return;
 		}
@@ -98,7 +98,7 @@ class Sure_Forms {
 	}
 
 	public function render_after_submit( $form_id ): void {
-		$enabled = (bool) $this->settings->get_option('tswp_sureforms_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_sureforms_enable', false);
 		if ( ! $enabled ) {
 			return;
 		}
@@ -131,7 +131,7 @@ class Sure_Forms {
 		}
 
 		wp_send_json_error(array(
-			'message' => $this->settings->get_option('tswp_custom_error_message', __('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile')),
+			'message' => $this->settings->get_option('smartct_custom_error_message', __('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile')),
 			'position' => 'header',
 		));
 	}
@@ -144,7 +144,7 @@ class Sure_Forms {
 		$items[] = array(
 			'label' => 'SureForms',
 			'enabled' => $enabled,
-			'configure_url' => admin_url('admin.php?page=turnstilewp-integrations&integration_tab=form_plugins'),
+			'configure_url' => admin_url('admin.php?page=smartct-integrations&integration_tab=form_plugins'),
 		);
 		return $items;
 	}

@@ -3,12 +3,12 @@
 /**
  * Base Settings Tab Class
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP\Settings;
+namespace SmartCT\Settings;
 
 abstract class Tab {
 

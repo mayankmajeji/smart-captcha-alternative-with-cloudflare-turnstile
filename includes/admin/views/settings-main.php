@@ -2,7 +2,7 @@
 /**
  * Main Settings Page Template
  *
- * @package TurnstileWP
+ * @package SmartCT
  * 
  * phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
  * Template variables are scoped to this file and do not pollute the global namespace.
@@ -13,9 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use TurnstileWP\Settings;
+// Check user permissions - only administrators can access plugin settings
+if ( ! current_user_can( 'manage_options' ) ) {
+	wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'smart-cloudflare-turnstile' ) );
+}
 
-require_once dirname(__DIR__, 2) . '/settings/field-renderer.php';
+use SmartCT\Settings;
+
+require_once SMARTCT_PLUGIN_DIR . 'includes/settings/field-renderer.php';
 
 $settings = new Settings();
 $fields_structure = $settings->get_fields_structure();
@@ -24,19 +29,19 @@ $values = $settings->get_settings();
 // Only render fields from the 'turnstile_settings' tab
 $fields = $fields_structure['turnstile_settings'] ?? array();
 
-$site_key = $settings->get_option('tswp_site_key', '');
-$secret_key = $settings->get_option('tswp_secret_key', '');
-$keys_verified = get_option('turnstilewp_keys_verified', 0);
+$site_key = $settings->get_option('smartct_site_key', '');
+$secret_key = $settings->get_option('smartct_secret_key', '');
+$keys_verified = get_option('smartct_keys_verified', 0);
 ?>
-<div class="turnstilewp-page turnstilewp-page--settings">
-	<?php require_once dirname(__DIR__) . '/templates/header.php'; ?>
-	<div class="turnstilewp-body">
+<div class="smartct-page smartct-page--settings">
+	<?php require_once SMARTCT_PLUGIN_DIR . 'includes/admin/templates/header.php'; ?>
+	<div class="smartct-body">
 		<?php
 		$twp_title = get_admin_page_title();
 		$twp_desc  = __('Configure Turnstile settings and integrations.', 'smart-cloudflare-turnstile');
-		require dirname(__DIR__) . '/templates/body-header.php';
+		require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/body-header.php';
 		?>
-		<?php settings_errors('turnstilewp_settings_errors'); ?>
+		<?php settings_errors('smartct_settings_errors'); ?>
 		<?php
 		// Build left tabs: Settings first, then integrations conditionally
 		$settings_tabs = array(
@@ -44,7 +49,7 @@ $keys_verified = get_option('turnstilewp_keys_verified', 0);
 			'default_wordpress_forms' => __('WordPress Forms', 'smart-cloudflare-turnstile'),
 		);
 		$has_form_plugins = apply_filters(
-			'turnstilewp_has_form_plugins',
+			'smartct_has_form_plugins',
 			( defined('WPCF7_VERSION') || function_exists('wpcf7')
 				|| defined('WPFORMS_VERSION') || class_exists('WPForms') || function_exists('wpforms')
 				|| defined('NINJA_FORMS_VERSION') || class_exists('Ninja_Forms') || function_exists('Ninja_Forms')
@@ -61,14 +66,14 @@ $keys_verified = get_option('turnstilewp_keys_verified', 0);
 		if ( $has_form_plugins ) {
 			$settings_tabs['form_plugins'] = __('Form Plugins', 'smart-cloudflare-turnstile');
 		}
-	if ( ! empty($fields_structure['others']) ) {
-		$settings_tabs['others'] = __('Others', 'smart-cloudflare-turnstile');
-	}
+		if ( ! empty($fields_structure['others']) ) {
+			$settings_tabs['others'] = __('Others', 'smart-cloudflare-turnstile');
+		}
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation doesn't require nonce verification
 	$current_settings_tab = isset($_GET['settings_tab']) ? sanitize_key(wp_unslash($_GET['settings_tab'])) : 'turnstile_settings';
-	if ( ! array_key_exists($current_settings_tab, $settings_tabs) ) {
-		$current_settings_tab = 'turnstile_settings';
-	}
+		if ( ! array_key_exists($current_settings_tab, $settings_tabs) ) {
+			$current_settings_tab = 'turnstile_settings';
+		}
 		?>
 		<div class="twp-2col">
 			<aside class="twp-vtabs">
@@ -87,10 +92,10 @@ $keys_verified = get_option('turnstilewp_keys_verified', 0);
 					} elseif ( $sid === 'others' ) {
 						$icon_partial = 'plugin-icon.php';
 					}
-					$icon_path = dirname(__DIR__) . '/templates/icons/' . $icon_partial;
+					$icon_path = SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/' . $icon_partial;
 					?>
-					<a class="twp-vtab <?php echo $current_settings_tab === $sid ? 'is-active' : ''; ?>"
-						href="<?php echo esc_url(admin_url('admin.php?page=turnstilewp-settings&settings_tab=' . urlencode( (string) $sid))); ?>">
+				<a class="twp-vtab <?php echo esc_attr( $current_settings_tab === $sid ? 'is-active' : '' ); ?>"
+					href="<?php echo esc_url(admin_url('admin.php?page=smartct-settings&settings_tab=' . urlencode( (string) $sid))); ?>">
 						<span class="twp-vtab-icon">
 							<?php
 							if ( file_exists($icon_path) ) {
@@ -106,22 +111,22 @@ $keys_verified = get_option('turnstilewp_keys_verified', 0);
 				<div class="twp-toolbar">
 					<button type="button" class="twp-collapse-btn" data-twp-toggle="vtabs">
 						<span class="twp-collapse-icon icon-open" aria-hidden="true">
-							<?php require dirname(__DIR__) . '/templates/icons/panel-close-icon.php'; ?>
+							<?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/panel-close-icon.php'; ?>
 						</span>
 						<span class="twp-collapse-icon icon-close" aria-hidden="true" style="display:none;">
-							<?php require dirname(__DIR__) . '/templates/icons/panel-open-icon.php'; ?>
+							<?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/panel-open-icon.php'; ?>
 						</span>
 					</button>
-					<button type="submit" class="button button-primary" form="turnstilewp-settings-form">
+					<button type="submit" class="button button-primary" form="smartct-settings-form">
 						<?php esc_html_e('Save Changes', 'smart-cloudflare-turnstile'); ?>
 					</button>
 				</div>
-				<form id="turnstilewp-settings-form" method="post" action="options.php">
-					<?php settings_fields('turnstilewp_settings'); ?>
-					<div class="turnstilewp-section" id="section-<?php echo esc_attr($current_settings_tab); ?>">
-						<div class="turnstilewp-sub-section">
+				<form id="smartct-settings-form" method="post" action="options.php">
+					<?php settings_fields('smartct_settings'); ?>
+					<div class="smartct-section" id="section-<?php echo esc_attr($current_settings_tab); ?>">
+						<div class="smartct-sub-section">
 							<?php if ( $current_settings_tab === 'turnstile_settings' && ! empty($site_key) && ! empty($secret_key) ) : ?>
-								<div class="turnstilewp-preview-box">
+								<div class="smartct-preview-box">
 									<?php if ( ! $keys_verified ) : ?>
 										<div class="twp-status-indicator-box unverified">
 											<strong style="color:#d00;"><?php esc_html_e('API keys have been updated. Please test the Turnstile API response below.', 'smart-cloudflare-turnstile'); ?></strong><br>
@@ -129,9 +134,9 @@ $keys_verified = get_option('turnstilewp_keys_verified', 0);
 											<div style="margin:1.5em 0;">
 												<div id="cf-turnstile-preview"></div>
 											</div>
-											<button type="button" class="button button-primary" id="turnstilewp-verify-keys"><?php esc_html_e('Verify Keys', 'smart-cloudflare-turnstile'); ?></button>
-											<span id="turnstilewp-verify-spinner" class="spinner" style="float:none;vertical-align:middle;"></span>
-											<div id="turnstilewp-verify-message" style="margin-top:1em;"></div>
+											<button type="button" class="button button-primary" id="smartct-verify-keys"><?php esc_html_e('Verify Keys', 'smart-cloudflare-turnstile'); ?></button>
+											<span id="smartct-verify-spinner" class="spinner" style="float:none;vertical-align:middle;"></span>
+											<div id="smartct-verify-message" style="margin-top:1em;"></div>
 										</div>
 									<?php else : ?>
 										<div class="twp-status-indicator-box verified">
@@ -144,40 +149,40 @@ $keys_verified = get_option('turnstilewp_keys_verified', 0);
 							// Render only the selected tab sections
 							$selected_tab = $fields_structure[ $current_settings_tab ] ?? array();
 							// Maintain special handling for API settings block from earlier
-							$has_constants = defined('TURNSTILEWP_SITE_KEY') || defined('TURNSTILEWP_SECRET_KEY');
+							$has_constants = defined('SMARTCT_SITE_KEY') || defined('SMARTCT_SECRET_KEY');
 							// Special handling for API settings group only when on Settings tab
 							if ( $current_settings_tab === 'turnstile_settings' && $has_constants ) {
 								$section_fields_filtered = array();
 								foreach ( $selected_tab as $section_id => $section_fields_arr ) {
 									foreach ( $section_fields_arr as $k => $field ) {
-										if ( ! in_array(( $field['field_id'] ?? '' ), array( 'tswp_site_key', 'tswp_secret_key' ), true) ) {
+										if ( ! in_array(( $field['field_id'] ?? '' ), array( 'smartct_site_key', 'smartct_secret_key' ), true) ) {
 											$section_fields_filtered[ $k ] = $field;
 										}
 									}
 								}
 								$section_fields_filtered[] = array(
-									'field_id' => 'tswp_wpconfig_notice',
+									'field_id' => 'smartct_wpconfig_notice',
 									'type' => 'content',
 									'content' => '<p style="margin:0; font-weight:600; color:#1e8c1e;"><span class="dashicons dashicons-lock"></span> ' . esc_html__('Using keys defined in wp-config.php. Be sure to test your forms to confirm they are working.', 'smart-cloudflare-turnstile') . '</p>',
 									'group' => 'api_keys',
 								);
-								$const_site = defined('TURNSTILEWP_SITE_KEY') ? TURNSTILEWP_SITE_KEY : '';
-								$const_secret = defined('TURNSTILEWP_SECRET_KEY') ? TURNSTILEWP_SECRET_KEY : '';
+								$const_site = defined('SMARTCT_SITE_KEY') ? SMARTCT_SITE_KEY : '';
+								$const_secret = defined('SMARTCT_SECRET_KEY') ? SMARTCT_SECRET_KEY : '';
 								$masked_secret = $const_secret !== '' ? substr($const_secret, 0, 10) . str_repeat('*', max(0, strlen($const_secret) - 10)) : '';
 								$constants_table = '<div><table class="form-table" role="presentation" style="margin-top:0;"><tbody>'
-									. '<tr valign="top"><th scope="row">' . esc_html__('Site Key', 'smart-cloudflare-turnstile') . '</th><td><p>' . esc_html($const_site) . '</p><input type="hidden" name="tswp_site_key" value=""></td></tr>'
-									. '<tr valign="top"><th scope="row">' . esc_html__('Secret Key', 'smart-cloudflare-turnstile') . '</th><td><p>' . esc_html($masked_secret) . '</p><input type="hidden" name="tswp_secret_key" value=""></td></tr>'
+									. '<tr valign="top"><th scope="row">' . esc_html__('Site Key', 'smart-cloudflare-turnstile') . '</th><td><p>' . esc_html($const_site) . '</p><input type="hidden" name="smartct_site_key" value=""></td></tr>'
+									. '<tr valign="top"><th scope="row">' . esc_html__('Secret Key', 'smart-cloudflare-turnstile') . '</th><td><p>' . esc_html($masked_secret) . '</p><input type="hidden" name="smartct_secret_key" value=""></td></tr>'
 									. '</tbody></table></div>';
 								$section_fields_filtered[] = array(
-									'field_id' => 'tswp_wpconfig_constants_table',
+									'field_id' => 'smartct_wpconfig_constants_table',
 									'type' => 'content',
 									'content' => $constants_table,
 									'group' => 'api_keys',
 								);
-								turnstilewp_render_setting_fields_grouped(array_values($section_fields_filtered), $values);
+								smartct_render_setting_fields_grouped(array_values($section_fields_filtered), $values);
 							} else {
 								foreach ( $selected_tab as $section_id => $section_fields_arr ) {
-									turnstilewp_render_setting_fields_grouped(array_values($section_fields_arr), $values);
+									smartct_render_setting_fields_grouped(array_values($section_fields_arr), $values);
 								}
 							}
 							?>

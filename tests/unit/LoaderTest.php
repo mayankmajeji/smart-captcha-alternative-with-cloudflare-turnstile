@@ -1,8 +1,8 @@
 <?php
 
-namespace TurnstileWP\Tests\Unit;
+namespace SmartCT\Tests\Unit;
 
-use TurnstileWP\Loader;
+use SmartCT\Loader;
 use Codeception\Test\Unit;
 
 class LoaderTest extends Unit
@@ -24,10 +24,10 @@ class LoaderTest extends Unit
 		$this->assertTrue(method_exists(Loader::class, 'load_integrations'));
 	}
 
-	public function testAutoloadHandlesTurnstileWPNamespace()
+	public function testAutoloadHandlesSmartCTNamespace()
 	{
-		// Test that autoloader handles TurnstileWP namespace
-		$class = 'TurnstileWP\\Settings';
+		// Test that autoloader handles SmartCT namespace
+		$class = 'SmartCT\\Settings';
 		$this->assertTrue(class_exists($class));
 	}
 }

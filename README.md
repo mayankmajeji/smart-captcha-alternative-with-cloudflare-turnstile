@@ -1,4 +1,4 @@
-# TurnstileWP
+# SmartCT
 
 Lightweight, privacy‑first integration of Cloudflare Turnstile with WordPress core forms and WooCommerce. No puzzles, no images — just a fast, accessible user experience.
 
@@ -20,8 +20,8 @@ Lightweight, privacy‑first integration of Cloudflare Turnstile with WordPress 
 ## Installation
 
 1. Upload the `turnstilewp` folder to `/wp-content/plugins/`, or install via Plugins → Add New.
-2. Activate “TurnstileWP” from the Plugins screen.
-3. Go to Settings → TurnstileWP and enter your Cloudflare Turnstile keys.
+2. Activate “SmartCT” from the Plugins screen.
+3. Go to Settings → SmartCT and enter your Cloudflare Turnstile keys.
 
 ## Configuration
 
@@ -32,7 +32,7 @@ Lightweight, privacy‑first integration of Cloudflare Turnstile with WordPress 
 
 ## WooCommerce
 
-The plugin supports multiple checkout placement options (before/after checkout form, order review, etc.). You can fine‑tune locations from Settings → TurnstileWP → WooCommerce.
+The plugin supports multiple checkout placement options (before/after checkout form, order review, etc.). You can fine‑tune locations from Settings → SmartCT → WooCommerce.
 
 ## How it works
 

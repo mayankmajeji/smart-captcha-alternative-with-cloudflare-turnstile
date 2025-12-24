@@ -1,16 +1,16 @@
 <?php
 /**
- * Everest Forms Integration for TurnstileWP
+ * Everest Forms Integration for SmartCT
  *
- * @package TurnstileWP
- * @subpackage TurnstileWP/integrations
+ * @package SmartCT
+ * @subpackage SmartCT/integrations
  */
 declare(strict_types=1);
 
-namespace TurnstileWP\Integrations;
+namespace SmartCT\Integrations;
 
-use TurnstileWP\Settings;
-use TurnstileWP\Turnstile;
+use SmartCT\Settings;
+use SmartCT\Turnstile;
 
 if ( ! defined('ABSPATH') ) {
 	exit;
@@ -31,7 +31,7 @@ class Everest_Forms {
 		$this->settings = new Settings();
 
 		// Register settings fields in centralized system
-		add_filter('turnstilewp_settings', array( $this, 'register_settings_fields' ));
+		add_filter('smartct_settings', array( $this, 'register_settings_fields' ));
 
 		// Render before/after submit button
 		add_action('everest_forms_display_submit_before', array( $this, 'render_before_submit' ), 20, 1);
@@ -41,7 +41,7 @@ class Everest_Forms {
 		add_filter('everest_forms_process_initial_errors', array( $this, 'validate_submission' ), 10, 2);
 
 		// Expose status to Dashboard "Other Integrations"
-		add_filter('turnstilewp_integrations', array( $this, 'register_dashboard_status' ));
+		add_filter('smartct_integrations', array( $this, 'register_dashboard_status' ));
 	}
 
 	private function is_active(): bool {
@@ -53,7 +53,7 @@ class Everest_Forms {
 	 */
 	public function register_settings_fields( array $fields ): array {
 		$fields[] = array(
-			'field_id'    => 'tswp_everest_forms_enable',
+			'field_id'    => 'smartct_everest_forms_enable',
 			'label'       => __('Enable on Everest Forms', 'smart-cloudflare-turnstile'),
 			'description' => __('Add Turnstile verification to Everest Forms.', 'smart-cloudflare-turnstile'),
 			'type'        => 'checkbox',
@@ -66,7 +66,7 @@ class Everest_Forms {
 		);
 
 		$fields[] = array(
-			'field_id'    => 'tswp_everest_forms_position',
+			'field_id'    => 'smartct_everest_forms_position',
 			'label'       => __('Widget Position', 'smart-cloudflare-turnstile'),
 			'description' => __('Where to display the widget within the form.', 'smart-cloudflare-turnstile'),
 			'type'        => 'select',
@@ -85,11 +85,11 @@ class Everest_Forms {
 	}
 
 	public function render_before_submit( $form_data ): void {
-		$enabled = (bool) $this->settings->get_option('tswp_everest_forms_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_everest_forms_enable', false);
 		if ( ! $enabled ) {
 			return;
 		}
-		$position = (string) $this->settings->get_option('tswp_everest_forms_position', 'before_submit');
+		$position = (string) $this->settings->get_option('smartct_everest_forms_position', 'before_submit');
 		if ( $position !== 'before_submit' ) {
 			return;
 		}
@@ -98,7 +98,7 @@ class Everest_Forms {
 	}
 
 	public function render_after_submit( $form_data ): void {
-		$enabled = (bool) $this->settings->get_option('tswp_everest_forms_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_everest_forms_enable', false);
 		if ( ! $enabled ) {
 			return;
 		}
@@ -134,10 +134,10 @@ class Everest_Forms {
 			if ( empty($errors[ $form_id ]) ) {
 				$errors[ $form_id ] = array();
 			}
-			$errors[ $form_id ]['header'] = $this->settings->get_option('tswp_custom_error_message', __('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
+		$errors[ $form_id ]['header'] = $this->settings->get_option('smartct_custom_error_message', __('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
 
-			// Ensure Everest Forms flags AJAX validation failure when needed
-			update_option('evf_validation_error', 'yes');
+		// Store validation error flag with proper prefix to avoid conflicts
+		update_option('smartct_evf_validation_error', 'yes');
 		}
 
 		return $errors;
@@ -151,7 +151,7 @@ class Everest_Forms {
 		$items[] = array(
 			'label' => 'Everest Forms',
 			'enabled' => $enabled,
-			'configure_url' => admin_url('admin.php?page=turnstilewp-integrations&integration_tab=form_plugins'),
+			'configure_url' => admin_url('admin.php?page=smartct-integrations&integration_tab=form_plugins'),
 		);
 		return $items;
 	}

@@ -1,6 +1,6 @@
-# Testing Guide for TurnstileWP
+# Testing Guide for SmartCT
 
-This comprehensive guide explains how to test the TurnstileWP WordPress plugin, covering test execution, testing strategies, and quality assurance standards.
+This comprehensive guide explains how to test the SmartCT WordPress plugin, covering test execution, testing strategies, and quality assurance standards.
 
 ## Table of Contents
 
@@ -492,9 +492,9 @@ Create test files in `tests/unit/`:
 
 ```php
 <?php
-namespace TurnstileWP\Tests\Unit;
+namespace SmartCT\Tests\Unit;
 
-use TurnstileWP\YourClass;
+use SmartCT\YourClass;
 use Codeception\Test\Unit;
 
 class YourClassTest extends Unit
@@ -521,7 +521,7 @@ Create test files in `tests/integration/`:
 
 ```php
 <?php
-namespace TurnstileWP\Tests\Integration;
+namespace SmartCT\Tests\Integration;
 
 use Codeception\TestCase\WPTestCase;
 
@@ -541,7 +541,7 @@ Create test files in `tests/acceptance/`:
 
 ```php
 <?php
-namespace TurnstileWP\Tests\Acceptance;
+namespace SmartCT\Tests\Acceptance;
 
 use AcceptanceTester;
 
@@ -702,4 +702,4 @@ If you encounter issues with testing:
 
 **Last Updated:** December 20, 2024  
 **Version:** 2.0  
-**Maintained by:** TurnstileWP Team
+**Maintained by:** SmartCT Team

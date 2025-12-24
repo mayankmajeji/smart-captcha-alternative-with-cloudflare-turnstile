@@ -8,7 +8,7 @@ if ( ! defined('WPINC') ) {
 ?>
 <div class="twp-body-header">
 	<div class="twp-bh-left">
-		<img src="<?php echo esc_url(TURNSTILEWP_PLUGIN_URL . 'assets/images/favicon.svg'); ?>" alt="Smart Cloudflare Turnstile" />
+		<img src="<?php echo esc_url(SMARTCT_PLUGIN_URL . 'assets/images/favicon.svg'); ?>" alt="Smart Cloudflare Turnstile" />
 	</div>
 	<div class="twp-bh-right">
 		<h1><?php echo esc_html(isset($twp_title) && $twp_title !== '' ? $twp_title : get_admin_page_title()); ?></h1>

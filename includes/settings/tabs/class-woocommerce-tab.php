@@ -3,14 +3,14 @@
 /**
  * WooCommerce Settings Tab
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP\Settings\Tabs;
+namespace SmartCT\Settings\Tabs;
 
-use TurnstileWP\Settings\Tab;
+use SmartCT\Settings\Tab;
 
 class WooCommerce_Tab extends Tab {
 
@@ -44,8 +44,8 @@ class WooCommerce_Tab extends Tab {
 	public function get_content(): string {
 		ob_start();
 ?>
-		<div class="turnstilewp-tab-content">
-			<div class="turnstilewp-section">
+		<div class="smartct-tab-content">
+			<div class="smartct-section">
 				<h2><?php esc_html_e('WooCommerce Integration', 'smart-cloudflare-turnstile'); ?></h2>
 				<p><?php esc_html_e('Configure how Turnstile integrates with WooCommerce forms.', 'smart-cloudflare-turnstile'); ?></p>
 			</div>

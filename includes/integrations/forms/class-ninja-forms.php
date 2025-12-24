@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Ninja Forms Integration for TurnstileWP
+ * Ninja Forms Integration for SmartCT
  *
- * @package TurnstileWP
- * @subpackage TurnstileWP/integrations
+ * @package SmartCT
+ * @subpackage SmartCT/integrations
  */
 
-namespace TurnstileWP\Integrations;
+namespace SmartCT\Integrations;
 
-use TurnstileWP\Settings;
-use TurnstileWP\Turnstile;
+use SmartCT\Settings;
+use SmartCT\Turnstile;
 
 if ( ! defined('ABSPATH') ) {
 	exit;
@@ -37,7 +37,7 @@ class Ninja_Forms {
 		$this->settings = new Settings();
 
 		// Register settings fields in centralized system
-		add_filter('turnstilewp_settings', array( $this, 'register_settings_fields' ));
+		add_filter('smartct_settings', array( $this, 'register_settings_fields' ));
 
 		// Render after the form (below submit button) using the after_form_display ACTION (passes $form_id)
 		add_action('ninja_forms_after_form_display', array( $this, 'render_after_form' ), 999, 1);
@@ -53,7 +53,7 @@ class Ninja_Forms {
 		add_action('ninja_forms_before_submission', array( $this, 'validate_submission' ));
 
 		// Expose to Dashboard "Other Integrations"
-		add_filter('turnstilewp_integrations', array( $this, 'register_dashboard_status' ));
+		add_filter('smartct_integrations', array( $this, 'register_dashboard_status' ));
 	}
 
 	private function is_nf_active(): bool {
@@ -65,7 +65,7 @@ class Ninja_Forms {
 	 */
 	public function register_settings_fields( array $fields ): array {
 		$fields[] = array(
-			'field_id'    => 'tswp_nf_enable',
+			'field_id'    => 'smartct_nf_enable',
 			'label'       => __('Enable on Ninja Forms', 'smart-cloudflare-turnstile'),
 			'description' => __('Add Turnstile verification to Ninja Forms.', 'smart-cloudflare-turnstile'),
 			'type'        => 'checkbox',
@@ -87,7 +87,7 @@ class Ninja_Forms {
 		if ( $this->rendered ) {
 			return;
 		}
-		$enabled = (bool) $this->settings->get_option('tswp_nf_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_nf_enable', false);
 		if ( ! $enabled ) {
 			return;
 		}
@@ -99,7 +99,7 @@ class Ninja_Forms {
 
 	// Placeholder for validation pending finalization of NF processing API usage
 	public function validate_submission(): void {
-		$enabled = (bool) $this->settings->get_option('tswp_nf_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_nf_enable', false);
 		if ( ! $enabled ) {
 			return;
 		}
@@ -119,7 +119,7 @@ class Ninja_Forms {
 		$items[] = array(
 			'label' => 'Ninja Forms',
 			'enabled' => $enabled,
-			'configure_url' => admin_url('admin.php?page=turnstilewp-integrations&integration_tab=form_plugins'),
+			'configure_url' => admin_url('admin.php?page=smartct-integrations&integration_tab=form_plugins'),
 		);
 		return $items;
 	}

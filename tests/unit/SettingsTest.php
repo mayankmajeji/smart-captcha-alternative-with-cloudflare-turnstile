@@ -1,8 +1,8 @@
 <?php
 
-namespace TurnstileWP\Tests\Unit;
+namespace SmartCT\Tests\Unit;
 
-use TurnstileWP\Settings;
+use SmartCT\Settings;
 use Codeception\Test\Unit;
 
 class SettingsTest extends Unit

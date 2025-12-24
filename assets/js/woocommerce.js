@@ -15,31 +15,31 @@
 	}
 
 	// Define global Turnstile callbacks up-front (must exist before widget fires)
-	window.turnstileWooCheckoutCallback = function () {
+	window.smartctWooCheckoutCallback = function () {
 		enableButton($('form.checkout').find('#place_order'));
 	};
-	window.turnstileWooLoginCallback = function () {
+	window.smartctWooLoginCallback = function () {
 		enableButton(
 			$('form.woocommerce-form-login').find(
 				'button[type="submit"], input[type="submit"], .woocommerce-Button[name="login"]'
 			)
 		);
 	};
-	window.turnstileWooRegisterCallback = function () {
+	window.smartctWooRegisterCallback = function () {
 		enableButton(
 			$('form.woocommerce-form-register').find(
 				'button[type="submit"], input[type="submit"], .woocommerce-Button[name="register"]'
 			)
 		);
 	};
-	window.turnstileWooResetCallback = function () {
+	window.smartctWooResetCallback = function () {
 		enableButton(
 			$('form.woocommerce-ResetPassword').find(
 				'button[type="submit"], input[type="submit"]'
 			)
 		);
 	};
-	window.turnstileWooPayOrderCallback = function () {
+	window.smartctWooPayOrderCallback = function () {
 		enableButton($('#order_review').find('#place_order'));
 	};
 
@@ -94,34 +94,33 @@
 					}
 				});
 			}
-		} else if (typeof turnstile !== 'undefined' && ! hasWidget) {
+		} else if (typeof turnstile !== 'undefined' && !hasWidget) {
 			// Try to inject for Checkout Block area if present
 			const $actions = $(
 				'.wc-block-checkout__actions, .wc-block-components-checkout-place-order-button'
 			).first();
 			if (
 				$actions.length &&
-				window.turnstileWoo &&
-				window.turnstileWoo.siteKey
+				window.smartctWoo &&
+				window.smartctWoo.siteKey
 			) {
 				// Avoid duplicate inject
-				if ( ! $actions.prev('.turnstilewp-injected').length) {
+				if (!$actions.prev('.smartct-injected').length) {
 					const mount = $(
-						'<div class="turnstilewp-injected" style="margin:10px 0;"></div>'
+						'<div class="smartct-injected" style="margin:10px 0;"></div>'
 					);
 					$actions.before(mount);
 					try {
 						window.turnstile.render(mount.get(0), {
-							sitekey: window.turnstileWoo.siteKey,
-							callback: window.turnstileWooCheckoutCallback,
+							sitekey: window.smartctWoo.siteKey,
+							callback: window.smartctWooCheckoutCallback,
 						});
 						$submitButton.prop('disabled', true);
-					} catch (e) {
-}
+					} catch (e) {}
 				}
 			}
 			// If still no widget/mount, don't interfere
-			if ( ! $('.cf-turnstile').length) {
+			if (!$('.cf-turnstile').length) {
 				enableButton($submitButton);
 			}
 		} else {
@@ -249,4 +248,56 @@
 	$(document.body).on('updated_checkout', function () {
 		initWooTurnstile();
 	});
+
+	// ========================================
+	// WooCommerce Turnstile iFrame Styling
+	// Ensures iframes are properly styled on WooCommerce pages
+	// ========================================
+	const wooIframeSelectors = [
+		'.woocommerce .cf-turnstile iframe',
+		'.woocommerce-page .cf-turnstile iframe',
+		'.woocommerce form .cf-turnstile iframe',
+		'.woocommerce form.login .cf-turnstile iframe',
+		'.woocommerce form.register .cf-turnstile iframe',
+		'.woocommerce form.checkout .cf-turnstile iframe',
+		'.woocommerce form.lost_reset_password .cf-turnstile iframe',
+		'.woocommerce .woocommerce-form-login .cf-turnstile iframe',
+		'.woocommerce .woocommerce-form-register .cf-turnstile iframe',
+		'.woocommerce .woocommerce-checkout .cf-turnstile iframe',
+		'.woocommerce-page form .cf-turnstile iframe',
+		'.woocommerce-page form.login .cf-turnstile iframe',
+		'.woocommerce-page form.register .cf-turnstile iframe',
+	];
+
+	function styleWooTurnstileIframes() {
+		const iframes = document.querySelectorAll(
+			wooIframeSelectors.join(', ')
+		);
+		iframes.forEach(function (iframe) {
+			iframe.style.width = '100%';
+			iframe.style.maxWidth = '100%';
+		});
+	}
+
+	// Apply styles on DOM ready
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', styleWooTurnstileIframes);
+	} else {
+		styleWooTurnstileIframes();
+	}
+
+	// Apply styles repeatedly in case of late loading (e.g., AJAX loaded forms)
+	setInterval(styleWooTurnstileIframes, 300);
+
+	// Observe DOM for dynamically added iframes
+	if (window.MutationObserver && document.body) {
+		const observer = new MutationObserver(function (mutations) {
+			mutations.forEach(function (mutation) {
+				if (mutation.addedNodes.length) {
+					styleWooTurnstileIframes();
+				}
+			});
+		});
+		observer.observe(document.body, { childList: true, subtree: true });
+	}
 })(jQuery);

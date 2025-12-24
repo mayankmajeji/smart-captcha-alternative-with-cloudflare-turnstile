@@ -2,7 +2,7 @@
 /**
  * Integrations Page Template
  *
- * @package TurnstileWP
+ * @package SmartCT
  * 
  * phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
  * Template variables are scoped to this file and do not pollute the global namespace.
@@ -13,7 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use TurnstileWP\Settings;
+// Check user permissions - only administrators can access plugin settings
+if ( ! current_user_can( 'manage_options' ) ) {
+	wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'smart-cloudflare-turnstile' ) );
+}
+
+use SmartCT\Settings;
 
 $settings = new Settings();
 $fields_structure = $settings->get_fields_structure();
@@ -21,7 +26,7 @@ $values = $settings->get_settings();
 
 // Tabs for integrations
 $has_form_plugins = apply_filters(
-	'turnstilewp_has_form_plugins',
+	'smartct_has_form_plugins',
 	(defined('WPCF7_VERSION') || function_exists('wpcf7')
 		|| defined('WPFORMS_VERSION') || class_exists('WPForms') || function_exists('wpforms')
 		|| defined('NINJA_FORMS_VERSION') || class_exists('Ninja_Forms') || function_exists('Ninja_Forms')
@@ -57,15 +62,15 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 	$current_tab = 'default_wordpress_forms';
 }
 ?>
-<div class="turnstilewp-page turnstilewp-page--integrations">
-	<?php require_once dirname(__DIR__) . '/templates/header.php'; ?>
-	<div class="turnstilewp-body">
+<div class="smartct-page smartct-page--integrations">
+	<?php require_once SMARTCT_PLUGIN_DIR . 'includes/admin/templates/header.php'; ?>
+	<div class="smartct-body">
 		<?php
 		$twp_title = get_admin_page_title();
 		$twp_desc  = __('Browse available services and filter by type.', 'smart-cloudflare-turnstile');
-		require dirname(__DIR__) . '/templates/body-header.php';
+		require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/body-header.php';
 		?>
-		<?php settings_errors('turnstilewp_settings_errors'); ?>
+		<?php settings_errors('smartct_settings_errors'); ?>
 
 		<?php
 		// Left filters
@@ -73,14 +78,14 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 			'all'          => __('All', 'smart-cloudflare-turnstile'),
 			'form_plugins' => __('Form Plugins', 'smart-cloudflare-turnstile'),
 			'membership'   => __('Membership', 'smart-cloudflare-turnstile'),
-		'community'    => __('Community', 'smart-cloudflare-turnstile'),
-		'others'       => __('Others', 'smart-cloudflare-turnstile'),
-	);
+			'community'    => __('Community', 'smart-cloudflare-turnstile'),
+			'others'       => __('Others', 'smart-cloudflare-turnstile'),
+		);
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation doesn't require nonce verification
 	$current_filter = isset($_GET['filter_tab']) ? sanitize_key(wp_unslash($_GET['filter_tab'])) : 'all';
-	if (! array_key_exists($current_filter, $filter_tabs)) {
-		$current_filter = 'all';
-	}
+		if (! array_key_exists($current_filter, $filter_tabs)) {
+			$current_filter = 'all';
+		}
 
 		// Service catalog with plugin mapping
 		if (! function_exists('get_plugins')) {
@@ -93,8 +98,8 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 		$is_plugin_active_cb = function (string $plugin_file): bool {
 			return function_exists('is_plugin_active') ? is_plugin_active($plugin_file) : false;
 		};
-		$settings_base = admin_url('admin.php?page=turnstilewp-settings');
-		$logo_base = trailingslashit(TURNSTILEWP_PLUGIN_URL . 'assets/images/integrations');
+		$settings_base = admin_url('admin.php?page=smartct-settings');
+		$logo_base = trailingslashit(SMARTCT_PLUGIN_URL . 'assets/images/integrations');
 		$catalog = array(
 			array(
 				'key'          => 'woocommerce',
@@ -231,10 +236,10 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 					if ($fid === 'others') {
 						$icon_partial = 'others-icon.php';
 					}
-					$icon_path = dirname(__DIR__) . '/templates/icons/' . $icon_partial;
+					$icon_path = SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/' . $icon_partial;
 					?>
-					<a class="twp-vtab <?php echo $current_filter === $fid ? 'is-active' : ''; ?>"
-						href="<?php echo esc_url(admin_url('admin.php?page=turnstilewp-integrations&filter_tab=' . urlencode((string) $fid))); ?>">
+				<a class="twp-vtab <?php echo esc_attr( $current_filter === $fid ? 'is-active' : '' ); ?>"
+					href="<?php echo esc_url(admin_url('admin.php?page=smartct-integrations&filter_tab=' . urlencode((string) $fid))); ?>">
 						<span class="twp-vtab-icon">
 							<?php
 							if (file_exists($icon_path)) {
@@ -250,19 +255,19 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 				<div class="twp-toolbar">
 					<button type="button" class="twp-collapse-btn" data-twp-toggle="vtabs">
 						<span class="twp-collapse-icon icon-open" aria-hidden="true">
-							<?php require dirname(__DIR__) . '/templates/icons/panel-close-icon.php'; ?>
+							<?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/panel-close-icon.php'; ?>
 						</span>
 						<span class="twp-collapse-icon icon-close" aria-hidden="true" style="display:none;">
-							<?php require dirname(__DIR__) . '/templates/icons/panel-open-icon.php'; ?>
+							<?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/panel-open-icon.php'; ?>
 						</span>
 					</button>
 					<div></div>
 				</div>
 
-				<div class="turnstilewp-sub-section">
-					<div class="turnstilewp-integrations turnstilwp-integrations">
-						<div class="turnstilewp-field-group">
-							<div class="turnstilewp-field">
+				<div class="smartct-sub-section">
+					<div class="smartct-integrations turnstilwp-integrations">
+						<div class="smartct-field-group">
+							<div class="smartct-field">
 								<div class="inside">
 									<div class="twp-services-grid">
 										<?php
@@ -306,17 +311,17 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 															<span class="twp-service-badge is-active"><?php esc_html_e('Active', 'smart-cloudflare-turnstile'); ?></span>
 														<?php endif; ?>
 													</div>
-													<div class="turnstilewp-content">
+													<div class="smartct-content">
 														<?php echo esc_html($svc['desc']); ?>
 													</div>
 												</div>
-												<div class="turnstilewp-buttons">
+												<div class="smartct-buttons">
 													<?php if ($is_coming_soon) : ?>
 														<span class="button button-secondary coming-soon-btn">
 															<?php echo esc_html($btn_label); ?>
 														</span>
 													<?php else : ?>
-														<a href="<?php echo esc_url($btn_url); ?>" class="button <?php echo ($btn_label === 'Settings') ? 'button-primary' : 'button-secondary'; ?>">
+														<a href="<?php echo esc_url($btn_url); ?>" class="button <?php echo esc_attr( ($btn_label === 'Settings') ? 'button-primary' : 'button-secondary' ); ?>">
 															<?php echo esc_html($btn_label); ?>
 														</a>
 													<?php endif; ?>

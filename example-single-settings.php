@@ -4,12 +4,12 @@
  * Single Settings File - All-in-One Example
  * This demonstrates how all settings functionality COULD be combined
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP;
+namespace SmartCT;
 
 /**
  * All-in-One Settings Class
@@ -19,7 +19,7 @@ class Single_Settings
 {
 
 	// === DATA LAYER PROPERTIES ===
-	private const OPTION_NAME = 'turnstilewp_settings';
+	private const OPTION_NAME = 'smartct_settings';
 	private array $sensitive_fields = array('secret_key');
 
 	// === BUSINESS LOGIC PROPERTIES ===
@@ -163,7 +163,7 @@ class Single_Settings
 	{
 		add_action('admin_menu', array($this, 'add_admin_menu'));
 		add_action('admin_init', array($this, 'register_settings'));
-		add_action('wp_ajax_turnstilewp_verify_keys', array($this, 'verify_keys_ajax'));
+		add_action('wp_ajax_smartct_verify_keys', array($this, 'verify_keys_ajax'));
 	}
 
 	/**
@@ -182,7 +182,7 @@ class Single_Settings
 	public function register_settings(): void
 	{
 		register_setting(
-			'turnstilewp_settings',
+			'smartct_settings',
 			self::OPTION_NAME,
 			array(
 				'type' => 'array',
@@ -214,7 +214,7 @@ class Single_Settings
 		}
 
 		add_settings_error(
-			'turnstilewp_settings_errors',
+			'smartct_settings_errors',
 			'settings_updated',
 			__('Settings saved successfully.', 'smart-cloudflare-turnstile'),
 			'updated'
@@ -228,7 +228,7 @@ class Single_Settings
 	 */
 	public function verify_keys_ajax(): void
 	{
-		check_ajax_referer('turnstilewp_verify_keys', 'nonce');
+		check_ajax_referer('smartct_verify_keys', 'nonce');
 
 		if (! current_user_can('manage_options')) {
 			wp_die(esc_html__('Insufficient permissions.', 'smart-cloudflare-turnstile'));
@@ -245,7 +245,7 @@ class Single_Settings
 		$verified = $this->verify_turnstile_keys($site_key, $secret_key);
 
 		if ($verified) {
-			update_option('turnstilewp_keys_verified', 1);
+			update_option('smartct_keys_verified', 1);
 			wp_send_json_success(__('Keys verified successfully!', 'smart-cloudflare-turnstile'));
 		} else {
 			wp_send_json_error(__('Key verification failed.', 'smart-cloudflare-turnstile'));
@@ -269,8 +269,8 @@ class Single_Settings
 	public function add_admin_menu(): void
 	{
 		add_menu_page(
-			__('TurnstileWP', 'smart-cloudflare-turnstile'),
-			__('TurnstileWP', 'smart-cloudflare-turnstile'),
+			__('SmartCT', 'smart-cloudflare-turnstile'),
+			__('SmartCT', 'smart-cloudflare-turnstile'),
 			'manage_options',
 			'smart-cloudflare-turnstile',
 			array($this, 'render_settings_page'),
@@ -311,10 +311,10 @@ class Single_Settings
 		<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
 
 		<?php $this->render_info_section(); ?>
-		<?php settings_errors('turnstilewp_settings_errors'); ?>
+		<?php settings_errors('smartct_settings_errors'); ?>
 
 		<form method="post" action="options.php">
-			<?php settings_fields('turnstilewp_settings'); ?>
+			<?php settings_fields('smartct_settings'); ?>
 
 			<?php $this->render_tabs(); ?>
 			<?php $this->render_tab_content($values); ?>
@@ -332,9 +332,9 @@ class Single_Settings
 	private function render_info_section(): void
 	{
 	?>
-		<div class="turnstilewp-info">
-			<h2><?php esc_html_e('About TurnstileWP', 'smart-cloudflare-turnstile'); ?></h2>
-			<p><?php esc_html_e('TurnstileWP is a lightweight and privacy-first integration of Cloudflare Turnstile with WordPress forms.', 'smart-cloudflare-turnstile'); ?></p>
+		<div class="smartct-info">
+			<h2><?php esc_html_e('About SmartCT', 'smart-cloudflare-turnstile'); ?></h2>
+			<p><?php esc_html_e('SmartCT is a lightweight and privacy-first integration of Cloudflare Turnstile with WordPress forms.', 'smart-cloudflare-turnstile'); ?></p>
 		</div>
 	<?php
 	}
@@ -347,7 +347,7 @@ class Single_Settings
 	?>
 		<h2 class="nav-tab-wrapper">
 			<?php foreach ($this->tabs as $tab_id => $tab_label) : ?>
-				<a href="?page=turnstilewp&tab=<?php echo esc_attr($tab_id); ?>"
+				<a href="?page=smartct-settings&tab=<?php echo esc_attr($tab_id); ?>"
 					class="nav-tab <?php echo $this->current_tab === $tab_id ? 'nav-tab-active' : ''; ?>">
 					<?php echo esc_html($tab_label); ?>
 				</a>
@@ -362,7 +362,7 @@ class Single_Settings
 	private function render_tab_content(array $values): void
 	{
 	?>
-		<div class="turnstilewp-tabs">
+		<div class="smartct-tabs">
 			<?php
 			switch ($this->current_tab) {
 				case 'general':
@@ -395,7 +395,7 @@ class Single_Settings
 			<tr>
 				<th scope="row"><?php esc_html_e('Site Key', 'smart-cloudflare-turnstile'); ?></th>
 				<td>
-					<input type="text" name="turnstilewp_settings[site_key]"
+					<input type="text" name="smartct_settings[site_key]"
 						value="<?php echo esc_attr($values['site_key']); ?>"
 						class="regular-text" />
 					<p class="description"><?php esc_html_e('Your Cloudflare Turnstile site key.', 'smart-cloudflare-turnstile'); ?></p>
@@ -404,7 +404,7 @@ class Single_Settings
 			<tr>
 				<th scope="row"><?php esc_html_e('Secret Key', 'smart-cloudflare-turnstile'); ?></th>
 				<td>
-					<input type="password" name="turnstilewp_settings[secret_key]"
+					<input type="password" name="smartct_settings[secret_key]"
 						value="<?php echo esc_attr($values['secret_key']); ?>"
 						class="regular-text" />
 					<p class="description"><?php esc_html_e('Your Cloudflare Turnstile secret key.', 'smart-cloudflare-turnstile'); ?></p>
@@ -413,7 +413,7 @@ class Single_Settings
 			<tr>
 				<th scope="row"><?php esc_html_e('Theme', 'smart-cloudflare-turnstile'); ?></th>
 				<td>
-					<select name="turnstilewp_settings[theme]">
+					<select name="smartct_settings[theme]">
 						<option value="auto" <?php selected($values['theme'], 'auto'); ?>><?php esc_html_e('Auto', 'smart-cloudflare-turnstile'); ?></option>
 						<option value="light" <?php selected($values['theme'], 'light'); ?>><?php esc_html_e('Light', 'smart-cloudflare-turnstile'); ?></option>
 						<option value="dark" <?php selected($values['theme'], 'dark'); ?>><?php esc_html_e('Dark', 'smart-cloudflare-turnstile'); ?></option>
@@ -434,7 +434,7 @@ class Single_Settings
 			<tr>
 				<th scope="row"><?php esc_html_e('Enable on Login', 'smart-cloudflare-turnstile'); ?></th>
 				<td>
-					<input type="checkbox" name="turnstilewp_settings[enable_login]"
+					<input type="checkbox" name="smartct_settings[enable_login]"
 						value="1" <?php checked($values['enable_login'], 1); ?> />
 					<label><?php esc_html_e('Show Turnstile on login form', 'smart-cloudflare-turnstile'); ?></label>
 				</td>
@@ -442,7 +442,7 @@ class Single_Settings
 			<tr>
 				<th scope="row"><?php esc_html_e('Enable on Registration', 'smart-cloudflare-turnstile'); ?></th>
 				<td>
-					<input type="checkbox" name="turnstilewp_settings[enable_register]"
+					<input type="checkbox" name="smartct_settings[enable_register]"
 						value="1" <?php checked($values['enable_register'], 1); ?> />
 					<label><?php esc_html_e('Show Turnstile on registration form', 'smart-cloudflare-turnstile'); ?></label>
 				</td>
@@ -450,7 +450,7 @@ class Single_Settings
 			<tr>
 				<th scope="row"><?php esc_html_e('Enable on Comments', 'smart-cloudflare-turnstile'); ?></th>
 				<td>
-					<input type="checkbox" name="turnstilewp_settings[enable_comments]"
+					<input type="checkbox" name="smartct_settings[enable_comments]"
 						value="1" <?php checked($values['enable_comments'], 1); ?> />
 					<label><?php esc_html_e('Show Turnstile on comment forms', 'smart-cloudflare-turnstile'); ?></label>
 				</td>
@@ -469,7 +469,7 @@ class Single_Settings
 			<tr>
 				<th scope="row"><?php esc_html_e('WooCommerce Login', 'smart-cloudflare-turnstile'); ?></th>
 				<td>
-					<input type="checkbox" name="turnstilewp_settings[woo_login]"
+					<input type="checkbox" name="smartct_settings[woo_login]"
 						value="1" <?php checked($values['woo_login'], 1); ?> />
 					<label><?php esc_html_e('Enable on WooCommerce login', 'smart-cloudflare-turnstile'); ?></label>
 				</td>
@@ -477,7 +477,7 @@ class Single_Settings
 			<tr>
 				<th scope="row"><?php esc_html_e('WooCommerce Checkout', 'smart-cloudflare-turnstile'); ?></th>
 				<td>
-					<input type="checkbox" name="turnstilewp_settings[woo_checkout]"
+					<input type="checkbox" name="smartct_settings[woo_checkout]"
 						value="1" <?php checked($values['woo_checkout'], 1); ?> />
 					<label><?php esc_html_e('Enable on WooCommerce checkout', 'smart-cloudflare-turnstile'); ?></label>
 				</td>
@@ -496,7 +496,7 @@ class Single_Settings
 			<tr>
 				<th scope="row"><?php esc_html_e('Debug Mode', 'smart-cloudflare-turnstile'); ?></th>
 				<td>
-					<input type="checkbox" name="turnstilewp_settings[debug_mode]"
+					<input type="checkbox" name="smartct_settings[debug_mode]"
 						value="1" <?php checked($values['debug_mode'], 1); ?> />
 					<label><?php esc_html_e('Enable debug logging', 'smart-cloudflare-turnstile'); ?></label>
 				</td>
@@ -504,7 +504,7 @@ class Single_Settings
 			<tr>
 				<th scope="row"><?php esc_html_e('Show for Logged-in Users', 'smart-cloudflare-turnstile'); ?></th>
 				<td>
-					<input type="checkbox" name="turnstilewp_settings[show_for_logged_in]"
+					<input type="checkbox" name="smartct_settings[show_for_logged_in]"
 						value="1" <?php checked($values['show_for_logged_in'], 1); ?> />
 					<label><?php esc_html_e('Show Turnstile even for logged-in users', 'smart-cloudflare-turnstile'); ?></label>
 				</td>
@@ -522,11 +522,11 @@ class Single_Settings
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
 				// Key verification AJAX
-				const verifyBtn = document.getElementById('turnstilewp-verify-keys');
+				const verifyBtn = document.getElementById('smartct-verify-keys');
 				if (verifyBtn) {
 					verifyBtn.addEventListener('click', function() {
-						const siteKey = document.querySelector('input[name="turnstilewp_settings[site_key]"]').value;
-						const secretKey = document.querySelector('input[name="turnstilewp_settings[secret_key]"]').value;
+						const siteKey = document.querySelector('input[name="smartct_settings[site_key]"]').value;
+						const secretKey = document.querySelector('input[name="smartct_settings[secret_key]"]').value;
 
 						if (!siteKey || !secretKey) {
 							alert('<?php echo esc_js(__('Please enter both site key and secret key.', 'smart-cloudflare-turnstile')); ?>');

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Autoloader class for TurnstileWP
+ * Autoloader class for SmartCT
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP;
+namespace SmartCT;
 
 /**
  * Class Loader
@@ -25,7 +25,7 @@ class Loader {
 		self::load_integrations();
 
 		// Ensure core Turnstile settings/filters are loaded (registers settings fields)
-		$core_turnstile = TURNSTILEWP_PLUGIN_DIR . 'includes/class-turnstile.php';
+		$core_turnstile = SMARTCT_PLUGIN_DIR . 'includes/class-turnstile.php';
 		if ( file_exists($core_turnstile) ) {
 			require_once $core_turnstile;
 		}
@@ -38,15 +38,15 @@ class Loader {
 	 */
 	public static function autoload( string $class ): void {
 		// Only handle classes in our namespace
-		if ( strpos($class, 'TurnstileWP\\') !== 0 ) {
+		if ( strpos($class, 'SmartCT\\') !== 0 ) {
 			return;
 		}
 
 		// Remove namespace from class name
-		$class = str_replace('TurnstileWP\\', '', $class);
+		$class = str_replace('SmartCT\\', '', $class);
 
 		// Convert class name to file path
-		$file = TURNSTILEWP_PLUGIN_DIR . 'includes/class-' .
+		$file = SMARTCT_PLUGIN_DIR . 'includes/class-' .
 			strtolower(str_replace('_', '-', $class)) . '.php';
 
 		// Load the file if it exists
@@ -56,7 +56,7 @@ class Loader {
 		}
 
 		// Also check integrations directory (now under includes/)
-		$file = TURNSTILEWP_PLUGIN_DIR . 'includes/integrations/class-' .
+		$file = SMARTCT_PLUGIN_DIR . 'includes/integrations/class-' .
 			strtolower(str_replace('_', '-', $class)) . '.php';
 
 		if ( file_exists($file) ) {
@@ -67,7 +67,7 @@ class Loader {
 		// Check categorized integration subdirectories
 		$categories = array( 'core', 'ecommerce', 'forms', 'others', 'community', 'membership', 'newsletter' );
 		foreach ( $categories as $category ) {
-			$file = TURNSTILEWP_PLUGIN_DIR . 'includes/integrations/' . $category . '/class-' .
+			$file = SMARTCT_PLUGIN_DIR . 'includes/integrations/' . $category . '/class-' .
 				strtolower(str_replace('_', '-', $class)) . '.php';
 			if ( file_exists($file) ) {
 				require_once $file;
@@ -80,7 +80,7 @@ class Loader {
 	 * Load all integration files
 	 */
 	public static function load_integrations(): void {
-		$integrations_dir = TURNSTILEWP_PLUGIN_DIR . 'includes/integrations/';
+		$integrations_dir = SMARTCT_PLUGIN_DIR . 'includes/integrations/';
 		$categories = array( '.', 'ecommerce', 'forms', 'others', 'community', 'membership', 'newsletter' );
 
 		if ( ! is_dir($integrations_dir) ) {

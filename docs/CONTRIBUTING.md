@@ -1,6 +1,6 @@
-# Contributing to TurnstileWP
+# Contributing to SmartCT
 
-Thank you for your interest in contributing to TurnstileWP! This document provides guidelines and instructions for contributing to the project.
+Thank you for your interest in contributing to SmartCT! This document provides guidelines and instructions for contributing to the project.
 
 ## Table of Contents
 
@@ -161,7 +161,7 @@ $site_key = $settings->get_option('site_key');
 
 ```php
 // ✅ CORRECT
-$ip = \TurnstileWP\get_client_ip();
+$ip = \SmartCT\get_client_ip();
 
 // ❌ WRONG
 $ip = $_SERVER['REMOTE_ADDR'] ?? '';
@@ -239,9 +239,9 @@ All new features should include tests:
 **Unit Test Example:**
 ```php
 <?php
-namespace TurnstileWP\Tests\Unit;
+namespace SmartCT\Tests\Unit;
 
-use TurnstileWP\YourNewClass;
+use SmartCT\YourNewClass;
 use Codeception\Test\Unit;
 
 class YourNewClassTest extends Unit
@@ -326,11 +326,11 @@ To add a new form plugin integration:
 <?php
 // includes/integrations/forms/class-your-form.php
 
-namespace TurnstileWP\Integrations;
+namespace SmartCT\Integrations;
 
-use TurnstileWP\Turnstile;
-use TurnstileWP\Settings;
-use TurnstileWP\Verify;
+use SmartCT\Turnstile;
+use SmartCT\Settings;
+use SmartCT\Verify;
 
 class Your_Form {
     private Settings $settings;
@@ -402,7 +402,7 @@ Add to `includes/class-init.php` in the `init_integrations()` method:
 ```php
 // Your Form integration (if Your Form is active)
 if ( defined('YOUR_FORM_VERSION') || class_exists('YourFormClass') ) {
-    new \TurnstileWP\Integrations\Your_Form();
+    new \SmartCT\Integrations\Your_Form();
 }
 ```
 
@@ -446,7 +446,7 @@ Include the following information:
 
 - **WordPress version**
 - **PHP version**
-- **TurnstileWP version**
+- **SmartCT version**
 - **Active theme**
 - **Active plugins** (list relevant ones)
 - **Steps to reproduce**
@@ -517,10 +517,10 @@ If you have questions about contributing:
 
 ## License
 
-By contributing to TurnstileWP, you agree that your contributions will be licensed under the GPL v2 or later license.
+By contributing to SmartCT, you agree that your contributions will be licensed under the GPL v2 or later license.
 
 ---
 
-**Thank you for contributing to TurnstileWP!** 🎉
+**Thank you for contributing to SmartCT!** 🎉
 
 Your contributions help make this plugin better for everyone.

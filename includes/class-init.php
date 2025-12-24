@@ -3,17 +3,18 @@
 /**
  * Plugin initialization class
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP;
+namespace SmartCT;
 
 /**
  * Class Init
  */
-class Init {
+class Init
+{
 
 	/**
 	 * Plugin settings instance
@@ -38,24 +39,16 @@ class Init {
 
 	/**
 	 * Plugin admin screen IDs
+	 * Note: WordPress converts dashes to underscores in screen IDs
 	 *
 	 * @var array
 	 */
 	private const PLUGIN_SCREEN_IDS = array(
-		'settings_page_turnstilewp',
-		'toplevel_page_turnstilewp',
-		'settings_page_turnstilewp-settings',
-		'toplevel_page_turnstilewp-settings',
-		'smart-cloudflare-turnstile_page_turnstilewp-integrations',
-		'toplevel_page_turnstilewp-integrations',
-		'smart-cloudflare-turnstile_page_turnstilewp-tools',
-		'toplevel_page_turnstilewp-tools',
-		'smart-cloudflare-turnstile_page_turnstilewp-faqs',
-		'toplevel_page_turnstilewp-faqs',
-		'smart-cloudflare-turnstile_page_turnstilewp-help',
-		'toplevel_page_turnstilewp-help',
-		'smart-cloudflare-turnstile_page_turnstilewp-settings',
-		'turnstilewp_page_turnstilewp-settings',
+		'toplevel_page_smartct-settings',
+		'smartct-settings_page_smartct-settings',
+		'smartct-settings_page_smartct-integrations',
+		'smartct-settings_page_smartct-tools',
+		'smartct-settings_page_smartct-help',
 	);
 
 	private static bool $admin_hooks_registered = false;
@@ -65,8 +58,9 @@ class Init {
 	/**
 	 * Get the singleton instance
 	 */
-	public static function get_instance(): Init {
-		if ( self::$instance === null ) {
+	public static function get_instance(): Init
+	{
+		if (self::$instance === null) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -75,12 +69,13 @@ class Init {
 	/**
 	 * Initialize the plugin
 	 */
-	public function init(): void {
+	public function init(): void
+	{
 		// Prevent double initialization
-		if ( defined('TURNSTILEWP_INIT_DONE') ) {
+		if (defined('SMARTCT_INIT_DONE')) {
 			return;
 		}
-		define('TURNSTILEWP_INIT_DONE', true);
+		define('SMARTCT_INIT_DONE', true);
 
 		// Load dependencies
 		$this->load_dependencies();
@@ -100,37 +95,49 @@ class Init {
 	/**
 	 * Load plugin dependencies
 	 */
-	private function load_dependencies(): void {
+	private function load_dependencies(): void
+	{
 		// Load common functions
-		require_once TURNSTILEWP_PLUGIN_DIR . 'includes/functions-common.php';
+		require_once SMARTCT_PLUGIN_DIR . 'includes/functions-common.php';
 	}
 
 	/**
 	 * Initialize WordPress hooks
 	 */
-	private function init_hooks(): void {
+	private function init_hooks(): void
+	{
 		// Admin hooks
-		if ( is_admin() && ! self::$admin_hooks_registered ) {
-			add_action('admin_menu', array( $this->settings, 'add_admin_menu' ));
-			add_action('admin_init', array( $this->settings, 'register_settings' ));
-			add_action('admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ));
-			add_filter('admin_body_class', array( $this, 'add_admin_body_class' ));
-			add_action('wp_ajax_turnstilewp_verify_keys', array( $this, 'verify_keys_ajax' ));
-			add_action('wp_ajax_turnstilewp_remove_keys', array( $this, 'remove_keys_ajax' ));
+		if (is_admin() && ! self::$admin_hooks_registered) {
+			add_action('admin_menu', array($this->settings, 'add_admin_menu'));
+			add_action('admin_init', array($this->settings, 'register_settings'));
+			add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
+			add_filter('admin_body_class', array($this, 'add_admin_body_class'));
+			add_action('wp_ajax_smartct_verify_keys', array($this, 'verify_keys_ajax'));
+			add_action('wp_ajax_smartct_remove_keys', array($this, 'remove_keys_ajax'));
 			self::$admin_hooks_registered = true;
 		}
 
 		// Frontend hooks
-		add_action('wp_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ));
-		add_action('login_enqueue_scripts', array( $this, 'enqueue_frontend_assets' ));
+		add_action('wp_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
+		add_action('login_enqueue_scripts', array($this, 'enqueue_frontend_assets'));
 	}
 
 	/**
 	 * Enqueue admin assets
 	 */
-	public function enqueue_admin_assets(): void {
+	public function enqueue_admin_assets(): void
+	{
 		$screen = get_current_screen();
-		if ( ! $screen || ! in_array($screen->id, self::PLUGIN_SCREEN_IDS, true) ) {
+		if (! $screen) {
+			return;
+		}
+
+		// Check if current screen is a plugin page (by menu slug)
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Checking page slug for asset enqueuing only
+		$page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
+		$is_plugin_page = strpos($page, 'smartct-') === 0;
+
+		if (! $is_plugin_page && ! in_array($screen->id, self::PLUGIN_SCREEN_IDS, true)) {
 			return;
 		}
 
@@ -144,9 +151,9 @@ class Init {
 		 * Privacy: When enabled, this plugin sends limited data to Cloudflare for verification.
 		 * Users are informed of this in the plugin description and documentation.
 		 * 
-		 * Filter: 'turnstilewp_load_turnstile_script' can be used to prevent loading if needed.
+		 * Filter: 'smartct_load_turnstile_script' can be used to prevent loading if needed.
 		 */
-		if ( apply_filters('turnstilewp_load_turnstile_script', true) ) {
+		if (apply_filters('smartct_load_turnstile_script', true)) {
 			wp_enqueue_script(
 				'cloudflare-turnstile',
 				'https://challenges.cloudflare.com/turnstile/v0/api.js', // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent -- Cloudflare Turnstile API must be loaded from their CDN per terms of service
@@ -158,51 +165,83 @@ class Init {
 		}
 
 		wp_enqueue_style(
-			'turnstilewp-admin',
-			TURNSTILEWP_PLUGIN_URL . 'assets/css/admin.css',
+			'smartct-admin',
+			SMARTCT_PLUGIN_URL . 'assets/css/admin.css',
 			array(),
-			( file_exists(TURNSTILEWP_PLUGIN_DIR . 'assets/css/admin.css') ? filemtime(TURNSTILEWP_PLUGIN_DIR . 'assets/css/admin.css') : TURNSTILEWP_VERSION )
+			(file_exists(SMARTCT_PLUGIN_DIR . 'assets/css/admin.css') ? filemtime(SMARTCT_PLUGIN_DIR . 'assets/css/admin.css') : SMARTCT_VERSION)
 		);
 		// Header/brand styles now compiled via admin.scss
 
 		// Enqueue admin-settings.js for widget preview and AJAX
 		wp_enqueue_script(
-			'turnstilewp-admin-settings',
-			TURNSTILEWP_PLUGIN_URL . 'assets/js/admin-settings.js',
-			array( 'jquery', 'cloudflare-turnstile' ),
-			TURNSTILEWP_VERSION,
+			'smartct-admin-settings',
+			SMARTCT_PLUGIN_URL . 'assets/js/admin-settings.js',
+			array('jquery', 'cloudflare-turnstile'),
+			SMARTCT_VERSION,
 			true
 		);
-	wp_localize_script(
-		'turnstilewp-admin-settings',
-		'turnstilewp',
-		array(
-			'ajaxurl' => admin_url('admin-ajax.php'),
-			'nonce' => wp_create_nonce('turnstilewp_verify_keys'),
-			'siteKey' => ( new Settings() )->get_option('tswp_site_key', ''),
-			'secretKey' => ( new Settings() )->get_option('tswp_secret_key', ''),
-		)
-	);
+		wp_localize_script(
+			'smartct-admin-settings',
+			'smartct',
+			array(
+				'ajaxurl' => admin_url('admin-ajax.php'),
+				'nonce' => wp_create_nonce('smartct_verify_keys'),
+				'siteKey' => (new Settings())->get_option('smartct_site_key', ''),
+				'secretKey' => (new Settings())->get_option('smartct_secret_key', ''),
+			)
+		);
+
+		// Enqueue page-specific scripts
+		$this->enqueue_admin_page_scripts($screen->id);
 	}
 
 	/**
-	 * Add custom classes to the admin body on TurnstileWP plugin pages
+	 * Enqueue page-specific admin scripts with localized data
+	 *
+	 * @param string $screen_id Current admin screen ID.
+	 */
+	private function enqueue_admin_page_scripts(string $screen_id): void
+	{
+		global $wp_version;
+
+		// Prepare system info data for localization
+		$system_info_data = array(
+			'plugin_version' => defined('SMARTCT_VERSION') ? SMARTCT_VERSION : '',
+			'wp_version'     => $wp_version ?? '',
+			'php_version'    => PHP_VERSION,
+			'wc_version'     => class_exists('WooCommerce') ? 'v' . get_option('woocommerce_version') : 'Not detected',
+			'memory_limit'   => (string) ini_get('memory_limit'),
+		);
+
+		// Localize system info data to admin-settings.js (already enqueued in enqueue_admin_assets)
+		// This data is used by the system info copy feature in the sidebar
+		wp_localize_script('smartct-admin-settings', 'smartctSystemInfo', $system_info_data);
+	}
+
+	/**
+	 * Add custom classes to the admin body on SmartCT plugin pages
 	 *
 	 * @param string $classes Existing admin body classes.
 	 * @return string
 	 */
-	public function add_admin_body_class( string $classes ): string {
-		if ( ! function_exists('get_current_screen') ) {
+	public function add_admin_body_class(string $classes): string
+	{
+		if (! function_exists('get_current_screen')) {
 			return $classes;
 		}
 		$screen = get_current_screen();
-		if ( ! $screen ) {
+		if (! $screen) {
 			return $classes;
 		}
-		
-		if ( in_array($screen->id, self::PLUGIN_SCREEN_IDS, true) ) {
+
+		// Check if current page is a plugin page (by menu slug)
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Checking page slug for display only
+		$page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
+		$is_plugin_page = strpos($page, 'smartct-') === 0;
+
+		if ($is_plugin_page || in_array($screen->id, self::PLUGIN_SCREEN_IDS, true)) {
 			// Generic plugin class + screen-specific class
-			$classes .= ' turnstilewp-admin turnstilewp-screen-' . sanitize_html_class( (string) $screen->id);
+			$classes .= ' smartct-admin smartct-screen-' . sanitize_html_class((string) $screen->id);
 		}
 		return $classes;
 	}
@@ -210,9 +249,10 @@ class Init {
 	/**
 	 * Enqueue frontend assets
 	 */
-	public function enqueue_frontend_assets(): void {
+	public function enqueue_frontend_assets(): void
+	{
 		// Only load on pages where Turnstile is needed
-		if ( ! $this->should_load_turnstile() ) {
+		if (! $this->should_load_turnstile()) {
 			return;
 		}
 
@@ -235,9 +275,9 @@ class Init {
 		 * 
 		 * Cloudflare Privacy Policy: https://www.cloudflare.com/privacypolicy/
 		 * 
-		 * Filter: 'turnstilewp_load_turnstile_script' can be used to prevent loading if needed.
+		 * Filter: 'smartct_load_turnstile_script' can be used to prevent loading if needed.
 		 */
-		if ( apply_filters('turnstilewp_load_turnstile_script', true) ) {
+		if (apply_filters('smartct_load_turnstile_script', true)) {
 			wp_enqueue_script(
 				'cloudflare-turnstile',
 				'https://challenges.cloudflare.com/turnstile/v0/api.js', // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent -- Cloudflare Turnstile API must be loaded from their CDN per terms of service
@@ -249,18 +289,18 @@ class Init {
 		}
 
 		// Add small inline bootstrap to render placeholders (e.g., Formidable)
-		$siteKey = $this->settings->get_option('tswp_site_key');
-		if ( ! empty($siteKey) ) {
-			$inline = "(function(){function onReady(fn){if(document.readyState!=='loading'){fn();}else{document.addEventListener('DOMContentLoaded',fn);}}onReady(function(){var phs=document.querySelectorAll('.turnstilewp-fmd-placeholder');if(!phs.length){return;}phs.forEach(function(ph){var form=ph.closest('form');if(!form){return;}var btn=form.querySelector('.frm_button_submit');if(!btn){return;}var mount=document.createElement('div');mount.style.margin='10px 0';btn.parentNode.insertBefore(mount, btn);if(window.turnstile){try{window.turnstile.render(mount,{sitekey:'" . esc_js($siteKey) . "'});}catch(e){console&&console.warn&&console.warn('Turnstile render error',e);}}});});})();";
+		$siteKey = $this->settings->get_option('smartct_site_key');
+		if (! empty($siteKey)) {
+			$inline = "(function(){function onReady(fn){if(document.readyState!=='loading'){fn();}else{document.addEventListener('DOMContentLoaded',fn);}}onReady(function(){var phs=document.querySelectorAll('.smartct-fmd-placeholder');if(!phs.length){return;}phs.forEach(function(ph){var form=ph.closest('form');if(!form){return;}var btn=form.querySelector('.frm_button_submit');if(!btn){return;}var mount=document.createElement('div');mount.style.margin='10px 0';btn.parentNode.insertBefore(mount, btn);if(window.turnstile){try{window.turnstile.render(mount,{sitekey:'" . esc_js($siteKey) . "'});}catch(e){console&&console.warn&&console.warn('Turnstile render error',e);}}});});})();";
 			wp_add_inline_script('cloudflare-turnstile', $inline, 'after');
 		}
 
 		// Enqueue our custom styles
 		wp_enqueue_style(
-			'turnstilewp-frontend',
-			TURNSTILEWP_PLUGIN_URL . 'assets/css/turnstile.css',
+			'smartct-frontend',
+			SMARTCT_PLUGIN_URL . 'assets/css/turnstile.css',
 			array(),
-			TURNSTILEWP_VERSION
+			SMARTCT_VERSION
 		);
 
 		// Note: localization not needed for inline bootstrap above
@@ -271,10 +311,11 @@ class Init {
 	 *
 	 * @return bool
 	 */
-	private function should_load_turnstile(): bool {
+	private function should_load_turnstile(): bool
+	{
 		// Don't load for logged-in users unless specifically configured
-		$settings = get_option('turnstilewp_settings', array());
-		if ( is_user_logged_in() && ( empty($settings['show_for_logged_in']) || ! $settings['show_for_logged_in'] ) ) {
+		$settings = get_option('smartct_settings', array());
+		if (is_user_logged_in() && (empty($settings['show_for_logged_in']) || ! $settings['show_for_logged_in'])) {
 			return false;
 		}
 
@@ -288,7 +329,8 @@ class Init {
 	/**
 	 * Plugin activation
 	 */
-	public function activate(): void {
+	public function activate(): void
+	{
 		// Initialize settings before using them
 		$this->settings = new Settings();
 
@@ -299,22 +341,24 @@ class Init {
 	/**
 	 * Plugin deactivation
 	 */
-	public function deactivate(): void {
+	public function deactivate(): void
+	{
 		// Cleanup tasks if needed
 	}
 
 	/**
 	 * Handle AJAX key verification
 	 */
-	public function verify_keys_ajax(): void {
+	public function verify_keys_ajax(): void
+	{
 		// Verify nonce
-		if ( ! check_ajax_referer('turnstilewp_verify_keys', 'nonce', false) ) {
-			wp_send_json_error(array( 'message' => __('Security check failed.', 'smart-cloudflare-turnstile') ));
+		if (! check_ajax_referer('smartct_verify_keys', 'nonce', false)) {
+			wp_send_json_error(array('message' => __('Security check failed.', 'smart-cloudflare-turnstile')));
 		}
 
 		// Verify user capabilities
-		if ( ! current_user_can('manage_options') ) {
-			wp_send_json_error(array( 'message' => __('You do not have permission to perform this action.', 'smart-cloudflare-turnstile') ));
+		if (! current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => __('You do not have permission to perform this action.', 'smart-cloudflare-turnstile')));
 		}
 
 		// Get the keys from the request
@@ -322,111 +366,113 @@ class Init {
 		$secret_key = sanitize_text_field(wp_unslash($_POST['secret_key'] ?? ''));
 		$token = sanitize_text_field(wp_unslash($_POST['response'] ?? ''));
 
-		if ( empty($site_key) || empty($secret_key) ) {
-			wp_send_json_error(array( 'message' => __('Please enter both Site Key and Secret Key.', 'smart-cloudflare-turnstile') ));
+		if (empty($site_key) || empty($secret_key)) {
+			wp_send_json_error(array('message' => __('Please enter both Site Key and Secret Key.', 'smart-cloudflare-turnstile')));
 		}
-		if ( empty($token) ) {
-			wp_send_json_error(array( 'message' => __('Please complete the Turnstile challenge.', 'smart-cloudflare-turnstile') ));
+		if (empty($token)) {
+			wp_send_json_error(array('message' => __('Please complete the Turnstile challenge.', 'smart-cloudflare-turnstile')));
 		}
 
 		// Use the Verify class to check the token with the provided secret key
 		$verify = new Verify();
 		$is_valid = $verify->verify_token($token, $secret_key);
 
-		if ( $is_valid ) {
-			$current_settings = get_option('turnstilewp_settings', array());
-			if ( ! is_array($current_settings) ) {
+		if ($is_valid) {
+			$current_settings = get_option('smartct_settings', array());
+			if (! is_array($current_settings)) {
 				$current_settings = array();
 			}
-			$current_settings['tswp_site_key'] = $site_key;
-			$current_settings['tswp_secret_key'] = $secret_key;
-			update_option('turnstilewp_settings', $current_settings);
+			$current_settings['smartct_site_key'] = $site_key;
+			$current_settings['smartct_secret_key'] = $secret_key;
+			update_option('smartct_settings', $current_settings);
 
-			update_option('turnstilewp_keys_verified', 1);
+			update_option('smartct_keys_verified', 1);
 
-			wp_send_json_success(array( 'message' => __('Keys verified successfully.', 'smart-cloudflare-turnstile') ));
+			wp_send_json_success(array('message' => __('Keys verified successfully.', 'smart-cloudflare-turnstile')));
 		} else {
-			wp_send_json_error(array( 'message' => __('Verification failed. Please check your keys and try again.', 'smart-cloudflare-turnstile') ));
+			wp_send_json_error(array('message' => __('Verification failed. Please check your keys and try again.', 'smart-cloudflare-turnstile')));
 		}
 	}
 
 	/**
 	 * Handle AJAX key removal
 	 */
-	public function remove_keys_ajax(): void {
+	public function remove_keys_ajax(): void
+	{
 		// Verify nonce
-		if ( ! check_ajax_referer('turnstilewp_verify_keys', 'nonce', false) ) {
-			wp_send_json_error(array( 'message' => __('Security check failed.', 'smart-cloudflare-turnstile') ));
+		if (! check_ajax_referer('smartct_verify_keys', 'nonce', false)) {
+			wp_send_json_error(array('message' => __('Security check failed.', 'smart-cloudflare-turnstile')));
 		}
 
 		// Verify user capabilities
-		if ( ! current_user_can('manage_options') ) {
-			wp_send_json_error(array( 'message' => __('You do not have permission to perform this action.', 'smart-cloudflare-turnstile') ));
+		if (! current_user_can('manage_options')) {
+			wp_send_json_error(array('message' => __('You do not have permission to perform this action.', 'smart-cloudflare-turnstile')));
 		}
 
 		// Update the settings to remove verification
-		$current_settings = get_option('turnstilewp_settings', array());
-		if ( ! is_array($current_settings) ) {
+		$current_settings = get_option('smartct_settings', array());
+		if (! is_array($current_settings)) {
 			$current_settings = array();
 		}
-		$current_settings['tswp_site_key'] = '';
-		$current_settings['tswp_secret_key'] = '';
-		update_option('turnstilewp_settings', $current_settings);
-		update_option('turnstilewp_keys_verified', 0);
+		$current_settings['smartct_site_key'] = '';
+		$current_settings['smartct_secret_key'] = '';
+		update_option('smartct_settings', $current_settings);
+		update_option('smartct_keys_verified', 0);
 
-		wp_send_json_success(array( 'message' => __('Keys removed successfully.', 'smart-cloudflare-turnstile') ));
+		wp_send_json_success(array('message' => __('Keys removed successfully.', 'smart-cloudflare-turnstile')));
 	}
 
 	/**
 	 * Initialize all integrations
 	 */
-	private function init_integrations(): void {
+	private function init_integrations(): void
+	{
 		// Core WordPress integration
-		new \TurnstileWP\Core_WP();
+		new \SmartCT\Core_WP();
 
 		// WooCommerce integration (if WooCommerce is active)
-		if ( class_exists('WooCommerce') ) {
-			new \TurnstileWP\Integrations\Turnstile_WooCommerce();
+		if (class_exists('WooCommerce')) {
+			new \SmartCT\Integrations\Turnstile_WooCommerce();
 		}
 
 		// Contact Form 7 integration (if CF7 is active)
-		if ( defined('WPCF7_VERSION') || function_exists('wpcf7') ) {
-			new \TurnstileWP\Integrations\Contact_Form7();
+		if (defined('WPCF7_VERSION') || function_exists('wpcf7')) {
+			new \SmartCT\Integrations\Contact_Form7();
 		}
 
 		// WPForms integration (if WPForms is active)
-		if ( defined('WPFORMS_VERSION') || class_exists('WPForms') || function_exists('wpforms') ) {
-			new \TurnstileWP\Integrations\WPForms();
+		if (defined('WPFORMS_VERSION') || class_exists('WPForms') || function_exists('wpforms')) {
+			new \SmartCT\Integrations\WPForms();
 		}
 
 		// Ninja Forms integration (if Ninja Forms is active)
-		if ( defined('NINJA_FORMS_VERSION') || class_exists('Ninja_Forms') || function_exists('Ninja_Forms') ) {
-			new \TurnstileWP\Integrations\Ninja_Forms();
+		if (defined('NINJA_FORMS_VERSION') || class_exists('Ninja_Forms') || function_exists('Ninja_Forms')) {
+			new \SmartCT\Integrations\Ninja_Forms();
 		}
 
 		// Fluent Forms integration (if Fluent Forms is active)
-		if ( defined('FLUENTFORM') || function_exists('wpFluentForm') || class_exists('\FluentForm\App\Modules\Component\Component') ) {
-			new \TurnstileWP\Integrations\Fluent_Forms();
+		if (defined('FLUENTFORM') || function_exists('wpFluentForm') || class_exists('\FluentForm\App\Modules\Component\Component')) {
+			new \SmartCT\Integrations\Fluent_Forms();
 		}
 
 		// Formidable Forms integration (if Formidable is active)
-		if ( defined('FRM_VERSION') || class_exists('FrmAppHelper') || function_exists('load_formidable_forms') ) {
-			new \TurnstileWP\Integrations\Formidable_Forms();
+		if (defined('FRM_VERSION') || class_exists('FrmAppHelper') || function_exists('load_formidable_forms')) {
+			new \SmartCT\Integrations\Formidable_Forms();
 		}
 
 		// Forminator integration (if Forminator is active)
-		if ( defined('FORMINATOR_VERSION') || class_exists('\Forminator') || function_exists('forminator') ) {
-			new \TurnstileWP\Integrations\Forminator_Forms();
+		if (defined('FORMINATOR_VERSION') || class_exists('\Forminator') || function_exists('forminator')) {
+			new \SmartCT\Integrations\Forminator_Forms();
 		}
 
 		// Everest Forms integration (if Everest Forms is active)
-		if ( function_exists('evf') || class_exists('EverestForms') || defined('EVF_PLUGIN_FILE') ) {
-			new \TurnstileWP\Integrations\Everest_Forms();
+		if (function_exists('evf') || class_exists('EverestForms') || defined('EVF_PLUGIN_FILE')) {
+			new \SmartCT\Integrations\Everest_Forms();
 		}
 
 		// SureForms integration (if SureForms is active)
-		if ( defined('SRFM_SLUG') || class_exists('\SRFM\Inc\Form_Submit') ) {
-			new \TurnstileWP\Integrations\Sure_Forms();
+		if (defined('SRFM_SLUG') || class_exists('\SRFM\Inc\Form_Submit')) {
+			new \SmartCT\Integrations\Sure_Forms();
 		}
 	}
 }

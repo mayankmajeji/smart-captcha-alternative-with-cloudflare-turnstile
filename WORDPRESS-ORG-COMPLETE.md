@@ -66,7 +66,7 @@ sanitize_text_field(wp_unslash($_GET['turnstilewp_tools_action'])) === 'export'
 
 #### 3.3 $_SERVER Access
 ✅ **Already fixed in previous refactoring**
-- All IP detection uses centralized `\TurnstileWP\get_client_ip()` function
+- All IP detection uses centralized `\SmartCT\get_client_ip()` function
 - Proper sanitization in `includes/functions-common.php`
 - No direct `$_SERVER['REMOTE_ADDR']` access
 

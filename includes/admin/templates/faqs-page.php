@@ -3,7 +3,7 @@
 /**
  * FAQs Page Template
  *
- * @package TurnstileWP
+ * @package SmartCT
  * 
  * phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
  * Template variables are scoped to this file and do not pollute the global namespace.
@@ -12,9 +12,15 @@
 if (! defined('WPINC')) {
 	die;
 }
+
+// Check user permissions - only administrators can access plugin pages
+if (! current_user_can('manage_options')) {
+	wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'smart-cloudflare-turnstile'));
+}
+
 // System info
 $plugin_data = get_file_data(
-	TURNSTILEWP_PLUGIN_DIR . 'turnstilewp.php',
+	SMARTCT_PLUGIN_DIR . 'smart-cloudflare-turnstile.php',
 	array(
 		'Version' => 'Version',
 	)
@@ -22,22 +28,22 @@ $plugin_data = get_file_data(
 $plugin_version = $plugin_data['Version'] ?? '';
 $theme = wp_get_theme();
 ?>
-<div class="turnstilewp-page turnstilewp-page--support">
-	<?php require_once __DIR__ . '/header.php'; ?>
-	<div class="turnstilewp-faqs">
-		<div class="turnstilewp-admin-wrapper">
-			<div class="turnstilewp-section" id="section-support">
-				<div class="turnstilewp-sub-section">
-					<div class="turnstilewp-faq-card">
-						<div id="faq-content" class="turnstilewp-faq-accordion" role="tablist">
+<div class="smartct-page smartct-page--support">
+	<?php require_once SMARTCT_PLUGIN_DIR . 'includes/admin/templates/header.php'; ?>
+	<div class="smartct-faqs">
+		<div class="smartct-admin-wrapper">
+			<div class="smartct-section" id="section-support">
+				<div class="smartct-sub-section">
+					<div class="smartct-faq-card">
+						<div id="faq-content" class="smartct-faq-accordion" role="tablist">
 							<div class="faq-block">
-								<h3 class="faq-question" role="tab" id="faq-q-1" aria-controls="faq-a-1" aria-expanded="false" tabindex="0"><?php esc_html_e('Do I need a Cloudflare account to use this plugin?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require __DIR__ . '/icons/caret-icon.php'; ?></span></h3>
+								<h3 class="faq-question" role="tab" id="faq-q-1" aria-controls="faq-a-1" aria-expanded="false" tabindex="0"><?php esc_html_e('Do I need a Cloudflare account to use this plugin?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/caret-icon.php'; ?></span></h3>
 								<div class="faq-answer" id="faq-a-1" aria-labelledby="faq-q-1" role="tabpanel" aria-hidden="true" style="display:none;">
 									<p><?php esc_html_e('Yes. Cloudflare Turnstile requires a free Cloudflare account to generate a Site Key and Secret Key. These keys are used to securely validate requests between your site and Cloudflare.', 'smart-cloudflare-turnstile'); ?></p>
 								</div>
 							</div>
 							<div class="faq-block">
-								<h3 class="faq-question" role="tab" id="faq-q-2" aria-controls="faq-a-2" aria-expanded="false" tabindex="0"><?php esc_html_e('Which forms are supported?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require __DIR__ . '/icons/caret-icon.php'; ?></span></h3>
+								<h3 class="faq-question" role="tab" id="faq-q-2" aria-controls="faq-a-2" aria-expanded="false" tabindex="0"><?php esc_html_e('Which forms are supported?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/caret-icon.php'; ?></span></h3>
 								<div class="faq-answer" id="faq-a-2" aria-labelledby="faq-q-2" role="tabpanel" aria-hidden="true" style="display:none;">
 									<p><?php esc_html_e('The plugin integrates with WordPress core forms, WooCommerce forms, and popular form plugins, including:', 'smart-cloudflare-turnstile'); ?></p>
 									<p><strong><?php esc_html_e('WordPress Core:', 'smart-cloudflare-turnstile'); ?></strong><br>
@@ -50,27 +56,27 @@ $theme = wp_get_theme();
 								</div>
 							</div>
 							<div class="faq-block">
-								<h3 class="faq-question" role="tab" id="faq-q-3" aria-controls="faq-a-3" aria-expanded="false" tabindex="0"><?php esc_html_e('Does this plugin replace CAPTCHA solutions like reCAPTCHA?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require __DIR__ . '/icons/caret-icon.php'; ?></span></h3>
+								<h3 class="faq-question" role="tab" id="faq-q-3" aria-controls="faq-a-3" aria-expanded="false" tabindex="0"><?php esc_html_e('Does this plugin replace CAPTCHA solutions like reCAPTCHA?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/caret-icon.php'; ?></span></h3>
 								<div class="faq-answer" id="faq-a-3" aria-labelledby="faq-q-3" role="tabpanel" aria-hidden="true" style="display:none;">
 									<p><?php esc_html_e('Yes. Cloudflare Turnstile is designed as a modern alternative to traditional CAPTCHAs. It protects forms from bots without visual challenges, image selection, or user interaction in most cases.', 'smart-cloudflare-turnstile'); ?></p>
 								</div>
 							</div>
 							<div class="faq-block">
-								<h3 class="faq-question" role="tab" id="faq-q-4" aria-controls="faq-a-4" aria-expanded="false" tabindex="0"><?php esc_html_e('Is this plugin free?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require __DIR__ . '/icons/caret-icon.php'; ?></span></h3>
+								<h3 class="faq-question" role="tab" id="faq-q-4" aria-controls="faq-a-4" aria-expanded="false" tabindex="0"><?php esc_html_e('Is this plugin free?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/caret-icon.php'; ?></span></h3>
 								<div class="faq-answer" id="faq-a-4" aria-labelledby="faq-q-4" role="tabpanel" aria-hidden="true" style="display:none;">
 									<p><?php esc_html_e('Yes. This plugin is completely free and does not include paid plans, upsells, or tracking.', 'smart-cloudflare-turnstile'); ?></p>
 									<p><?php esc_html_e('Cloudflare Turnstile itself is also a free service.', 'smart-cloudflare-turnstile'); ?></p>
 								</div>
 							</div>
 							<div class="faq-block">
-								<h3 class="faq-question" role="tab" id="faq-q-5" aria-controls="faq-a-5" aria-expanded="false" tabindex="0"><?php esc_html_e('Does it collect or store user data?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require __DIR__ . '/icons/caret-icon.php'; ?></span></h3>
+								<h3 class="faq-question" role="tab" id="faq-q-5" aria-controls="faq-a-5" aria-expanded="false" tabindex="0"><?php esc_html_e('Does it collect or store user data?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/caret-icon.php'; ?></span></h3>
 								<div class="faq-answer" id="faq-a-5" aria-labelledby="faq-q-5" role="tabpanel" aria-hidden="true" style="display:none;">
 									<p><?php esc_html_e('No. The plugin does not store personal data or user interaction data.', 'smart-cloudflare-turnstile'); ?></p>
 									<p><?php esc_html_e('Verification is performed server-side against Cloudflare\'s API, and responses are not logged unless debug logging is explicitly enabled by the site owner.', 'smart-cloudflare-turnstile'); ?></p>
 								</div>
 							</div>
 							<div class="faq-block">
-								<h3 class="faq-question" role="tab" id="faq-q-6" aria-controls="faq-a-6" aria-expanded="false" tabindex="0"><?php esc_html_e('Is this plugin GDPR-friendly?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require __DIR__ . '/icons/caret-icon.php'; ?></span></h3>
+								<h3 class="faq-question" role="tab" id="faq-q-6" aria-controls="faq-a-6" aria-expanded="false" tabindex="0"><?php esc_html_e('Is this plugin GDPR-friendly?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/caret-icon.php'; ?></span></h3>
 								<div class="faq-answer" id="faq-a-6" aria-labelledby="faq-q-6" role="tabpanel" aria-hidden="true" style="display:none;">
 									<p><?php esc_html_e('Cloudflare states that Turnstile does not use cookies, does not track users for advertising, and does not perform fingerprinting.', 'smart-cloudflare-turnstile'); ?></p>
 									<p>
@@ -86,13 +92,13 @@ $theme = wp_get_theme();
 								</div>
 							</div>
 							<div class="faq-block">
-								<h3 class="faq-question" role="tab" id="faq-q-7" aria-controls="faq-a-7" aria-expanded="false" tabindex="0"><?php esc_html_e('Why do I see a console warning or 401 error related to Turnstile?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require __DIR__ . '/icons/caret-icon.php'; ?></span></h3>
+								<h3 class="faq-question" role="tab" id="faq-q-7" aria-controls="faq-a-7" aria-expanded="false" tabindex="0"><?php esc_html_e('Why do I see a console warning or 401 error related to Turnstile?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/caret-icon.php'; ?></span></h3>
 								<div class="faq-answer" id="faq-a-7" aria-labelledby="faq-q-7" role="tabpanel" aria-hidden="true" style="display:none;">
 									<p><?php esc_html_e('Some browsers may log warnings related to unsupported browser features used by Cloudflare (such as Private Access Tokens). These messages can usually be ignored and do not affect form validation or security.', 'smart-cloudflare-turnstile'); ?></p>
 								</div>
 							</div>
 							<div class="faq-block">
-								<h3 class="faq-question" role="tab" id="faq-q-8" aria-controls="faq-a-8" aria-expanded="false" tabindex="0"><?php esc_html_e('The Turnstile widget is not showing on my form. What should I check?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require __DIR__ . '/icons/caret-icon.php'; ?></span></h3>
+								<h3 class="faq-question" role="tab" id="faq-q-8" aria-controls="faq-a-8" aria-expanded="false" tabindex="0"><?php esc_html_e('The Turnstile widget is not showing on my form. What should I check?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/caret-icon.php'; ?></span></h3>
 								<div class="faq-answer" id="faq-a-8" aria-labelledby="faq-q-8" role="tabpanel" aria-hidden="true" style="display:none;">
 									<p><?php esc_html_e('Please verify the following:', 'smart-cloudflare-turnstile'); ?></p>
 									<p><?php esc_html_e('• Your Site Key and Secret Key are entered correctly', 'smart-cloudflare-turnstile'); ?></p>
@@ -103,14 +109,14 @@ $theme = wp_get_theme();
 								</div>
 							</div>
 							<div class="faq-block">
-								<h3 class="faq-question" role="tab" id="faq-q-9" aria-controls="faq-a-9" aria-expanded="false" tabindex="0"><?php esc_html_e('Where can I get help or report issues?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require __DIR__ . '/icons/caret-icon.php'; ?></span></h3>
+								<h3 class="faq-question" role="tab" id="faq-q-9" aria-controls="faq-a-9" aria-expanded="false" tabindex="0"><?php esc_html_e('Where can I get help or report issues?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/caret-icon.php'; ?></span></h3>
 								<div class="faq-answer" id="faq-a-9" aria-labelledby="faq-q-9" role="tabpanel" aria-hidden="true" style="display:none;">
 									<p>
 										<?php
 										printf(
 											/* translators: %s: WordPress.org support forum link */
 											esc_html__('Support is provided through the %s.', 'smart-cloudflare-turnstile'),
-											'<a href="https://wordpress.org/support/plugin/smart-cloudflare-turnstile/" target="_blank" rel="noopener">' . esc_html__('official WordPress.org plugin support forum', 'smart-cloudflare-turnstile') . '</a>'
+											'<a href="https://wordpress.org/support/plugin/smart-captcha-alternative-with-cloudflare-turnstile/" target="_blank" rel="noopener">' . esc_html__('official WordPress.org plugin support forum', 'smart-cloudflare-turnstile') . '</a>'
 										);
 										?>
 									</p>
@@ -126,7 +132,7 @@ $theme = wp_get_theme();
 								</div>
 							</div>
 							<div class="faq-block">
-								<h3 class="faq-question" role="tab" id="faq-q-10" aria-controls="faq-a-10" aria-expanded="false" tabindex="0"><?php esc_html_e('How can I report a security vulnerability?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require __DIR__ . '/icons/caret-icon.php'; ?></span></h3>
+								<h3 class="faq-question" role="tab" id="faq-q-10" aria-controls="faq-a-10" aria-expanded="false" tabindex="0"><?php esc_html_e('How can I report a security vulnerability?', 'smart-cloudflare-turnstile'); ?><span class="faq-icon"><?php require SMARTCT_PLUGIN_DIR . 'includes/admin/templates/icons/caret-icon.php'; ?></span></h3>
 								<div class="faq-answer" id="faq-a-10" aria-labelledby="faq-q-10" role="tabpanel" aria-hidden="true" style="display:none;">
 									<p>
 										<?php
@@ -146,32 +152,6 @@ $theme = wp_get_theme();
 		</div>
 	</div>
 </div>
-<script>
-	document.addEventListener('DOMContentLoaded', function() {
-		var questions = document.querySelectorAll('.faq-question');
-		var answers = document.querySelectorAll('.faq-answer');
-		questions.forEach(function(q, idx) {
-			q.addEventListener('click', function() {
-				var expanded = q.getAttribute('aria-expanded') === 'true';
-				// Collapse all
-				questions.forEach(function(qq, i) {
-					qq.setAttribute('aria-expanded', 'false');
-					answers[i].style.display = 'none';
-				});
-				// Expand this one if it was not already open
-				if (!expanded) {
-					q.setAttribute('aria-expanded', 'true');
-					answers[idx].style.display = 'block';
-				}
-			});
-			q.addEventListener('keydown', function(e) {
-				if (e.key === 'Enter' || e.key === ' ') {
-					q.click();
-					e.preventDefault();
-				}
-			});
-			// Start collapsed
-			answers[idx].style.display = 'none';
-		});
-	});
-</script>
+<?php
+// FAQ accordion functionality is enqueued via admin-faq-accordion.js in class-init.php
+?>

@@ -1,8 +1,8 @@
 <?php
 
-namespace TurnstileWP\Tests\Integration;
+namespace SmartCT\Tests\Integration;
 
-use TurnstileWP\Settings;
+use SmartCT\Settings;
 use Codeception\TestCase\WPTestCase;
 
 class SettingsPersistenceTest extends WPTestCase

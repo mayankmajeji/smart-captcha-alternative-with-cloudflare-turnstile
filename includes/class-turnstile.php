@@ -3,12 +3,12 @@
 /**
  * Turnstile Settings Integration
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP;
+namespace SmartCT;
 
 class Turnstile {
 
@@ -30,18 +30,18 @@ class Turnstile {
 	 */
 	public function enqueue_script(): void {
 		// Only enqueue if site key is set
-		$site_key = $this->settings->get_option('tswp_site_key');
+		$site_key = $this->settings->get_option('smartct_site_key');
 		if ( empty($site_key) ) {
 			return;
 		}
-	wp_enqueue_script(
-		'cloudflare-turnstile',
+		wp_enqueue_script(
+			'cloudflare-turnstile',
 		'https://challenges.cloudflare.com/turnstile/v0/api.js', // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent -- Cloudflare Turnstile API must be loaded from their CDN per terms of service
-		array(),
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, version controlled by Cloudflare
-		null,
-		true
-	);
+			array(),
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, version controlled by Cloudflare
+			null,
+			true
+		);
 	}
 
 	/**
@@ -50,15 +50,15 @@ class Turnstile {
 	 * @param string $action The action name for this widget
 	 */
 	public function render( string $action ): void {
-		$site_key = $this->settings->get_option('tswp_site_key');
+		$site_key = $this->settings->get_option('smartct_site_key');
 		if ( empty($site_key) ) {
 			return;
 		}
 
-		$theme = $this->settings->get_option('tswp_theme', 'auto');
-		$size = $this->settings->get_option('tswp_widget_size', 'normal');
-		$language = $this->settings->get_option('tswp_language', 'auto');
-		$appearance = $this->settings->get_option('tswp_appearance_mode', 'always');
+		$theme = $this->settings->get_option('smartct_theme', 'auto');
+		$size = $this->settings->get_option('smartct_widget_size', 'normal');
+		$language = $this->settings->get_option('smartct_language', 'auto');
+		$appearance = $this->settings->get_option('smartct_appearance_mode', 'always');
 
 		printf(
 			'<div class="cf-turnstile" data-sitekey="%s" data-theme="%s" data-size="%s" data-language="%s" data-appearance="%s" data-action="%s"></div>',
@@ -87,7 +87,7 @@ class Turnstile {
 			return false;
 		}
 
-		$secret_key = $this->settings->get_option('tswp_secret_key');
+		$secret_key = $this->settings->get_option('smartct_secret_key');
 		if ( empty($secret_key) ) {
 			return false;
 		}
@@ -96,7 +96,7 @@ class Turnstile {
 			'body' => array(
 				'secret' => $secret_key,
 				'response' => $token,
-				'remoteip' => \TurnstileWP\get_client_ip(),
+				'remoteip' => \SmartCT\get_client_ip(),
 			),
 		));
 
@@ -126,23 +126,23 @@ class Turnstile {
 		$args = array_merge($defaults, $args);
 
 		// Allow disabling via filter
-		if ( apply_filters('turnstilewp_widget_disable', false, $args) ) {
+		if ( apply_filters('smartct_widget_disable', false, $args) ) {
 			return;
 		}
 
 		// Whitelist check (implement your own logic or hook)
-		if ( function_exists('turnstilewp_is_whitelisted') && turnstilewp_is_whitelisted() ) {
+		if ( function_exists('smartct_is_whitelisted') && smartct_is_whitelisted() ) {
 			return;
 		}
 
-		$site_key   = $this->settings->get_option('tswp_site_key');
-		$theme      = $this->settings->get_option('tswp_theme', 'auto');
-		$language   = $this->settings->get_option('tswp_language', 'auto');
-		$size       = $this->settings->get_option('tswp_widget_size', 'normal');
-		$appearance = $this->settings->get_option('tswp_appearance_mode', 'always');
+		$site_key   = $this->settings->get_option('smartct_site_key');
+		$theme      = $this->settings->get_option('smartct_theme', 'auto');
+		$language   = $this->settings->get_option('smartct_language', 'auto');
+		$size       = $this->settings->get_option('smartct_widget_size', 'normal');
+		$appearance = $this->settings->get_option('smartct_appearance_mode', 'always');
 
 		// Allow pre-render hook
-		do_action('turnstilewp_before_field', $args);
+		do_action('smartct_before_field', $args);
 
 ?>
 		<div
@@ -168,7 +168,7 @@ class Turnstile {
 <?php
 
 		// Allow post-render hook
-		do_action('turnstilewp_after_field', $args);
+		do_action('smartct_after_field', $args);
 	}
 }
 
@@ -176,12 +176,12 @@ class Turnstile {
 new Turnstile();
 
 // Register Turnstile Settings fields for centralized settings
-add_filter('turnstilewp_settings', function ( $fields ) {
+add_filter('smartct_settings', function ( $fields ) {
 	// API Settings Section
 	$fields[] = array(
-		'field_id'    => 'tswp_info_box',
+		'field_id'    => 'smartct_info_box',
 		'type'        => 'content',
-		'content'     => '<div class="turnstilewp-content">'
+		'content'     => '<div class="smartct-content">'
 			. '<strong>' . sprintf(
 				// translators: %s: Cloudflare dashboard URL
 				__('You can get your site key and secret key from here: %s', 'smart-cloudflare-turnstile'),
@@ -195,7 +195,7 @@ add_filter('turnstilewp_settings', function ( $fields ) {
 		'priority'    => 5,
 	);
 	$fields[] = array(
-		'field_id'    => 'tswp_site_key',
+		'field_id'    => 'smartct_site_key',
 		'label'       => __('Site Key', 'smart-cloudflare-turnstile'),
 		'description' => __('Your Cloudflare Turnstile site key.', 'smart-cloudflare-turnstile'),
 		'type'        => 'text',
@@ -206,7 +206,7 @@ add_filter('turnstilewp_settings', function ( $fields ) {
 		'group'       => 'api_keys',
 	);
 	$fields[] = array(
-		'field_id'    => 'tswp_secret_key',
+		'field_id'    => 'smartct_secret_key',
 		'label'       => __('Secret Key', 'smart-cloudflare-turnstile'),
 		'description' => __('Your Cloudflare Turnstile secret key.', 'smart-cloudflare-turnstile'),
 		'type'        => 'password',
@@ -218,7 +218,7 @@ add_filter('turnstilewp_settings', function ( $fields ) {
 	);
 	// Appearance Section
 	$fields[] = array(
-		'field_id'    => 'tswp_appearance_mode',
+		'field_id'    => 'smartct_appearance_mode',
 		'label'       => __('Appearance Mode', 'smart-cloudflare-turnstile'),
 		'description' => __('Choose how the Turnstile widget appears.', 'smart-cloudflare-turnstile'),
 		'type'        => 'select',
@@ -233,7 +233,7 @@ add_filter('turnstilewp_settings', function ( $fields ) {
 		'default'     => 'always',
 	);
 	$fields[] = array(
-		'field_id'    => 'tswp_widget_size',
+		'field_id'    => 'smartct_widget_size',
 		'label'       => __('Widget Size', 'smart-cloudflare-turnstile'),
 		'description' => __('Choose the Turnstile widget size.', 'smart-cloudflare-turnstile'),
 		'type'        => 'select',
@@ -249,7 +249,7 @@ add_filter('turnstilewp_settings', function ( $fields ) {
 		'default'     => 'normal',
 	);
 	$fields[] = array(
-		'field_id'    => 'tswp_theme',
+		'field_id'    => 'smartct_theme',
 		'label'       => __('Theme', 'smart-cloudflare-turnstile'),
 		'description' => __('Choose the Turnstile widget theme.', 'smart-cloudflare-turnstile'),
 		'type'        => 'select',
@@ -266,7 +266,7 @@ add_filter('turnstilewp_settings', function ( $fields ) {
 		'default'     => 'auto',
 	);
 	$fields[] = array(
-		'field_id'    => 'tswp_language',
+		'field_id'    => 'smartct_language',
 		'label'       => __('Language', 'smart-cloudflare-turnstile'),
 		'description' => __('Widget language code.', 'smart-cloudflare-turnstile'),
 		'type'        => 'select',
@@ -320,7 +320,7 @@ add_filter('turnstilewp_settings', function ( $fields ) {
 	);
 	// Error Handling Section
 	$fields[] = array(
-		'field_id'    => 'tswp_custom_error_message',
+		'field_id'    => 'smartct_custom_error_message',
 		'label'       => __('Custom Error Message', 'smart-cloudflare-turnstile'),
 		'description' => __('Custom message to display when Turnstile verification fails.', 'smart-cloudflare-turnstile'),
 		'type'        => 'text',
@@ -332,7 +332,7 @@ add_filter('turnstilewp_settings', function ( $fields ) {
 		'default'     => '',
 	);
 	$fields[] = array(
-		'field_id'    => 'tswp_extra_failure_message',
+		'field_id'    => 'smartct_extra_failure_message',
 		'label'       => __('Extra Failure Message', 'smart-cloudflare-turnstile'),
 		'description' => __('Additional message or instructions to display when verification fails.', 'smart-cloudflare-turnstile'),
 		'type'        => 'textarea',
@@ -344,7 +344,7 @@ add_filter('turnstilewp_settings', function ( $fields ) {
 	);
 	// Script Options Section
 	$fields[] = array(
-		'field_id'    => 'tswp_defer_script',
+		'field_id'    => 'smartct_defer_script',
 		'label'       => __('Defer Script', 'smart-cloudflare-turnstile'),
 		'description' => __('Defer loading of the Turnstile script for improved performance.', 'smart-cloudflare-turnstile'),
 		'type'        => 'checkbox',

@@ -1,16 +1,16 @@
 <?php
 
 /**
- * Formidable Forms Integration for TurnstileWP
+ * Formidable Forms Integration for SmartCT
  *
- * @package TurnstileWP
- * @subpackage TurnstileWP/integrations
+ * @package SmartCT
+ * @subpackage SmartCT/integrations
  */
 
-namespace TurnstileWP\Integrations;
+namespace SmartCT\Integrations;
 
-use TurnstileWP\Settings;
-use TurnstileWP\Turnstile;
+use SmartCT\Settings;
+use SmartCT\Turnstile;
 
 if ( ! defined('ABSPATH') ) {
 	exit;
@@ -31,7 +31,7 @@ class Formidable_Forms {
 		$this->settings = new Settings();
 
 		// Register settings fields in centralized system
-		add_filter('turnstilewp_settings', array( $this, 'register_settings_fields' ));
+		add_filter('smartct_settings', array( $this, 'register_settings_fields' ));
 
 		// Inject widget markup adjacent to submit button HTML (outside the <button>)
 		add_filter('frm_submit_button_html', array( $this, 'filter_submit_button_html' ), 10, 2);
@@ -39,7 +39,7 @@ class Formidable_Forms {
 		add_filter('frm_validate_entry', array( $this, 'validate_entry' ), 10, 2);
 
 		// Expose status to Dashboard "Other Integrations"
-		add_filter('turnstilewp_integrations', array( $this, 'register_dashboard_status' ));
+		add_filter('smartct_integrations', array( $this, 'register_dashboard_status' ));
 	}
 
 	private function is_ff_active(): bool {
@@ -51,7 +51,7 @@ class Formidable_Forms {
 	 */
 	public function register_settings_fields( array $fields ): array {
 		$fields[] = array(
-			'field_id'    => 'tswp_formidable_enable',
+			'field_id'    => 'smartct_formidable_enable',
 			'label'       => __('Enable on Formidable Forms', 'smart-cloudflare-turnstile'),
 			'description' => __('Add Turnstile verification to Formidable Forms.', 'smart-cloudflare-turnstile'),
 			'type'        => 'checkbox',
@@ -64,7 +64,7 @@ class Formidable_Forms {
 		);
 
 		$fields[] = array(
-			'field_id'    => 'tswp_formidable_position',
+			'field_id'    => 'smartct_formidable_position',
 			'label'       => __('Widget Position', 'smart-cloudflare-turnstile'),
 			'description' => __('Choose where to display the widget near the submit button.', 'smart-cloudflare-turnstile'),
 			'type'        => 'select',
@@ -85,11 +85,11 @@ class Formidable_Forms {
 	// Removed frm_form_classes hook to avoid signature mismatch and fatal error
 
 	public function register_dashboard_status( array $items ): array {
-		$enabled = (bool) $this->settings->get_option('tswp_formidable_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_formidable_enable', false);
 		$items[] = array(
 			'label' => 'Formidable Forms',
 			'enabled' => $enabled,
-			'configure_url' => admin_url('admin.php?page=turnstilewp-integrations&integration_tab=form_plugins'),
+			'configure_url' => admin_url('admin.php?page=smartct-integrations&integration_tab=form_plugins'),
 		);
 		return $items;
 	}
@@ -102,23 +102,23 @@ class Formidable_Forms {
 	 * @return string
 	 */
 	public function filter_submit_button_html( $button_html, $args ) {
-		$enabled = (bool) $this->settings->get_option('tswp_formidable_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_formidable_enable', false);
 		if ( ! $enabled ) {
 			return $button_html;
 		}
-		$position = (string) $this->settings->get_option('tswp_formidable_position', 'after_submit');
+		$position = (string) $this->settings->get_option('smartct_formidable_position', 'after_submit');
 
-	// Ensure script present
-	wp_enqueue_script(
-		'cloudflare-turnstile',
+		// Ensure script present
+		wp_enqueue_script(
+			'cloudflare-turnstile',
 		'https://challenges.cloudflare.com/turnstile/v0/api.js', // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent -- Cloudflare Turnstile API must be loaded from their CDN per terms of service
-		array(),
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, version controlled by Cloudflare
-		null,
-		true
-	);
+			array(),
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, version controlled by Cloudflare
+			null,
+			true
+		);
 
-		$site_key = (string) $this->settings->get_option('tswp_site_key', '');
+		$site_key = (string) $this->settings->get_option('smartct_site_key', '');
 		if ( ! $site_key ) {
 			return $button_html;
 		}
@@ -129,11 +129,11 @@ class Formidable_Forms {
 		$turnstile->render_dynamic(array(
 			'form_name' => 'formidable-form',
 			'unique_id' => isset($args['form']) && isset($args['form']->id) ? '-frm-' . $args['form']->id : uniqid(),
-			'class'     => 'turnstilewp-formidable-form',
+			'class'     => 'smartct-formidable-form',
 		));
 		$widget = ob_get_clean();
 
-		$widget_wrapper = '<div class="turnstilewp-formidable-container" style="display:block;margin:10px 0;">' . $widget . '</div>';
+		$widget_wrapper = '<div class="smartct-formidable-container" style="display:block;margin:10px 0;">' . $widget . '</div>';
 
 		if ( $position === 'before_submit' ) {
 			return $widget_wrapper . $button_html;
@@ -149,7 +149,7 @@ class Formidable_Forms {
 	 * @return array
 	 */
 	public function validate_entry( $errors, $values ) {
-		$enabled = (bool) $this->settings->get_option('tswp_formidable_enable', false);
+		$enabled = (bool) $this->settings->get_option('smartct_formidable_enable', false);
 		if ( ! $enabled ) {
 			return $errors;
 		}

@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: TurnstileWP 1.0.0\n"
+"Project-Id-Version: SmartCT 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/turnstilewp\n"
 "POT-Creation-Date: 2024-01-01 12:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"

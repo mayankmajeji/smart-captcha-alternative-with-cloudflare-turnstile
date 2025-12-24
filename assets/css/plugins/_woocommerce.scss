@@ -1,10 +1,65 @@
-.woocommerce-page{
-    .woocommerce-form{
-        .cf-turnstile{
-            iframe{
-                width: 100% !important;
-                max-width: 100% !important;
-            }
-        }
-    }
+// WooCommerce Turnstile iFrame Styling
+// Ensures Turnstile iframes are properly sized across all WooCommerce forms
+
+.woocommerce,
+.woocommerce-page {
+	.cf-turnstile {
+		iframe {
+			width: 100% !important;
+			max-width: 100% !important;
+		}
+	}
+
+	// Form-specific selectors
+	form {
+		.cf-turnstile {
+			iframe {
+				width: 100% !important;
+				max-width: 100% !important;
+			}
+		}
+
+		// Login form
+		&.login,
+		&.woocommerce-form-login {
+			.cf-turnstile {
+				iframe {
+					width: 100% !important;
+					max-width: 100% !important;
+				}
+			}
+		}
+
+		// Registration form
+		&.register,
+		&.woocommerce-form-register {
+			.cf-turnstile {
+				iframe {
+					width: 100% !important;
+					max-width: 100% !important;
+				}
+			}
+		}
+
+		// Checkout form
+		&.checkout,
+		&.woocommerce-checkout {
+			.cf-turnstile {
+				iframe {
+					width: 100% !important;
+					max-width: 100% !important;
+				}
+			}
+		}
+
+		// Lost password form
+		&.lost_reset_password {
+			.cf-turnstile {
+				iframe {
+					width: 100% !important;
+					max-width: 100% !important;
+				}
+			}
+		}
+	}
 }

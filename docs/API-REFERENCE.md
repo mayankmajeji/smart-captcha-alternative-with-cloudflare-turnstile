@@ -1,8 +1,8 @@
-# TurnstileWP Plugin Documentation
+# SmartCT Plugin Documentation
 
 ## Overview
 
-TurnstileWP is a WordPress plugin that integrates Cloudflare Turnstile CAPTCHA protection with WordPress forms. It provides lightweight and privacy-first protection for login, registration, password reset, comments, and WooCommerce forms.
+SmartCT is a WordPress plugin that integrates Cloudflare Turnstile CAPTCHA protection with WordPress forms. It provides lightweight and privacy-first protection for login, registration, password reset, comments, and WooCommerce forms.
 
 **Plugin Details:**
 
@@ -191,7 +191,7 @@ turnstilewp/
 
 ##### `autoload(string $class): void`
 
--   **Purpose**: Autoload classes in the TurnstileWP namespace
+-   **Purpose**: Autoload classes in the SmartCT namespace
 -   **Parameters**:
     -   `$class`: Full class name including namespace
 -   **Returns**: void
@@ -796,7 +796,7 @@ The plugin provides numerous hooks for customization:
 
 ### Overview
 
-The TurnstileWP plugin uses a standardized naming convention with the `tswp_` prefix for all settings keys.
+The SmartCT plugin uses a standardized naming convention with the `tswp_` prefix for all settings keys.
 
 ### Key Naming Pattern
 
@@ -925,7 +925,7 @@ Each form plugin follows the pattern `tswp_{plugin}_enable` and `tswp_{plugin}_p
 
 ```php
 // Get Settings instance
-$settings = new \TurnstileWP\Settings();
+$settings = new \SmartCT\Settings();
 
 // Retrieve a setting
 $value = $settings->get_option('tswp_site_key');
@@ -981,7 +981,7 @@ When site/secret keys are changed or emptied (and not overridden by constants), 
 
 ## Utility Functions
 
-### `\TurnstileWP\get_client_ip(): string`
+### `\SmartCT\get_client_ip(): string`
 
 Get client IP address with proper fallback and sanitization.
 
@@ -1000,7 +1000,7 @@ Get client IP address with proper fallback and sanitization.
 **Usage**:
 ```php
 // Get client IP anywhere in the plugin
-$ip = \TurnstileWP\get_client_ip();
+$ip = \SmartCT\get_client_ip();
 
 // Custom IP detection via filter
 add_filter('turnstilewp_client_ip', function($ip) {
@@ -1013,4 +1013,4 @@ add_filter('turnstilewp_client_ip', function($ip) {
 
 ---
 
-This documentation covers all major functions, classes, settings, and utilities in the TurnstileWP plugin. Each function is documented with its purpose, parameters, return values, and functionality to provide a complete reference for developers and users working with this plugin.
+This documentation covers all major functions, classes, settings, and utilities in the SmartCT plugin. Each function is documented with its purpose, parameters, return values, and functionality to provide a complete reference for developers and users working with this plugin.

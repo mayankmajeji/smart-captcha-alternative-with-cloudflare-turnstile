@@ -9,7 +9,7 @@ modules:
             tablePrefix: "wp_"
             domain: "cloudflare-turnstile.local"
             adminEmail: "admin@example.com"
-            title: "TurnstileWP Tests"
+            title: "SmartCT Tests"
         WPDb:
             dsn: "mysql:host=localhost;dbname=local"
             user: "root"

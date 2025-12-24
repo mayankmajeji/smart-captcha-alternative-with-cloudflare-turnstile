@@ -13,7 +13,7 @@ module.exports = {
 		'plugin:@wordpress/eslint-plugin/recommended',
 	],
 	globals: {
-		turnstilewp: 'readonly',
+		smartct: 'readonly',
 		turnstile: 'readonly',
 	},
 	rules: {

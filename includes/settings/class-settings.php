@@ -3,12 +3,12 @@
 /**
  * Settings Class
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP\Settings;
+namespace SmartCT\Settings;
 
 class Settings {
 
@@ -17,7 +17,7 @@ class Settings {
 	 *
 	 * @var string
 	 */
-	private string $option_name = 'turnstilewp_settings';
+	private string $option_name = 'smartct_settings';
 
 	/**
 	 * Sensitive fields that should be encrypted

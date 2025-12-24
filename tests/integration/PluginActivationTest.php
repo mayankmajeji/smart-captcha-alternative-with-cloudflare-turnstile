@@ -1,9 +1,9 @@
 <?php
 
-namespace TurnstileWP\Tests\Integration;
+namespace SmartCT\Tests\Integration;
 
-use TurnstileWP\Init;
-use TurnstileWP\Settings;
+use SmartCT\Init;
+use SmartCT\Settings;
 use Codeception\TestCase\WPTestCase;
 
 class PluginActivationTest extends WPTestCase
@@ -11,7 +11,7 @@ class PluginActivationTest extends WPTestCase
 	public function testPluginActivatesSuccessfully()
 	{
 		// Verify plugin is active
-		$this->assertTrue(is_plugin_active('turnstilewp/turnstilewp.php'));
+		$this->assertTrue(is_plugin_active('smart-cloudflare-turnstile/smart-cloudflare-turnstile.php'));
 	}
 
 	public function testDefaultSettingsAreCreated()

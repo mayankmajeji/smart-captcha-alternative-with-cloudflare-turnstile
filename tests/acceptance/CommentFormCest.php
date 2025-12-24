@@ -1,6 +1,6 @@
 <?php
 
-namespace TurnstileWP\Tests\Acceptance;
+namespace SmartCT\Tests\Acceptance;
 
 use AcceptanceTester;
 

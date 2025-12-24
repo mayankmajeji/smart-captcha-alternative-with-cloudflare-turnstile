@@ -1,9 +1,9 @@
 <?php
 
-namespace TurnstileWP\Tests\Integration;
+namespace SmartCT\Tests\Integration;
 
-use TurnstileWP\Settings;
-use TurnstileWP\Turnstile;
+use SmartCT\Settings;
+use SmartCT\Turnstile;
 use Codeception\TestCase\WPTestCase;
 
 class FormIntegrationTest extends WPTestCase

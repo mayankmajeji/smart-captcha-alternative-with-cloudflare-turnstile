@@ -1,5 +1,5 @@
 /*
- * Admin styles for TurnstileWP (SCSS source)
+ * Admin styles for SmartCT (SCSS source)
  */
 
 /* Copy of admin.css, now as SCSS for further modularization and nesting */
@@ -24,10 +24,10 @@
 }
 
 /**
- * Admin styles for TurnstileWP
+ * Admin styles for SmartCT
  */
 
-.turnstilewp-info {
+.smartct-info {
 	margin-top: 2em;
 	padding: 1.5em;
 	background: #fff;
@@ -35,17 +35,17 @@
 	box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
 }
 
-.turnstilewp-info h2 {
+.smartct-info h2 {
 	margin-top: 0;
 	padding-bottom: 0.5em;
 	border-bottom: 1px solid #eee;
 }
 
-.turnstilewp-info p {
+.smartct-info p {
 	margin: 1em 0;
 }
 
-.turnstilewp-info a {
+.smartct-info a {
 	text-decoration: none;
 	color: var(--tswp-color-primary);
 }
@@ -60,7 +60,7 @@
 	}
 }
 
-.turnstilewp-info a:hover {
+.smartct-info a:hover {
 	text-decoration: underline;
 }
 
@@ -96,7 +96,7 @@
 }
 
 /* Verification status styles */
-.turnstilewp-verification-status {
+.smartct-verification-status {
 	margin: 10px 0;
 	padding: 10px;
 	background: #f8f9fa;
@@ -104,7 +104,7 @@
 	border-radius: 4px;
 }
 
-.turnstilewp-admin {
+.smartct-admin {
 	#wpcontent {
 		padding-left: 0;
 
@@ -122,7 +122,7 @@
 	}
 }
 
-.turnstilewp-verification-status .status-indicator {
+.smartct-verification-status .status-indicator {
 	display: inline-block;
 	padding: 4px 8px;
 	margin-right: 10px;
@@ -130,33 +130,33 @@
 	font-weight: 500;
 }
 
-.turnstilewp-verification-status .status-indicator.verified {
+.smartct-verification-status .status-indicator.verified {
 	background: #d4edda;
 	color: #155724;
 	border: 1px solid #c3e6cb;
 }
 
-.turnstilewp-verification-status .status-indicator.unverified {
+.smartct-verification-status .status-indicator.unverified {
 	background: #fff3cd;
 	color: #856404;
 	border: 1px solid #ffeeba;
 }
 
-.turnstilewp-verification-status .spinner {
+.smartct-verification-status .spinner {
 	float: none;
 	margin: 4px 10px;
 	visibility: hidden;
 }
 
-.turnstilewp-verification-status .spinner.is-active {
+.smartct-verification-status .spinner.is-active {
 	visibility: visible;
 }
 
-.turnstilewp-verification-status .button {
+.smartct-verification-status .button {
 	margin-right: 10px;
 }
 
-.turnstilewp-field-verified {
+.smartct-field-verified {
 	background-color: #f8f8f8 !important;
 	border-color: #ddd !important;
 	color: #666 !important;
@@ -165,30 +165,30 @@
 	pointer-events: none !important;
 }
 
-.turnstilewp-field-verified:focus {
+.smartct-field-verified:focus {
 	box-shadow: none !important;
 	border-color: #ddd !important;
 }
 
-.turnstilewp-field-verified + .description {
+.smartct-field-verified + .description {
 	color: #666;
 	font-style: italic;
 	margin-top: 0.5em;
 }
 
-.turnstilewp-spinner {
+.smartct-spinner {
 	display: inline-block;
 	width: 20px;
 	height: 20px;
 	border: 3px solid #ccc;
 	border-top: 3px solid #0073aa;
 	border-radius: 50%;
-	animation: turnstilewp-spin 0.8s linear infinite;
+	animation: smartct-spin 0.8s linear infinite;
 	vertical-align: middle;
 	margin-left: 10px;
 }
 
-@keyframes turnstilewp-spin {
+@keyframes smartct-spin {
 	0% {
 		transform: rotate(0deg);
 	}
@@ -199,18 +199,18 @@
 }
 
 /* Modern settings page background */
-.turnstilewp-settings-bg {
+.smartct-settings-bg {
 	background: #f5f6fa;
 	padding: 40px 0;
 	min-height: 100vh;
 }
 
 /* Modern card style for each section */
-.turnstilewp-card {
+.smartct-card {
 	padding: 32px 32px 24px 32px;
 }
 
-.turnstilewp-card h2 {
+.smartct-card h2 {
 	margin-top: 0;
 	font-size: 1.3em;
 	font-weight: 600;
@@ -219,22 +219,22 @@
 	letter-spacing: 0.01em;
 }
 
-.turnstilewp-card + .turnstilewp-card {
+.smartct-card + .smartct-card {
 	margin-top: 32px;
 }
 
-.turnstilewp-admin-layout {
+.smartct-admin-layout {
 	display: grid;
 	grid-template-columns: 1fr 350px;
 	gap: 40px;
 
-	.turnstilewp-admin-sidebar {
+	.smartct-admin-sidebar {
 		position: sticky;
 		top: 100px;
 		margin-top: 50px;
 
-		.turnstilewp-sidebar-section,
-		.turnstilewp-quick-links {
+		.smartct-sidebar-section,
+		.smartct-quick-links {
 			padding: 22px;
 			background: #fff;
 			margin-bottom: 40px;
@@ -254,7 +254,7 @@
 	}
 }
 
-.turnstilewp-section {
+.smartct-section {
 	margin-top: 20px;
 	padding: 20px 0;
 
@@ -267,17 +267,17 @@
 		margin: 0;
 	}
 
-	.turnstilewp-sub-section h2 {
+	.smartct-sub-section h2 {
 		margin-bottom: 16px;
 	}
 
-	.turnstilewp-sub-section {
+	.smartct-sub-section {
 		background-color: #fcfcfd;
 		border: solid 1px #d8d8d8;
 		margin-top: 10px;
 		padding: 0 1rem 1rem 1rem;
 
-		.turnstilewp-field {
+		.smartct-field {
 			display: -webkit-box;
 			display: -moz-box;
 			display: flexbox;
@@ -288,7 +288,7 @@
 			margin: 0;
 			padding: 22px 0 22px 22px;
 
-			.turnstilewp-label {
+			.smartct-label {
 				display: -webkit-inline-box;
 				display: -moz-inline-box;
 				display: inline-flex;
@@ -307,7 +307,7 @@
 				vertical-align: baseline;
 			}
 
-			.turnstilewp-option {
+			.smartct-option {
 				/* -webkit-box-flex: 1;-webkit-box-flex 
 				 -moz-box-flex: 1;-moz-box-flex
 				 -webkit-flex-grow: 1;-webkit-flex-grow
@@ -326,7 +326,7 @@
 				flex-direction: column;
 				padding-right: 20px;
 
-				.turnstilewp-description {
+				.smartct-description {
 					p {
 						color: #999;
 						margin-top: 6px;
@@ -340,7 +340,7 @@
 		}
 	}
 
-	.turnstilewp-field-group {
+	.smartct-field-group {
 		border-bottom: 1px solid #e5e7eb;
 		position: relative;
 		padding: 32px;
@@ -352,7 +352,7 @@
 			border-bottom: none;
 		}
 
-		.turnstilewp-group-title {
+		.smartct-group-title {
 			h2 {
 				margin: 0;
 				line-height: 1;
@@ -367,7 +367,7 @@
 			}
 		}
 
-		.turnstilewp-field {
+		.smartct-field {
 			border-top: none;
 
 			&:not(:last-child) {
@@ -376,7 +376,7 @@
 		}
 	}
 
-	.turnstilewp-content-field {
+	.smartct-content-field {
 		margin-bottom: 32px;
 
 		&:last-child {
@@ -384,7 +384,7 @@
 		}
 	}
 
-	.turnstilewp-preview-box {
+	.smartct-preview-box {
 		border-bottom: 1px solid #e5e7eb;
 		position: relative;
 		min-width: 255px;
@@ -421,14 +421,14 @@
 	}
 }
 
-.turnstilewp-section:last-child {
+.smartct-section:last-child {
 	border-bottom: none;
 	margin-bottom: 0;
 	padding-bottom: 0;
 }
 
 @media (width <= 600px) {
-	.turnstilewp-card {
+	.smartct-card {
 		padding: 18px 8px 12px;
 	}
 
@@ -444,7 +444,7 @@
 }
 
 /* Modern toggle switch styles */
-.turnstilewp-toggle {
+.smartct-toggle {
 	position: relative;
 	display: inline-block;
 	width: 46px;
@@ -453,13 +453,13 @@
 	margin-right: 10px;
 }
 
-.turnstilewp-toggle input[type='checkbox'] {
+.smartct-toggle input[type='checkbox'] {
 	opacity: 0;
 	width: 0;
 	height: 0;
 }
 
-.turnstilewp-toggle-slider {
+.smartct-toggle-slider {
 	position: absolute;
 	cursor: pointer;
 	inset: 0;
@@ -469,7 +469,7 @@
 	box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
 }
 
-.turnstilewp-toggle-slider::before {
+.smartct-toggle-slider::before {
 	position: absolute;
 	content: '';
 	height: 18px;
@@ -482,20 +482,20 @@
 	box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
 }
 
-.turnstilewp-toggle input:checked + .turnstilewp-toggle-slider {
+.smartct-toggle input:checked + .smartct-toggle-slider {
 	background-color: var(--tswp-color-primary);
 }
 
-.turnstilewp-toggle input:checked + .turnstilewp-toggle-slider::before {
+.smartct-toggle input:checked + .smartct-toggle-slider::before {
 	transform: translateX(22px);
 }
 
 /* Accordion styles for WordPress Forms */
-.turnstilewp-accordion {
+.smartct-accordion {
 	margin-bottom: 32px;
 }
 
-.turnstilewp-accordion-item {
+.smartct-accordion-item {
 	background: #fff;
 	border-radius: 10px;
 	box-shadow: 0 2px 8px rgb(60 60 60 / 6%);
@@ -504,7 +504,7 @@
 	overflow: hidden;
 }
 
-.turnstilewp-accordion-header {
+.smartct-accordion-header {
 	width: 100%;
 	background: #e9eef3;
 	border: none;
@@ -519,38 +519,38 @@
 	transition: background 0.2s;
 }
 
-.turnstilewp-accordion-header:hover {
+.smartct-accordion-header:hover {
 	background: var(--tswp-gradient);
 	color: #fff;
 }
 
-.turnstilewp-accordion-arrow {
+.smartct-accordion-arrow {
 	font-size: 1.2em;
 	margin-left: 10px;
 	transition: transform 0.2s;
 }
 
-.turnstilewp-accordion-item .turnstilewp-accordion-content {
+.smartct-accordion-item .smartct-accordion-content {
 	display: block;
 	padding: 24px 24px 18px;
 	border-top: 1px solid #e5e7eb;
 }
 
-.turnstilewp-accordion-item:not(.open) .turnstilewp-accordion-content {
+.smartct-accordion-item:not(.open) .smartct-accordion-content {
 	display: none;
 }
 
-.turnstilewp-accordion-item.open .turnstilewp-accordion-arrow {
+.smartct-accordion-item.open .smartct-accordion-arrow {
 	transform: rotate(0deg);
 }
 
-.turnstilewp-accordion-item:not(.open) .turnstilewp-accordion-arrow {
+.smartct-accordion-item:not(.open) .smartct-accordion-arrow {
 	transform: rotate(180deg);
 }
 
 /* FAQ Accordion Styles */
 
-.turnstilewp-faqs-wrapper {
+.smartct-faqs-wrapper {
 	max-width: 576px;
 	background: #fff;
 	border: 1px solid #e5e7eb;

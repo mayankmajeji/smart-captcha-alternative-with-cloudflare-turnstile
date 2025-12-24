@@ -3,12 +3,12 @@
 /**
  * Token verification class
  *
- * @package TurnstileWP
+ * @package SmartCT
  */
 
 declare(strict_types=1);
 
-namespace TurnstileWP;
+namespace SmartCT;
 
 /**
  * Class Verify
@@ -44,12 +44,12 @@ class Verify
 			return false;
 		}
 
-		$secret_key = $custom_secret_key ?: $this->settings->get_option('tswp_secret_key');
+		$secret_key = $custom_secret_key ?: $this->settings->get_option('smartct_secret_key');
 		if (empty($secret_key)) {
 			return false;
 		}
 
-		$appearance_mode = $this->settings->get_option('tswp_appearance_mode', 'always');
+		$appearance_mode = $this->settings->get_option('smartct_appearance_mode', 'always');
 		if ($appearance_mode === 'interaction_only') {
 			$appearance_mode = 'interaction-only';
 		}
@@ -59,7 +59,7 @@ class Verify
 				'body' => array(
 					'secret' => $secret_key,
 					'response' => $token,
-					'remoteip' => \TurnstileWP\get_client_ip(),
+					'remoteip' => \SmartCT\get_client_ip(),
 					'appearance' => $appearance_mode,
 				),
 			)
@@ -93,9 +93,9 @@ class Verify
 	 */
 	private function log_error(string $message): void
 	{
-		if ($this->settings->get_option('tswp_debug_mode')) {
+		if ($this->settings->get_option('smartct_debug_mode')) {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log -- Intentional debug logging when debug mode is enabled
-			// error_log('[TurnstileWP] ' . $message);
+			// error_log('[SmartCT] ' . $message);
 		}
 	}
 }
