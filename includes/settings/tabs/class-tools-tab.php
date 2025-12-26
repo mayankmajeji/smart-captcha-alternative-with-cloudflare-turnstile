@@ -53,28 +53,43 @@ class Tools_Tab
 	 */
 	private function handle_tools_actions(): void
 	{
-		if ( empty( $_POST['smartct_tools_action'] ) ) {
+		// Early exit if no POST data
+		if (empty($_POST)) {
 			return;
 		}
 
-		$action = sanitize_text_field( wp_unslash( $_POST['smartct_tools_action'] ) );
+		// Verify user has permission
+		if (! current_user_can('manage_options')) {
+			wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'smart-cloudflare-turnstile'));
+		}
+
+		// Check if action is set before processing
+		if (empty($_POST['smartct_tools_action'])) {
+			return;
+		}
+
+		$action = sanitize_text_field(wp_unslash($_POST['smartct_tools_action']));
 		$settings = new Settings();
 
-		switch ( $action ) {
+		switch ($action) {
 			case 'import':
-				if ( check_admin_referer( 'smartct_tools_import', 'smartct_tools_nonce' ) ) {
-					$this->import_settings( $settings );
+				// Verify nonce for import action
+				if (! isset($_POST['smartct_tools_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), 'smartct_tools_import')) {
+					wp_die(esc_html__('Security check failed.', 'smart-cloudflare-turnstile'));
 				}
+				$this->import_settings($settings);
 				break;
 
 			case 'reset':
-				if ( check_admin_referer( 'smartct_tools_reset', 'smartct_tools_nonce' ) ) {
-					$this->reset_settings( $settings );
+				// Verify nonce for reset action
+				if (! isset($_POST['smartct_tools_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), 'smartct_tools_reset')) {
+					wp_die(esc_html__('Security check failed.', 'smart-cloudflare-turnstile'));
 				}
+				$this->reset_settings($settings);
 				break;
 
 			case 'export':
-				// Export is handled via AJAX with smartct_tools_export nonce
+				// Export is handled via GET with smartct_tools_export nonce
 				break;
 		}
 	}

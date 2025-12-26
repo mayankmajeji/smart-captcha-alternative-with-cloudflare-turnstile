@@ -105,8 +105,8 @@ $external_integrations = apply_filters('smartct_integrations', array());
 								<a class="button" href="<?php echo esc_url(admin_url('admin.php?page=smartct-settings')); ?>">
 									<?php esc_html_e('Edit Keys', 'smart-cloudflare-turnstile'); ?>
 								</a>
-								<a class="button" href="https://github.com/mayankmajeji/turnstilewp" target="_blank" rel="noopener noreferrer">
-									<?php esc_html_e('Documentation', 'smart-cloudflare-turnstile'); ?>
+								<a class="button" href="https://github.com/mayankmajeji/smart-cloudflare-turnstile" target="_blank" rel="noopener noreferrer"></a>
+								<?php esc_html_e('Documentation', 'smart-cloudflare-turnstile'); ?>
 								</a>
 							</p>
 						</div>
@@ -220,7 +220,7 @@ $external_integrations = apply_filters('smartct_integrations', array());
 							<tr>
 								<td>📖 <?php esc_html_e('Review documentation', 'smart-cloudflare-turnstile'); ?></td>
 								<td><?php esc_html_e('Learn about hooks and settings', 'smart-cloudflare-turnstile'); ?></td>
-								<td><a href="https://github.com/mayankmajeji/turnstilewp" target="_blank" rel="noopener noreferrer">🔗</a></td>
+								<td><a href="https://github.com/mayankmajeji/smart-cloudflare-turnstile" target="_blank" rel="noopener noreferrer">🔗</a></td>
 							</tr>
 						</tbody>
 					</table>

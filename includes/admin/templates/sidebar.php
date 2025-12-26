@@ -53,7 +53,6 @@ if (! defined('WPINC')) {
 	<div class="smartct-sidebar-section">
 		<h3>Plugin Navigation</h3>
 		<ul>
-			<li><a href="admin.php?page=turnstilewp">Dashboard</a></li>
 			<li><a href="admin.php?page=smartct-settings">Settings</a></li>
 			<li><a href="admin.php?page=smartct-integrations">Integrations</a></li>
 			<li><a href="admin.php?page=smartct-tools">Tools</a></li>
@@ -62,7 +61,7 @@ if (! defined('WPINC')) {
 	</div>
 	<div class="smartct-sidebar-section">
 		<h3>Need Help?</h3>
-		<p>Visit the <a href="https://wordpress.org/support/plugin/turnstilewp/" target="_blank" rel="noopener">support forum</a> or <a href="https://github.com/mayankmajeji/turnstilewp" target="_blank" rel="noopener">GitHub</a>.</p>
+		<p>Visit the <a href="https://wordpress.org/support/plugin/smart-captcha-alternative-with-cloudflare-turnstile/" target="_blank" rel="noopener">support forum</a> or <a href="https://github.com/mayankmajeji/smart-cloudflare-turnstile" target="_blank" rel="noopener">GitHub</a>.</p>
 	</div>
 </div>
 <?php

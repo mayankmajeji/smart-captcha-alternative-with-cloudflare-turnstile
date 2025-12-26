@@ -113,7 +113,7 @@ if (! array_key_exists($current_help_tab, $help_tabs)) {
 													<p><?php esc_html_e('Smart Cloudflare Turnstile is also available on WordPress.org where you can download the plugin, submit a bug ticket, and follow along with the updates.', 'smart-cloudflare-turnstile'); ?></p>
 												</div>
 												<div class="smartct-buttons">
-													<a class="button button-primary" href="https://wordpress.org/plugins/smart-cloudflare-turnstile/" target="_blank" rel="noopener">
+													<a class="button button-primary" href="https://wordpress.org/plugins/smart-captcha-alternative-with-cloudflare-turnstile/" target="_blank" rel="noopener">
 														<?php esc_html_e('Visit WordPress.org', 'smart-cloudflare-turnstile'); ?>
 													</a>
 												</div>
@@ -132,7 +132,7 @@ if (! array_key_exists($current_help_tab, $help_tabs)) {
 													<p><?php esc_html_e('Smart Cloudflare Turnstile is also available on GitHub where you can browse the code, open a bug report, and follow along with development.', 'smart-cloudflare-turnstile'); ?></p>
 												</div>
 												<div class="smartct-buttons">
-													<a class="button button-primary" href="https://github.com/mayankmajeji/turnstilewp" target="_blank" rel="noopener">
+													<a class="button button-primary" href="https://github.com/mayankmajeji/smart-cloudflare-turnstile" target="_blank" rel="noopener">
 														<?php esc_html_e('Visit GitHub', 'smart-cloudflare-turnstile'); ?>
 													</a>
 												</div>
