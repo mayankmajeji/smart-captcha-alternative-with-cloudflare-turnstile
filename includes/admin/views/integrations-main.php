@@ -50,7 +50,16 @@ if ($has_form_plugins) {
 if (! empty($fields_structure['others'])) {
 	$integration_tabs['others'] = __('Others', 'smart-cloudflare-turnstile');
 }
-// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation doesn't require nonce verification
+/**
+ * Tab navigation security model:
+ * - This is a read-only operation (no state changes, no data modification)
+ * - Page access is protected by current_user_can('manage_options') check above (line 17)
+ * - Input is sanitized with sanitize_key() and validated against $integration_tabs array
+ * - Invalid tabs default to 'default_wordpress_forms'
+ * - Nonces are not used to preserve bookmarkability and prevent UX issues with expired nonces
+ * - This follows WordPress core's admin navigation patterns (e.g., wp-admin/?page=X)
+ */
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation with capability check and input validation
 $current_tab = isset($_GET['integration_tab']) ? sanitize_key(wp_unslash($_GET['integration_tab'])) : 'default_wordpress_forms';
 if (! $has_form_plugins && $current_tab === 'form_plugins') {
 	$current_tab = 'default_wordpress_forms';
@@ -77,11 +86,17 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 		$filter_tabs = array(
 			'all'          => __('All', 'smart-cloudflare-turnstile'),
 			'form_plugins' => __('Form Plugins', 'smart-cloudflare-turnstile'),
-			'membership'   => __('Membership', 'smart-cloudflare-turnstile'),
-			'community'    => __('Community', 'smart-cloudflare-turnstile'),
-			'others'       => __('Others', 'smart-cloudflare-turnstile'),
-		);
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation doesn't require nonce verification
+		'membership'   => __('Membership', 'smart-cloudflare-turnstile'),
+		'community'    => __('Community', 'smart-cloudflare-turnstile'),
+		'others'       => __('Others', 'smart-cloudflare-turnstile'),
+	);
+	/**
+	 * Filter tab navigation security:
+	 * - Read-only operation for UI filtering
+	 * - Protected by capability check at line 17
+	 * - Validated against $filter_tabs array below
+	 */
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation with capability check and input validation
 	$current_filter = isset($_GET['filter_tab']) ? sanitize_key(wp_unslash($_GET['filter_tab'])) : 'all';
 		if (! array_key_exists($current_filter, $filter_tabs)) {
 			$current_filter = 'all';

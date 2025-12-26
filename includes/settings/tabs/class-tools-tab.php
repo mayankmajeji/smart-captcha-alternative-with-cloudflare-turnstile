@@ -58,9 +58,15 @@ class Tools_Tab
 			return;
 		}
 
-		// Verify user has permission
+		// Verify user has permission first
 		if (! current_user_can('manage_options')) {
 			wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'smart-cloudflare-turnstile'));
+		}
+
+		// Verify nonce field exists before processing any POST data
+		// This prevents unauthorized access attempts without a valid nonce
+		if (! isset($_POST['smartct_tools_nonce'])) {
+			return; // No nonce provided, not a valid form submission
 		}
 
 		// Check if action is set before processing
@@ -68,21 +74,22 @@ class Tools_Tab
 			return;
 		}
 
+		// Now that we've verified a nonce field exists, we can safely read the action
 		$action = sanitize_text_field(wp_unslash($_POST['smartct_tools_action']));
 		$settings = new Settings();
 
 		switch ($action) {
 			case 'import':
-				// Verify nonce for import action
-				if (! isset($_POST['smartct_tools_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), 'smartct_tools_import')) {
+				// Verify specific nonce for import action
+				if (! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), 'smartct_tools_import')) {
 					wp_die(esc_html__('Security check failed.', 'smart-cloudflare-turnstile'));
 				}
 				$this->import_settings($settings);
 				break;
 
 			case 'reset':
-				// Verify nonce for reset action
-				if (! isset($_POST['smartct_tools_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), 'smartct_tools_reset')) {
+				// Verify specific nonce for reset action
+				if (! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), 'smartct_tools_reset')) {
 					wp_die(esc_html__('Security check failed.', 'smart-cloudflare-turnstile'));
 				}
 				$this->reset_settings($settings);
@@ -91,6 +98,10 @@ class Tools_Tab
 			case 'export':
 				// Export is handled via GET with smartct_tools_export nonce
 				break;
+
+			default:
+				// Invalid action - do nothing
+				return;
 		}
 	}
 
