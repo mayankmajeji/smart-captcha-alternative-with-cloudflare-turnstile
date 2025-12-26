@@ -66,10 +66,17 @@ $keys_verified = get_option('smartct_keys_verified', 0);
 		if ( $has_form_plugins ) {
 			$settings_tabs['form_plugins'] = __('Form Plugins', 'smart-cloudflare-turnstile');
 		}
-		if ( ! empty($fields_structure['others']) ) {
-			$settings_tabs['others'] = __('Others', 'smart-cloudflare-turnstile');
-		}
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation doesn't require nonce verification
+	if ( ! empty($fields_structure['others']) ) {
+		$settings_tabs['others'] = __('Others', 'smart-cloudflare-turnstile');
+	}
+	/**
+	 * Settings tab navigation security model:
+	 * - Read-only display operation (actual settings changes go through options.php with nonces)
+	 * - Protected by current_user_can('manage_options') at line 17
+	 * - Input validated against $settings_tabs array below
+	 * - Nonces not used to maintain bookmarkable URLs
+	 */
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation with capability check and input validation
 	$current_settings_tab = isset($_GET['settings_tab']) ? sanitize_key(wp_unslash($_GET['settings_tab'])) : 'turnstile_settings';
 		if ( ! array_key_exists($current_settings_tab, $settings_tabs) ) {
 			$current_settings_tab = 'turnstile_settings';

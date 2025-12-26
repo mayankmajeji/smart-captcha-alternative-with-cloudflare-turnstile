@@ -22,7 +22,13 @@ $tabs = array(
 	'export' => __('Export Settings', 'smart-cloudflare-turnstile'),
 	'reset'  => __('Reset Settings', 'smart-cloudflare-turnstile'),
 );
-// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation doesn't require nonce verification
+/**
+ * Tools tab navigation security:
+ * - Read-only display (actual actions require nonces in their forms)
+ * - Protected by current_user_can('manage_options') at line 16
+ * - Validated against $tabs array above
+ */
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation with capability check and input validation
 $current_tab = isset($_GET['tools_tab']) ? sanitize_key(wp_unslash($_GET['tools_tab'])) : 'import';
 if ( ! array_key_exists($current_tab, $tabs) ) {
 	$current_tab = 'import';

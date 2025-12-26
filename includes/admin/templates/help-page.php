@@ -31,7 +31,13 @@ $help_tabs = array(
 	'faqs'     => __('FAQs', 'smart-cloudflare-turnstile'),
 	'system'   => __('System Info', 'smart-cloudflare-turnstile'),
 );
-// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation doesn't require nonce verification
+/**
+ * Help tab navigation security:
+ * - Read-only informational content display
+ * - Protected by current_user_can('manage_options') at line 17
+ * - Validated against $help_tabs array above
+ */
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only navigation with capability check and input validation
 $current_help_tab = isset($_GET['help_tab']) ? sanitize_key(wp_unslash($_GET['help_tab'])) : 'support';
 if (! array_key_exists($current_help_tab, $help_tabs)) {
 	$current_help_tab = 'support';
