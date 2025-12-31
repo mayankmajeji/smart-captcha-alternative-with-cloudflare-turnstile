@@ -58,7 +58,7 @@ class Tools_Tab
 			return;
 		}
 
-		// Verify user has permission
+		// Verify user has permission FIRST
 		if (! current_user_can('manage_options')) {
 			wp_die(esc_html__('You do not have sufficient permissions to access this page.', 'smart-cloudflare-turnstile'));
 		}
@@ -68,28 +68,43 @@ class Tools_Tab
 			return;
 		}
 
+		// Verify nonce exists BEFORE reading any other POST data
+		if (! isset($_POST['smartct_tools_nonce'])) {
+			wp_die(esc_html__('Security check failed: Missing nonce.', 'smart-cloudflare-turnstile'));
+		}
+
+		// Sanitize action to determine which nonce to verify
 		$action = sanitize_text_field(wp_unslash($_POST['smartct_tools_action']));
+		
+		// Determine the correct nonce action based on the submitted action
+		$nonce_action = '';
+		switch ($action) {
+			case 'import':
+				$nonce_action = 'smartct_tools_import';
+				break;
+			case 'reset':
+				$nonce_action = 'smartct_tools_reset';
+				break;
+			default:
+				// Invalid action - fail securely
+				wp_die(esc_html__('Security check failed: Invalid action.', 'smart-cloudflare-turnstile'));
+		}
+
+		// Verify the nonce for the specific action
+		if (! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), $nonce_action)) {
+			wp_die(esc_html__('Security check failed: Invalid nonce.', 'smart-cloudflare-turnstile'));
+		}
+
+		// Nonce and permissions verified - now process the action
 		$settings = new Settings();
 
 		switch ($action) {
 			case 'import':
-				// Verify nonce for import action
-				if (! isset($_POST['smartct_tools_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), 'smartct_tools_import')) {
-					wp_die(esc_html__('Security check failed.', 'smart-cloudflare-turnstile'));
-				}
 				$this->import_settings($settings);
 				break;
 
 			case 'reset':
-				// Verify nonce for reset action
-				if (! isset($_POST['smartct_tools_nonce']) || ! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), 'smartct_tools_reset')) {
-					wp_die(esc_html__('Security check failed.', 'smart-cloudflare-turnstile'));
-				}
 				$this->reset_settings($settings);
-				break;
-
-			case 'export':
-				// Export is handled via GET with smartct_tools_export nonce
 				break;
 		}
 	}
