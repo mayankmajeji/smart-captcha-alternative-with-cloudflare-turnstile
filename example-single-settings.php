@@ -11,6 +11,12 @@ declare(strict_types=1);
 
 namespace SmartCT;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+namespace SmartCT;
+
 /**
  * All-in-One Settings Class
  * Combines data layer, business logic, UI controller, and rendering

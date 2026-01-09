@@ -8,6 +8,12 @@
 
 declare(strict_types=1);
 
+namespace SmartCT\Integrations\Core;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 namespace SmartCT;
 
 /**

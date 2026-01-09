@@ -6,6 +6,10 @@
  * @package SmartCT
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if (! function_exists('smartct_render_setting_field')) {
 	function smartct_render_setting_field($field, $value)
 	{
