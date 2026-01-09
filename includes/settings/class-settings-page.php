@@ -10,6 +10,10 @@ declare(strict_types=1);
 
 namespace SmartCT\Settings;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use SmartCT\Settings\Tabs\WooCommerce_Tab;
 
 class Settings_Page

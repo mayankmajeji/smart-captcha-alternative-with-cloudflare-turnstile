@@ -10,6 +10,10 @@ declare(strict_types=1);
 
 namespace SmartCT;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Check if current page is login page
  *

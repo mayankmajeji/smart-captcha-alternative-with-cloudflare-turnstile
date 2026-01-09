@@ -64,39 +64,51 @@ class Tools_Tab
 		}
 
 		// Verify nonce field exists before processing any POST data
-		// This prevents unauthorized access attempts without a valid nonce
 		if (! isset($_POST['smartct_tools_nonce'])) {
 			return; // No nonce provided, not a valid form submission
 		}
 
-		// Check if action is set before processing
-		if (empty($_POST['smartct_tools_action'])) {
+		// Verify the nonce BEFORE accessing any other POST data
+		// Since we have multiple forms with different nonce actions, we need to check both
+		$nonce_value = sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce']));
+		$is_import_nonce = wp_verify_nonce($nonce_value, 'smartct_tools_import');
+		$is_reset_nonce = wp_verify_nonce($nonce_value, 'smartct_tools_reset');
+
+		// If neither nonce is valid, die immediately
+		if (! $is_import_nonce && ! $is_reset_nonce) {
+			wp_die(esc_html__('Security check failed.', 'smart-cloudflare-turnstile'));
+		}
+
+		// NOW it's safe to access other POST data since nonce is verified
+		if (! isset($_POST['smartct_tools_action'])) {
 			return;
 		}
 
-		// Now that we've verified a nonce field exists, we can safely read the action
 		$action = sanitize_text_field(wp_unslash($_POST['smartct_tools_action']));
 		$settings = new Settings();
 
+		// Process the verified action with additional referer check
 		switch ($action) {
 			case 'import':
-				// Verify specific nonce for import action
-				if (! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), 'smartct_tools_import')) {
+				// Double-check that this was the import nonce and verify HTTP referer
+				if (! $is_import_nonce) {
 					wp_die(esc_html__('Security check failed.', 'smart-cloudflare-turnstile'));
 				}
+				check_admin_referer('smartct_tools_import', 'smartct_tools_nonce');
 				$this->import_settings($settings);
 				break;
 
 			case 'reset':
-				// Verify specific nonce for reset action
-				if (! wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['smartct_tools_nonce'])), 'smartct_tools_reset')) {
+				// Double-check that this was the reset nonce and verify HTTP referer
+				if (! $is_reset_nonce) {
 					wp_die(esc_html__('Security check failed.', 'smart-cloudflare-turnstile'));
 				}
+				check_admin_referer('smartct_tools_reset', 'smartct_tools_nonce');
 				$this->reset_settings($settings);
 				break;
 
 			case 'export':
-				// Export is handled via GET with smartct_tools_export nonce
+				// Export is handled via GET with smartct_tools_export nonce in maybe_handle_export()
 				break;
 
 			default:
