@@ -5,7 +5,7 @@
 /vendor
 /node_modules
 
-# Directories
+# Directories 
 .vscode/
 .specify/
 Wordpress/
