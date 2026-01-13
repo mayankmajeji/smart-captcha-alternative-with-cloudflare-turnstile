@@ -4,7 +4,7 @@
  * Plugin Name: Smart CAPTCHA Alternative with Cloudflare Turnstile
  * Plugin URI: https://wordpress.org/plugins/smart-captcha-alternative-with-cloudflare-turnstile
  * Description: Lightweight and privacy-first integration of Cloudflare Turnstile with WordPress forms.
- * Version: 1.0.0
+ * Version: 1.0.2
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: Mayank Majeji, S P Pramodh
