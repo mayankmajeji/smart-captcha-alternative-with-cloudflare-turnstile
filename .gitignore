@@ -9,6 +9,8 @@
 .vscode/
 .specify/
 Wordpress/
+.rules/
+.docs/
 
 # Tests
 /tests/_output/
