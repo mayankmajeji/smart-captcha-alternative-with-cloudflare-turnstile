@@ -1,14 +1,24 @@
-# Files
+# Dependency files
+/composer.lock
+
+# Dependency directories
+/vendor
+/node_modules
+
+# Directories
+.vscode/
+.specify/
+Wordpress/
+
+# Tests
+/tests/_output/
+/tests/_support/_generated
+/tests/cache
+
+# SPAM
 /composer.lock
 .DS_Store
 **/.DS_Store
 __MACOSX
 **/__MACOSX
-
-# Directories
-/vendor
-/node_modules
-.github/
-.vscode/
-.specify/
-Wordpress/
+Thumbs.db
