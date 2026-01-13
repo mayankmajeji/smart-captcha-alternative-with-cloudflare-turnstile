@@ -158,14 +158,14 @@ class Init
 		 * Filter: 'smartct_load_turnstile_script' can be used to prevent loading if needed.
 		 */
 		if (apply_filters('smartct_load_turnstile_script', true)) {
-			wp_enqueue_script(
-				'cloudflare-turnstile',
+		wp_enqueue_script(
+			'cloudflare-turnstile',
 				'https://challenges.cloudflare.com/turnstile/v0/api.js', // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent -- Cloudflare Turnstile API must be loaded from their CDN per terms of service
-				array(),
-				// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, version controlled by Cloudflare
-				null,
-				true
-			);
+			array(),
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, version controlled by Cloudflare
+			null,
+			true
+		);
 		}
 
 		wp_enqueue_style(
@@ -237,7 +237,7 @@ class Init
 		if (! $screen) {
 			return $classes;
 		}
-
+		
 		// Check if current page is a plugin page (by menu slug)
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Checking page slug for display only
 		$page = isset($_GET['page']) ? sanitize_key(wp_unslash($_GET['page'])) : '';
@@ -282,14 +282,14 @@ class Init
 		 * Filter: 'smartct_load_turnstile_script' can be used to prevent loading if needed.
 		 */
 		if (apply_filters('smartct_load_turnstile_script', true)) {
-			wp_enqueue_script(
-				'cloudflare-turnstile',
+		wp_enqueue_script(
+			'cloudflare-turnstile',
 				'https://challenges.cloudflare.com/turnstile/v0/api.js', // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent -- Cloudflare Turnstile API must be loaded from their CDN per terms of service
-				array(),
-				// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, version controlled by Cloudflare
-				null,
-				true
-			);
+			array(),
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- External CDN script, version controlled by Cloudflare
+			null,
+			true
+		);
 		}
 
 		// Add small inline bootstrap to render placeholders (e.g., Formidable)
