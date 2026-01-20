@@ -116,6 +116,7 @@ class Init
 			add_action('admin_init', array($this->settings, 'register_settings'));
 			add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
 			add_filter('admin_body_class', array($this, 'add_admin_body_class'));
+			add_filter('plugin_action_links_' . SMARTCT_PLUGIN_BASENAME, array($this, 'add_plugin_action_links'));
 			add_action('wp_ajax_smartct_verify_keys', array($this, 'verify_keys_ajax'));
 			add_action('wp_ajax_smartct_remove_keys', array($this, 'remove_keys_ajax'));
 			self::$admin_hooks_registered = true;
@@ -248,6 +249,24 @@ class Init
 			$classes .= ' smartct-admin smartct-screen-' . sanitize_html_class((string) $screen->id);
 		}
 		return $classes;
+	}
+
+	/**
+	 * Add settings link to plugin action links
+	 *
+	 * @param array $links Existing plugin action links.
+	 * @return array Modified plugin action links.
+	 */
+	public function add_plugin_action_links(array $links): array
+	{
+		$settings_link = sprintf(
+			'<a href="%s">%s</a>',
+			esc_url(admin_url('admin.php?page=smartct-settings')),
+			esc_html__('Settings', 'smart-cloudflare-turnstile')
+		);
+		// Add Settings link before Deactivate link
+		array_unshift($links, $settings_link);
+		return $links;
 	}
 
 	/**
