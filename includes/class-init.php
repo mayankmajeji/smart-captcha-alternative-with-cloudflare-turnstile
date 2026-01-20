@@ -497,5 +497,15 @@ class Init
 		if (defined('SRFM_SLUG') || class_exists('\SRFM\Inc\Form_Submit')) {
 			new \SmartCT\Integrations\Sure_Forms();
 		}
+
+		// bbPress integration (if bbPress is active)
+		if (class_exists('bbPress') || function_exists('bbp_get_version')) {
+			new \SmartCT\Integrations\bbPress();
+		}
+
+		// BuddyPress integration (if BuddyPress is active)
+		if (function_exists('buddypress') || class_exists('BuddyPress')) {
+			new \SmartCT\Integrations\BuddyPress();
+		}
 	}
 }

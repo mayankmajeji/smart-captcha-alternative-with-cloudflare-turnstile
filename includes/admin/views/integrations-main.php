@@ -224,8 +224,18 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 				'plugin_slug'  => 'bbpress',
 				'plugin_file'  => 'bbpress/bbpress.php',
 				'desc'         => __('A lightweight forum plugin that adds discussion boards seamlessly to WordPress sites.', 'smart-cloudflare-turnstile'),
-				'settings_url' => $settings_base . '&settings_tab=others',
+				'settings_url' => $settings_base . '&settings_tab=community',
 				'logo'         => $logo_base . 'bbpress.png',
+			),
+			array(
+				'key'          => 'buddypress',
+				'label'        => 'BuddyPress',
+				'cat'          => 'community',
+				'plugin_slug'  => 'buddypress',
+				'plugin_file'  => 'buddypress/bp-loader.php',
+				'desc'         => __('A social networking plugin that adds community features like profiles, activity streams, and groups.', 'smart-cloudflare-turnstile'),
+				'settings_url' => $settings_base . '&settings_tab=community',
+				'logo'         => $logo_base . 'buddypress.png',
 			),
 		);
 		?>
@@ -294,11 +304,10 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 											$active    = ! empty($svc['plugin_file']) ? $is_plugin_active_cb($svc['plugin_file']) : true;
 											$btn_label = '';
 											$btn_url   = '';
-											$is_coming_soon = false;
+											$is_coming_soon = ! empty($svc['coming_soon']) && $svc['coming_soon'] === true;
 
-											// Special handling for BBPress - show "Coming soon" instead of Install
-											if ($svc['key'] === 'bbpress') {
-												$is_coming_soon = true;
+											// Check if integration is marked as "Coming soon"
+											if ($is_coming_soon) {
 												$active = false; // Don't show "Active" badge for coming soon integrations
 												$btn_label = __('Coming Soon', 'smart-cloudflare-turnstile');
 												$btn_url = '#';

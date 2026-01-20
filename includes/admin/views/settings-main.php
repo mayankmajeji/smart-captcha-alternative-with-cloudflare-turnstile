@@ -45,7 +45,7 @@ $keys_verified = get_option('smartct_keys_verified', 0);
 		<?php
 		// Build left tabs: Settings first, then integrations conditionally
 		$settings_tabs = array(
-			'turnstile_settings' => __('Settings', 'smart-cloudflare-turnstile'),
+			'turnstile_settings'      => __('Settings', 'smart-cloudflare-turnstile'),
 			'default_wordpress_forms' => __('WordPress Forms', 'smart-cloudflare-turnstile'),
 		);
 		$has_form_plugins = apply_filters(
@@ -66,9 +66,15 @@ $keys_verified = get_option('smartct_keys_verified', 0);
 		if ( $has_form_plugins ) {
 			$settings_tabs['form_plugins'] = __('Form Plugins', 'smart-cloudflare-turnstile');
 		}
-	if ( ! empty($fields_structure['others']) ) {
-		$settings_tabs['others'] = __('Others', 'smart-cloudflare-turnstile');
-	}
+
+		// Community tab (e.g., bbPress) appears when there are community fields registered
+		if ( ! empty( $fields_structure['community'] ) ) {
+			$settings_tabs['community'] = __('Community', 'smart-cloudflare-turnstile');
+		}
+
+		if ( ! empty($fields_structure['others']) ) {
+			$settings_tabs['others'] = __('Others', 'smart-cloudflare-turnstile');
+		}
 	/**
 	 * Settings tab navigation security model:
 	 * - Read-only display operation (actual settings changes go through options.php with nonces)
@@ -96,6 +102,8 @@ $keys_verified = get_option('smartct_keys_verified', 0);
 						$icon_partial = 'cart-icon.php';
 					} elseif ( $sid === 'form_plugins' ) {
 						$icon_partial = 'plugin-icon.php';
+					} elseif ( $sid === 'community' ) {
+						$icon_partial = 'community-icon.php';
 					} elseif ( $sid === 'others' ) {
 						$icon_partial = 'plugin-icon.php';
 					}
