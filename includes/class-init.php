@@ -512,5 +512,10 @@ class Init
 		if (class_exists('\MailPoet\API\API') || defined('MAILPOET_VERSION')) {
 			new \SmartCT\Integrations\MailPoet();
 		}
+
+		// Kadence Forms integration (if Kadence Blocks is active)
+		if (function_exists('kadence_blocks') || defined('KADENCE_BLOCKS_VERSION')) {
+			new \SmartCT\Integrations\Kadence();
+		}
 	}
 }
