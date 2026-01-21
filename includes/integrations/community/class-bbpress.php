@@ -5,6 +5,9 @@
  *
  * @package SmartCT
  * @subpackage SmartCT/integrations
+ * @since 1.1.0
+ * @author Mayank Majeji
+ * @date 2025-01-21
  */
 
 namespace SmartCT\Integrations;
@@ -180,8 +183,9 @@ class bbPress {
 			return;
 		}
 
-		if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Checking request method only
-			bbp_add_error('bbp_topic_turnstile', __('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated -- Validating REQUEST_METHOD existence
+		if ( ! isset($_SERVER['REQUEST_METHOD']) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+			bbp_add_error('bbp_topic_turnstile', esc_html__('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
 			return;
 		}
 
@@ -189,13 +193,13 @@ class bbPress {
 		$token = isset($_POST['cf-turnstile-response']) ? sanitize_text_field(wp_unslash($_POST['cf-turnstile-response'])) : '';
 
 		if ( empty($token) ) {
-			bbp_add_error('bbp_topic_turnstile', __('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
+			bbp_add_error('bbp_topic_turnstile', esc_html__('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
 			return;
 		}
 
 		$valid = $this->verify->verify_token($token);
 		if ( ! $valid ) {
-			bbp_add_error('bbp_topic_turnstile', __('Turnstile verification failed. Please try again.', 'smart-cloudflare-turnstile'));
+			bbp_add_error('bbp_topic_turnstile', esc_html__('Turnstile verification failed. Please try again.', 'smart-cloudflare-turnstile'));
 		}
 	}
 
@@ -207,8 +211,9 @@ class bbPress {
 			return;
 		}
 
-		if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Checking request method only
-			bbp_add_error('bbp_reply_turnstile', __('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated -- Validating REQUEST_METHOD existence
+		if ( ! isset($_SERVER['REQUEST_METHOD']) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+			bbp_add_error('bbp_reply_turnstile', esc_html__('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
 			return;
 		}
 
@@ -216,13 +221,13 @@ class bbPress {
 		$token = isset($_POST['cf-turnstile-response']) ? sanitize_text_field(wp_unslash($_POST['cf-turnstile-response'])) : '';
 
 		if ( empty($token) ) {
-			bbp_add_error('bbp_reply_turnstile', __('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
+			bbp_add_error('bbp_reply_turnstile', esc_html__('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
 			return;
 		}
 
 		$valid = $this->verify->verify_token($token);
 		if ( ! $valid ) {
-			bbp_add_error('bbp_reply_turnstile', __('Turnstile verification failed. Please try again.', 'smart-cloudflare-turnstile'));
+			bbp_add_error('bbp_reply_turnstile', esc_html__('Turnstile verification failed. Please try again.', 'smart-cloudflare-turnstile'));
 		}
 	}
 
