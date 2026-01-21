@@ -4,19 +4,15 @@ Tags: captcha, cloudflare, turnstile, security, woocommerce
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Protect your WordPress and WooCommerce forms from spam using Cloudflare Turnstile — a privacy-friendly, CAPTCHA-free alternative with no puzzles or tracking.
-
-A modern, privacy-focused alternative to traditional CAPTCHA solutions.
+Protect WordPress forms from spam using Cloudflare Turnstile. A privacy-friendly CAPTCHA alternative.
 
 == Description ==
 
 **Smart CAPTCHA Alternative with Cloudflare Turnstile** helps you block spam and bots without hurting user experience.
-
-**Available Integrations**
 
 Instead of frustrating image puzzles or invasive tracking, this plugin integrates **Cloudflare Turnstile**, a modern CAPTCHA alternative that silently verifies real users while respecting privacy.
 
@@ -162,7 +158,6 @@ This plugin connects to Cloudflare Turnstile service to provide CAPTCHA verifica
 - Cloudflare Terms of Service: https://www.cloudflare.com/terms/
 - Cloudflare Privacy Policy: https://www.cloudflare.com/privacypolicy/
 
-
 == Screenshots ==
 
 1. General settings screen with key configuration
@@ -170,6 +165,9 @@ This plugin connects to Cloudflare Turnstile service to provide CAPTCHA verifica
 3. Example widget rendering on a login form
 
 == Changelog ==
+
+= 1.1.1 =
+* Fixed readme.txt short description.
 
 = 1.1.0 =
 * Added bbPress integration (Topic Creation and Reply forms)
