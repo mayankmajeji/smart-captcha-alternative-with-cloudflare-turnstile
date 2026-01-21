@@ -5,6 +5,9 @@
  *
  * @package SmartCT
  * @subpackage SmartCT/integrations
+ * @since 1.1.0
+ * @author Mayank Majeji
+ * @date 2025-01-21
  */
 
 namespace SmartCT\Integrations;
@@ -91,7 +94,8 @@ class BuddyPress {
 	 * Validate BuddyPress registration
 	 */
 	public function validate_registration(): void {
-		if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Checking request method only
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated -- Validating REQUEST_METHOD existence
+		if ( ! isset($_SERVER['REQUEST_METHOD']) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 			wp_die(
 				'<p><strong>' . esc_html__('ERROR:', 'smart-cloudflare-turnstile') . '</strong> ' . esc_html__('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile') . '</p>',
 				'smart-cloudflare-turnstile',

@@ -1,6 +1,10 @@
 /**
  * MailPoet Integration for SmartCT
  * Handles Turnstile widget injection and token submission for MailPoet Gutenberg forms
+ *
+ * @since 1.1.0
+ * @author Mayank Majeji
+ * @date 2025-01-21
  */
 (function () {
 	'use strict';

@@ -5,6 +5,9 @@
  *
  * @package SmartCT
  * @subpackage SmartCT/integrations
+ * @since 1.1.0
+ * @author Mayank Majeji
+ * @date 2025-01-21
  */
 
 namespace SmartCT\Integrations;
@@ -84,6 +87,9 @@ class MailPoet {
 
 	/**
 	 * Enqueue JavaScript for MailPoet Gutenberg block forms
+	 *
+	 * @since 1.1.0
+	 * @return void
 	 */
 	public function enqueue_scripts(): void {
 		// Check if MailPoet integration is enabled
@@ -185,23 +191,27 @@ class MailPoet {
 		}
 
 		// MailPoet posts fields under $_POST['data'][...], but also check $_POST directly
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Turnstile token itself provides CSRF protection
-		$posted_data = ( isset($_POST['data']) && is_array($_POST['data']) ) ? $_POST['data'] : array();
-		$token = isset($posted_data['cf-turnstile-response']) ? sanitize_text_field(wp_unslash($posted_data['cf-turnstile-response'])) : '';
+		// This hook is called from within MailPoet's subscription flow which handles its own security
+		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// Called from MailPoet's secure subscription flow; Array is unslashed then sanitized via array_map
+		$posted_data_raw = ( isset($_POST['data']) && is_array($_POST['data']) ) ? wp_unslash($_POST['data']) : array();
+		// Sanitize all values in the array
+		$posted_data = array_map('sanitize_text_field', $posted_data_raw);
+		$token = isset($posted_data['cf-turnstile-response']) ? $posted_data['cf-turnstile-response'] : '';
 
 		// Fallback: check $_POST directly
 		if ( empty($token) && isset($_POST['cf-turnstile-response']) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Turnstile token itself provides CSRF protection
 			$token = sanitize_text_field(wp_unslash($_POST['cf-turnstile-response']));
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		if ( empty($token) ) {
-			throw new \MailPoet\UnexpectedValueException(__('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
+			throw new \MailPoet\UnexpectedValueException(esc_html__('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
 		}
 
 		$valid = $this->verify->verify_token($token);
 		if ( ! $valid ) {
-			throw new \MailPoet\UnexpectedValueException(__('Turnstile verification failed. Please try again.', 'smart-cloudflare-turnstile'));
+			throw new \MailPoet\UnexpectedValueException(esc_html__('Turnstile verification failed. Please try again.', 'smart-cloudflare-turnstile'));
 		}
 	}
 

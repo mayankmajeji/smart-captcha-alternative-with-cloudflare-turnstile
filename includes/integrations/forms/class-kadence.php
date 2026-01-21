@@ -5,6 +5,9 @@
  *
  * @package SmartCT
  * @subpackage SmartCT/integrations
+ * @since 1.1.0
+ * @author Mayank Majeji
+ * @date 2025-01-21
  */
 
 namespace SmartCT\Integrations;
@@ -55,6 +58,9 @@ class Kadence {
 
 	/**
 	 * Enqueue Turnstile script with render=auto for Kadence forms
+	 *
+	 * @since 1.1.0
+	 * @return void
 	 */
 	public function enqueue_turnstile_script(): void {
 		$enabled = (bool) $this->settings->get_option('smartct_kadence_enable', false);
