@@ -209,6 +209,16 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 				'logo'         => $logo_base . 'sure-forms.png',
 			),
 			array(
+				'key'          => 'kadence',
+				'label'        => 'Kadence Forms',
+				'cat'          => 'form_plugins',
+				'plugin_slug'  => 'kadence-blocks',
+				'plugin_file'  => 'kadence-blocks/kadence-blocks.php',
+				'desc'         => __('Beautiful form blocks built into the Kadence Blocks plugin for creating contact forms, surveys, and more.', 'smart-cloudflare-turnstile'),
+				'settings_url' => $settings_base . '&settings_tab=form_plugins',
+				'logo'         => $logo_base . 'kadence.png',
+			),
+			array(
 				'key'          => 'default_wp',
 				'label'        => __('WordPress Forms', 'smart-cloudflare-turnstile'),
 				'cat'          => 'others',

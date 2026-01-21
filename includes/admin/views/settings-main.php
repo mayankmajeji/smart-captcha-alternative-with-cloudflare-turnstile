@@ -57,13 +57,15 @@ $keys_verified = get_option('smartct_keys_verified', 0);
 				|| defined('FRM_VERSION') || class_exists('FrmAppHelper') || function_exists('load_formidable_forms')
 				|| defined('FORMINATOR_VERSION') || class_exists('\\Forminator') || function_exists('forminator')
 				|| function_exists('evf') || class_exists('EverestForms') || defined('EVF_PLUGIN_FILE')
-				|| defined('SRFM_SLUG') || class_exists('\\SRFM\\Inc\\Form_Submit') )
+				|| defined('SRFM_SLUG') || class_exists('\\SRFM\\Inc\\Form_Submit')
+				|| function_exists('kadence_blocks') || defined('KADENCE_BLOCKS_VERSION') )
 		);
 		$has_woocommerce = class_exists('WooCommerce');
 		if ( $has_woocommerce ) {
 			$settings_tabs['woocommerce'] = __('WooCommerce', 'smart-cloudflare-turnstile');
 		}
-		if ( $has_form_plugins ) {
+		// Form Plugins tab appears when there are form plugin fields registered OR when form plugins are detected
+		if ( $has_form_plugins || ! empty( $fields_structure['form_plugins'] ) ) {
 			$settings_tabs['form_plugins'] = __('Form Plugins', 'smart-cloudflare-turnstile');
 		}
 
