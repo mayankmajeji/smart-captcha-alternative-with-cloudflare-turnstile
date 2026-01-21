@@ -65,7 +65,7 @@ class Loader {
 		}
 
 		// Check categorized integration subdirectories
-		$categories = array( 'core', 'ecommerce', 'forms', 'others', 'community', 'membership', 'newsletter' );
+		$categories = array( 'core', 'ecommerce', 'forms', 'others', 'community', 'membership', 'newsletters' );
 		foreach ( $categories as $category ) {
 			$file = SMARTCT_PLUGIN_DIR . 'includes/integrations/' . $category . '/class-' .
 				strtolower(str_replace('_', '-', $class)) . '.php';
@@ -81,7 +81,7 @@ class Loader {
 	 */
 	public static function load_integrations(): void {
 		$integrations_dir = SMARTCT_PLUGIN_DIR . 'includes/integrations/';
-		$categories = array( '.', 'ecommerce', 'forms', 'others', 'community', 'membership', 'newsletter' );
+		$categories = array( '.', 'ecommerce', 'forms', 'others', 'community', 'membership', 'newsletters' );
 
 		if ( ! is_dir($integrations_dir) ) {
 			return;
