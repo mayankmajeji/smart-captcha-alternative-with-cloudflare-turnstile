@@ -507,5 +507,10 @@ class Init
 		if (function_exists('buddypress') || class_exists('BuddyPress')) {
 			new \SmartCT\Integrations\BuddyPress();
 		}
+
+		// MailPoet integration (if MailPoet is active)
+		if (class_exists('\MailPoet\API\API') || defined('MAILPOET_VERSION')) {
+			new \SmartCT\Integrations\MailPoet();
+		}
 	}
 }

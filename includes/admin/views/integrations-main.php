@@ -88,6 +88,7 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 			'form_plugins' => __('Form Plugins', 'smart-cloudflare-turnstile'),
 		'membership'   => __('Membership', 'smart-cloudflare-turnstile'),
 		'community'    => __('Community', 'smart-cloudflare-turnstile'),
+		'newsletters'  => __('Newsletters', 'smart-cloudflare-turnstile'),
 		'others'       => __('Others', 'smart-cloudflare-turnstile'),
 	);
 	/**
@@ -237,6 +238,16 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 				'settings_url' => $settings_base . '&settings_tab=community',
 				'logo'         => $logo_base . 'buddypress.png',
 			),
+			array(
+				'key'          => 'mailpoet',
+				'label'        => 'MailPoet',
+				'cat'          => 'newsletters',
+				'plugin_slug'  => 'mailpoet',
+				'plugin_file'  => 'mailpoet/mailpoet.php',
+				'desc'         => __('An all-in-one email marketing and newsletter plugin for WordPress with beautiful subscription forms.', 'smart-cloudflare-turnstile'),
+				'settings_url' => $settings_base . '&settings_tab=newsletters',
+				'logo'         => $logo_base . 'mailpoet.png',
+			),
 		);
 		?>
 
@@ -257,6 +268,9 @@ if (! $has_woocommerce && $current_tab === 'woocommerce') {
 					}
 					if ($fid === 'community') {
 						$icon_partial = 'community-icon.php';
+					}
+					if ($fid === 'newsletters') {
+						$icon_partial = 'plugin-icon.php';
 					}
 					if ($fid === 'others') {
 						$icon_partial = 'others-icon.php';

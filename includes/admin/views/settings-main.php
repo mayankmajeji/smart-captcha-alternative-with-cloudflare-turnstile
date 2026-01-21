@@ -72,6 +72,11 @@ $keys_verified = get_option('smartct_keys_verified', 0);
 			$settings_tabs['community'] = __('Community', 'smart-cloudflare-turnstile');
 		}
 
+		// Newsletters tab (e.g., MailPoet) appears when there are newsletter fields registered
+		if ( ! empty( $fields_structure['newsletters'] ) ) {
+			$settings_tabs['newsletters'] = __('Newsletters', 'smart-cloudflare-turnstile');
+		}
+
 		if ( ! empty($fields_structure['others']) ) {
 			$settings_tabs['others'] = __('Others', 'smart-cloudflare-turnstile');
 		}
@@ -104,6 +109,8 @@ $keys_verified = get_option('smartct_keys_verified', 0);
 						$icon_partial = 'plugin-icon.php';
 					} elseif ( $sid === 'community' ) {
 						$icon_partial = 'community-icon.php';
+					} elseif ( $sid === 'newsletters' ) {
+						$icon_partial = 'plugin-icon.php';
 					} elseif ( $sid === 'others' ) {
 						$icon_partial = 'plugin-icon.php';
 					}

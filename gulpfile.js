@@ -2,10 +2,12 @@ const gulp = require("gulp");
 const sass = require("gulp-sass")(require("sass"));
 const cleanCSS = require("gulp-clean-css");
 const rename = require("gulp-rename");
+const terser = require("gulp-terser");
 const path = require("path");
 const { exec } = require("child_process");
 
 const scssFiles = ["assets/css/admin.scss", "assets/css/turnstile.scss"];
+const jsFiles = ["assets/js/admin-settings.js", "assets/js/woocommerce.js", "assets/js/mailpoet.js"];
 
 function styles() {
 	return gulp
@@ -18,6 +20,18 @@ function styles() {
 			})
 		)
 		.pipe(gulp.dest("assets/css"));
+}
+
+function scripts() {
+	return gulp
+		.src(jsFiles, { cwd: __dirname })
+		.pipe(terser())
+		.pipe(
+			rename(function (file) {
+				file.basename += ".min";
+			})
+		)
+		.pipe(gulp.dest("assets/js"));
 }
 
 function migrateScss(cb) {
@@ -42,9 +56,11 @@ function migrateScss(cb) {
 }
 
 gulp.task("styles", styles);
+gulp.task("scripts", scripts);
 gulp.task("migrate-scss", migrateScss);
 gulp.task("watch", function () {
 	gulp.watch(["assets/css/**/*.scss", "assets/css/modules/**/*.scss"], styles);
+	gulp.watch(["assets/js/**/*.js", "!assets/js/**/*.min.js"], scripts);
 });
 
-gulp.task("default", gulp.series("styles"));
+gulp.task("default", gulp.series("styles", "scripts"));
