@@ -4,7 +4,7 @@ Tags: captcha, cloudflare, turnstile, security, woocommerce
 Requires at least: 5.8
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,7 +82,7 @@ The plugin includes several features and options:
 Setting up Cloudflare Turnstile protection is straightforward:
 
 1. Create your Turnstile keys in the Cloudflare dashboard (Site Key and Secret Key)
-2. Navigate to Settings → Smart CAPTCHA Alternative in your WordPress admin
+2. Navigate to Dashboard → Smart Cloudflare Turnstile in your WordPress admin
 3. Enter your keys and choose which forms to protect
 4. Save your settings — Turnstile will now appear on your selected forms
 
@@ -165,6 +165,9 @@ This plugin connects to Cloudflare Turnstile service to provide CAPTCHA verifica
 3. Example widget rendering on a login form
 
 == Changelog ==
+
+= 1.1.2 =
+* Fixed readme.txt short description.
 
 = 1.1.1 =
 * Fixed readme.txt short description.
