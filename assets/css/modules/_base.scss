@@ -4,6 +4,7 @@ body {
 	color: #222;
 	background: #f5f6fa;
 }
+
 h1,
 h2,
 h3,
@@ -14,9 +15,11 @@ h6 {
 	color: #091e42;
 	margin-top: 0;
 }
+
 a {
 	color: $color-accent;
 	text-decoration: none;
+
 	&:hover {
 		text-decoration: underline;
 	}

@@ -6,11 +6,13 @@
 	border: 1px solid $color-border;
 	padding: $card-padding;
 }
+
 @mixin flex-center {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
+
 @mixin visually-hidden {
 	position: absolute !important;
 	height: 1px;

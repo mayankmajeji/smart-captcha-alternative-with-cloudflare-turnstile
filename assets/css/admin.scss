@@ -105,6 +105,7 @@
 }
 
 .smartct-admin {
+
 	#wpcontent {
 		padding-left: 0;
 
@@ -114,6 +115,7 @@
 	}
 
 	.wp-core-ui {
+
 		.button-primary {
 			color: #fff;
 			background: var(--tswp-color-primary);
@@ -189,6 +191,7 @@
 }
 
 @keyframes smartct-spin {
+
 	0% {
 		transform: rotate(0deg);
 	}
@@ -308,6 +311,7 @@
 			}
 
 			.smartct-option {
+
 				/* -webkit-box-flex: 1;-webkit-box-flex 
 				 -moz-box-flex: 1;-moz-box-flex
 				 -webkit-flex-grow: 1;-webkit-flex-grow
@@ -327,11 +331,13 @@
 				padding-right: 20px;
 
 				.smartct-description {
+
 					p {
 						color: #999;
 						margin-top: 6px;
 
 						&:last-child {
+
 							/* margin-bottom: 0; */
 						}
 					}
@@ -353,6 +359,7 @@
 		}
 
 		.smartct-group-title {
+
 			h2 {
 				margin: 0;
 				line-height: 1;
@@ -428,6 +435,7 @@
 }
 
 @media (width <= 600px) {
+
 	.smartct-card {
 		padding: 18px 8px 12px;
 	}
@@ -594,6 +602,7 @@
 	transform: rotate(180deg);
 
 	svg {
+
 		path {
 			stroke: #8a8a9e;
 		}
@@ -622,6 +631,7 @@
 }
 
 @media (max-width: 600px) {
+
 	.faq-question,
 	.faq-answer {
 		padding-left: 1em;
@@ -650,6 +660,7 @@
 
 /* Tabs styling (used on Integrations screen) */
 .nav-tab-wrapper {
+
 	.nav-tab-active {
 		background: var(--tswp-color-primary);
 		border-color: var(--tswp-color-primary);

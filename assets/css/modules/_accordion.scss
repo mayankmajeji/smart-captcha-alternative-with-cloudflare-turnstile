@@ -2,6 +2,7 @@
 .smartct-accordion {
 	margin-bottom: 32px;
 }
+
 .smartct-accordion-item {
 	background: $color-bg;
 	border-radius: 10px;
@@ -10,6 +11,7 @@
 	border: 1px solid $color-border;
 	overflow: hidden;
 }
+
 .smartct-accordion-header {
 	width: 100%;
 	background: #e9eef3;
@@ -23,26 +25,32 @@
 	justify-content: space-between;
 	cursor: pointer;
 	transition: background 0.2s;
+
 	&:hover {
 		background: #dde4ec;
 	}
 }
+
 .smartct-accordion-arrow {
 	font-size: 1.2em;
 	margin-left: 10px;
 	transition: transform 0.2s;
 }
+
 .smartct-accordion-item .smartct-accordion-content {
 	display: block;
 	padding: 24px 24px 18px 24px;
 	border-top: 1px solid $color-border;
 }
+
 .smartct-accordion-item:not(.open) .smartct-accordion-content {
 	display: none;
 }
+
 .smartct-accordion-item.open .smartct-accordion-arrow {
 	transform: rotate(0deg);
 }
+
 .smartct-accordion-item:not(.open) .smartct-accordion-arrow {
 	transform: rotate(180deg);
 }
