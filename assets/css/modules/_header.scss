@@ -60,13 +60,13 @@
 	}
 
 	.twp-link-highlight {
-		color: #fff;
-		background: var(--tswp-color-primary);
+		color: var(--tswp-color-primary);
+		background: transparent;
 		border: 1px solid var(--tswp-color-primary);
 
 		&:hover {
-			background: var(--tswp-color-accent);
-			border-color: var(--tswp-color-accent);
+			background: var(--tswp-color-primary);
+			color: #fff;
 		}
 	}
 
