@@ -42,10 +42,8 @@ $is_active = function (string $slug) use ($current_page): string {
 		<nav class="twp-nav">
 			<a class="twp-nav-item<?php echo esc_attr($is_active('smartct-settings')); ?>" href="<?php echo esc_url(admin_url('admin.php?page=smartct-settings')); ?>">Settings</a>
 			<a class="twp-nav-item<?php echo esc_attr($is_active('smartct-help')); ?>" href="<?php echo esc_url(admin_url('admin.php?page=smartct-help')); ?>">Support</a>
-			<a class="twp-rate-us" href="https://wordpress.org/support/plugin/smart-captcha-alternative-with-cloudflare-turnstile/reviews/#new-post" target="_blank" rel="noopener noreferrer">Rate Us &#9733;</a>
-			<a class="twp-nav-item" href="https://github.com/mayankmajeji/smart-cloudflare-turnstile" target="_blank" rel="noopener noreferrer">Documentation</a>
-			<span class="twp-badge">FREE</span>
 			<a class="twp-nav-item twp-link-highlight" href="https://github.com/mayankmajeji/smart-cloudflare-turnstile/issues/new/choose" target="_blank" rel="noopener noreferrer">Request Integration</a>
+			<a class="twp-rate-us" href="https://wordpress.org/support/plugin/smart-captcha-alternative-with-cloudflare-turnstile/reviews/#new-post" target="_blank" rel="noopener noreferrer">Rate Us &#9733;</a>
 		</nav>
 	</div>
 </div>
