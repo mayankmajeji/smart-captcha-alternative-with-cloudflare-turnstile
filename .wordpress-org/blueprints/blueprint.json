@@ -1,14 +1,15 @@
 {
-	"landingPage": "/wp-admin/",
+	"$schema": "https://playground.wordpress.net/blueprint-schema.json",
+	"landingPage": "/wp-admin/admin.php?page=smartct-settings",
+	"login": true,
+	"features": {
+		"networking": true
+	},
 	"preferredVersions": {
-		"php": "7.4",
-		"wp": "5.9"
+		"php": "latest",
+		"wp": "latest"
 	},
 	"steps": [
-		{
-			"step": "login",
-			"username": "admin"
-		},
 		{
 			"step": "installPlugin",
 			"pluginZipFile": {
