@@ -34,5 +34,6 @@ module.exports = {
 		'wordpress/',
 		'build/',
 		'dist/',
+		'**/*.min.js',
 	],
 };

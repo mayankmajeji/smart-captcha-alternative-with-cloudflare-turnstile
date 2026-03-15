@@ -1,4 +1,3 @@
-/* global jQuery */
 (function ($) {
 	'use strict';
 
@@ -117,7 +116,12 @@
 						});
 						$submitButton.prop('disabled', true);
 					} catch (e) {
-						window.console && window.console.warn && window.console.warn('[SmartCT] Turnstile render error', e);
+						if (window.console && window.console.warn) {
+							window.console.warn(
+								'[SmartCT] Turnstile render error',
+								e
+							);
+						}
 					}
 				}
 			}
