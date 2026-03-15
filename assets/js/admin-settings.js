@@ -1,4 +1,4 @@
-/* global jQuery, ajaxurl, smartct, smartctSystemInfo */
+/* global ajaxurl */
 jQuery(document).ready(function ($) {
 	'use strict';
 
@@ -39,6 +39,7 @@ jQuery(document).ready(function ($) {
 					document.execCommand('copy');
 					showCopied();
 				} catch (err) {
+					// eslint-disable-next-line no-console
 					console.error('Copy failed', err);
 				}
 				document.body.removeChild(ta);
@@ -107,21 +108,19 @@ jQuery(document).ready(function ($) {
 		accordionHeaders.forEach(function (header) {
 			header.addEventListener('click', function () {
 				const item = this.closest('.smartct-accordion-item');
-				if (!item) return;
+				if (!item) {
+					return;
+				}
 
 				const isOpen = item.classList.contains('open');
-				const arrow = item.querySelector(
-					'.smartct-accordion-arrow'
-				);
+				const arrow = item.querySelector('.smartct-accordion-arrow');
 
 				// Close all accordion items
 				document
 					.querySelectorAll('.smartct-accordion-item')
 					.forEach(function (i) {
 						i.classList.remove('open');
-						const a = i.querySelector(
-							'.smartct-accordion-arrow'
-						);
+						const a = i.querySelector('.smartct-accordion-arrow');
 						if (a) {
 							a.innerHTML = '&#9660;'; // Down arrow
 						}
@@ -364,14 +363,18 @@ jQuery(document).ready(function ($) {
 					$secretKeyField.val('').prop('readonly', false);
 					// Replace remove button with verify button
 					$button.replaceWith(
-						'<button type="button" class="button button-secondary" id="smartct-verify-keys">' + window.smartct.i18n.verifyKeysButton + '</button>'
+						'<button type="button" class="button button-secondary" id="smartct-verify-keys">' +
+							window.smartct.i18n.verifyKeysButton +
+							'</button>'
 					);
 				} else {
 					$message.text(response.data.message).addClass('error');
 				}
 			},
 			error() {
-				$message.text(window.smartct.i18n.removalFailed).addClass('error');
+				$message
+					.text(window.smartct.i18n.removalFailed)
+					.addClass('error');
 			},
 			complete() {
 				$spinner.removeClass('is-active');

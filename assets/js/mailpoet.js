@@ -4,8 +4,8 @@
  *
  * @since 1.1.0
  * @author Mayank Majeji
- * @date 2025-01-21
  */
+/* global smartctMailPoet */
 (function () {
 	'use strict';
 
@@ -80,16 +80,18 @@
 					try {
 						window.turnstile.render(turnstileContainer, {
 							sitekey: siteKey,
-							callback: function (token) {
+							callback(_token) {
 								// Token is automatically available in the form
 							},
-							'error-callback': function () {
+							'error-callback': () => {
+								// eslint-disable-next-line no-console
 								console.warn(
 									'Turnstile error for MailPoet form'
 								);
 							},
 						});
 					} catch (e) {
+						// eslint-disable-next-line no-console
 						console.warn(
 							'Failed to render Turnstile for MailPoet:',
 							e
@@ -99,7 +101,7 @@
 			}
 
 			// Handle form submission - copy token to MailPoet's nested data structure
-			form.addEventListener('submit', function (event) {
+			form.addEventListener('submit', function (_event) {
 				const tokenInput = form.querySelector(
 					'input[name="cf-turnstile-response"]'
 				);
