@@ -15,6 +15,7 @@
 	.twp-left {
 		display: flex;
 		align-items: center;
+		gap: 8px;
 
 		.twp-logo {
 			display: inline-flex;
@@ -83,6 +84,22 @@
 	.twp-version {
 		color: var(--tswp-color-text-secondary);
 		font-size: 12px;
+	}
+
+	.twp-rate-us {
+		text-decoration: none;
+		color: #fff;
+		background: var(--tswp-color-primary);
+		padding: 6px 14px;
+		border-radius: 6px;
+		font-weight: 600;
+		font-size: 13px;
+		transition: all 150ms ease-in-out;
+
+		&:hover {
+			background: var(--tswp-color-accent);
+			color: #fff;
+		}
 	}
 }
 

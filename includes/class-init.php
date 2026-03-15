@@ -119,6 +119,7 @@ class Init
 			add_filter('plugin_action_links_' . SMARTCT_PLUGIN_BASENAME, array($this, 'add_plugin_action_links'));
 			add_action('wp_ajax_smartct_verify_keys', array($this, 'verify_keys_ajax'));
 			add_action('wp_ajax_smartct_remove_keys', array($this, 'remove_keys_ajax'));
+			add_action('in_admin_header', array($this, 'hide_admin_notices'));
 			self::$admin_hooks_registered = true;
 		}
 
@@ -230,6 +231,23 @@ class Init
 		// Localize system info data to admin-settings.js (already enqueued in enqueue_admin_assets)
 		// This data is used by the system info copy feature in the sidebar
 		wp_localize_script('smartct-admin-settings', 'smartctSystemInfo', $system_info_data);
+	}
+
+	/**
+	 * Remove third-party and core admin notices from plugin pages.
+	 *
+	 * Plugin notices use settings_errors() rendered inline in templates,
+	 * so removing admin_notices here does not affect our own notices.
+	 * Excludes nav-menus since it is a shared WordPress core page.
+	 */
+	public function hide_admin_notices(): void
+	{
+		$screen = get_current_screen();
+		if ( ! $screen || ! in_array( $screen->id, self::PLUGIN_SCREEN_IDS, true ) || 'nav-menus' === $screen->id ) {
+			return;
+		}
+		remove_all_actions( 'admin_notices' );
+		remove_all_actions( 'all_admin_notices' );
 	}
 
 	/**
