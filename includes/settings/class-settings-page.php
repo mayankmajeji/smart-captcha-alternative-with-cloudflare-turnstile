@@ -40,7 +40,7 @@ class Settings_Page
 	 */
 	public function __construct()
 	{
-		$this->settings = new Settings();
+		$this->settings = Settings::get_instance();
 		$this->init_hooks();
 	}
 

@@ -8,13 +8,11 @@
 
 declare(strict_types=1);
 
-namespace SmartCT\Integrations\Core;
+namespace SmartCT;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-namespace SmartCT;
 
 /**
  * Class Core_WP
@@ -39,7 +37,7 @@ class Core_WP {
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->settings = new Settings();
+		$this->settings = Settings::get_instance();
 		$this->verify = new Verify();
 
 		$this->init_hooks();
@@ -152,6 +150,14 @@ class Core_WP {
 	 * @return \WP_User|\WP_Error|null
 	 */
 	public function verify_login( $user, string $username, string $password ) {
+		// WooCommerce my-account login: the WooCommerce integration already verifies the token
+		// on the same `authenticate` hook at a lower priority (21). Running again would try to
+		// re-use an already-consumed token and always fail.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- presence check only, no value used
+		if ( isset($_POST['woocommerce-login-nonce']) ) {
+			return $user;
+		}
+
 		if ( ! $this->should_show_turnstile() ) {
 			return $user;
 		}

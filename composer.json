@@ -1,6 +1,6 @@
 {
-	"name": "mayankmajeji/plugin-infrastructure",
-	"description": "Reusable infrastructure relating to testing, building, and deploying my WordPress plugins",
+	"name": "mayankmajeji/smart-cloudflare-turnstile",
+	"description": "Lightweight and privacy-first integration of Cloudflare Turnstile with WordPress forms.",
 	"license": "MIT",
 	"type": "wordpress-plugin",
 	"authors": [
@@ -9,11 +9,11 @@
 			"homepage": "https://mayankmajeji.com/"
 		}
 	],
-	"homepage": "https://github.com/mayankmajeji/plugin-infrastructure/",
+	"homepage": "https://github.com/mayankmajeji/smart-cloudflare-turnstile/",
 	"support": {
-		"issues": "https://github.com/mayankmajeji/plugin-infrastructure/issues",
-		"forum": "https://wordpress.org/support/plugin/plugin-infrastructure",
-		"source": "https://github.com/mayankmajeji/plugin-infrastructure"
+		"issues": "https://github.com/mayankmajeji/smart-cloudflare-turnstile/issues",
+		"forum": "https://wordpress.org/support/plugin/smart-captcha-alternative-with-cloudflare-turnstile",
+		"source": "https://github.com/mayankmajeji/smart-cloudflare-turnstile"
 	},
 	"funding": [
 		{
@@ -56,9 +56,7 @@
 			"composer/installers": true,
 			"dealerdirect/phpcodesniffer-composer-installer": true,
 			"roots/wordpress-core-installer": true
-		},
-		"disable-tls": true,
-		"secure-http": false
+		}
 	},
 	"scripts": {
 		"format": "php vendor/bin/phpcbf --standard=phpcs.xml.dist .",

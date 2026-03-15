@@ -191,11 +191,7 @@ jQuery(document).ready(function ($) {
 	}
 	function getEffectiveSecretKey() {
 		const $input = $('input[name="smartct_settings[smartct_secret_key]"]');
-		const v = $input.length ? $input.val() : '';
-		if (!v && window.smartct && window.smartct.secretKey) {
-			return window.smartct.secretKey;
-		}
-		return v;
+		return $input.length ? $input.val() : '';
 	}
 
 	// Callback for Turnstile widget
@@ -225,14 +221,14 @@ jQuery(document).ready(function ($) {
 
 		if (!siteKey || !secretKey) {
 			$('.smartct-verification-status .message')
-				.text('Please enter both Site Key and Secret Key.')
+				.text(window.smartct.i18n.enterBothKeys)
 				.addClass('error');
 			return;
 		}
 
 		if (!turnstileToken) {
 			$('.smartct-verification-status .message')
-				.text('Please complete the Turnstile challenge.')
+				.text(window.smartct.i18n.completeTurnstile)
 				.addClass('error');
 			return;
 		}
@@ -271,7 +267,7 @@ jQuery(document).ready(function ($) {
 					$statusIndicator
 						.removeClass('unverified')
 						.addClass('verified')
-						.text('Keys Verified');
+						.text(window.smartct.i18n.keysVerified);
 
 					// Update message
 					$message
@@ -280,7 +276,7 @@ jQuery(document).ready(function ($) {
 						.html(
 							'<div class="twp-status-indicator-box verified">' +
 								'<span class="twp-status-indicator" style="color:#46b450;font-weight:bold;"><span class="dashicons dashicons-yes-alt"></span>' +
-								'Success! Turnstile is working correctly with your API keys.' +
+								window.smartct.i18n.verifySuccessMsg +
 								'</span></div>'
 						);
 
@@ -288,7 +284,7 @@ jQuery(document).ready(function ($) {
 					$previewBox.html(
 						'<div class="twp-status-indicator-box verified">' +
 							'<span class="twp-status-indicator" style="color:#46b450;font-weight:bold;"><span class="dashicons dashicons-yes-alt"></span>' +
-							'Success! Turnstile is working correctly with your API keys.' +
+							window.smartct.i18n.verifySuccessMsg +
 							'</span></div>'
 					);
 
@@ -299,7 +295,7 @@ jQuery(document).ready(function ($) {
 					$statusIndicator
 						.removeClass('verified')
 						.addClass('unverified')
-						.text('Keys Not Verified');
+						.text(window.smartct.i18n.keysNotVerified);
 					$message.text(response.data.message).addClass('error');
 				}
 			},
@@ -307,9 +303,9 @@ jQuery(document).ready(function ($) {
 				$statusIndicator
 					.removeClass('verified')
 					.addClass('unverified')
-					.text('Keys Not Verified');
+					.text(window.smartct.i18n.keysNotVerified);
 				$message
-					.text('Verification failed. Please try again.')
+					.text(window.smartct.i18n.verifyFailed)
 					.addClass('error');
 			},
 			complete() {
@@ -361,21 +357,21 @@ jQuery(document).ready(function ($) {
 					$statusIndicator
 						.removeClass('verified')
 						.addClass('unverified')
-						.text('Keys Not Verified');
+						.text(window.smartct.i18n.keysNotVerified);
 					$message.text(response.data.message).addClass('success');
 					// Clear and enable the input fields
 					$siteKeyField.val('').prop('readonly', false);
 					$secretKeyField.val('').prop('readonly', false);
 					// Replace remove button with verify button
 					$button.replaceWith(
-						'<button type="button" class="button button-secondary" id="smartct-verify-keys">Verify Keys</button>'
+						'<button type="button" class="button button-secondary" id="smartct-verify-keys">' + window.smartct.i18n.verifyKeysButton + '</button>'
 					);
 				} else {
 					$message.text(response.data.message).addClass('error');
 				}
 			},
 			error() {
-				$message.text('Key removal failed.').addClass('error');
+				$message.text(window.smartct.i18n.removalFailed).addClass('error');
 			},
 			complete() {
 				$spinner.removeClass('is-active');

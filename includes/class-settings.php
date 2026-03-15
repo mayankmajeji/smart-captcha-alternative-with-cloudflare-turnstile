@@ -26,6 +26,25 @@ class Settings {
 	private const OPTION_NAME = 'smartct_settings';
 
 	/**
+	 * Singleton instance
+	 *
+	 * @var Settings|null
+	 */
+	private static ?Settings $instance = null;
+
+	/**
+	 * Get or create the singleton instance
+	 *
+	 * @return Settings
+	 */
+	public static function get_instance(): Settings {
+		if ( static::$instance === null ) {
+			static::$instance = new self();
+		}
+		return static::$instance;
+	}
+
+	/**
 	 * Default settings
 	 *
 	 * @var array
@@ -63,7 +82,6 @@ class Settings {
 	 */
 	public function __construct() {
 		$this->add_default_options();
-		$this->register_centralized_fields();
 	}
 
 	/**
@@ -221,7 +239,7 @@ class Settings {
 	 */
 	public function add_admin_menu(): void {
 		$svg_path = SMARTCT_PLUGIN_DIR . 'assets/images/smartct-plugin-icon.svg';
-		$svg_data = @file_get_contents($svg_path);
+		$svg_data = file_exists($svg_path) ? file_get_contents($svg_path) : false;
 		$icon_data_uri = $svg_data ? ( 'data:image/svg+xml;base64,' . base64_encode($svg_data) ) : 'dashicons-shield-alt';
 
 		// Top-level points to Settings
@@ -343,6 +361,9 @@ class Settings {
 	 * @return array
 	 */
 	public function get_fields_structure(): array {
+		// Re-run the filter each time so integrations that register add_filter() in their
+		// constructors (after the singleton was first created) are always included.
+		$this->register_centralized_fields();
 		return $this->fields;
 	}
 
@@ -354,19 +375,31 @@ class Settings {
 		require_once SMARTCT_PLUGIN_DIR . 'includes/admin/views/dashboard.php';
 	}
 	public function render_integrations_page(): void {
+		if ( ! current_user_can('manage_options') ) {
+			return;
+		}
 		require_once SMARTCT_PLUGIN_DIR . 'includes/admin/views/integrations-main.php';
 	}
 	public function render_tools_page(): void {
+		if ( ! current_user_can('manage_options') ) {
+			return;
+		}
 		// Use the Tools_Tab class to render the tools page
 		require_once SMARTCT_PLUGIN_DIR . 'includes/settings/tabs/class-tools-tab.php';
 		$tools_tab = new \SmartCT\Settings\Tabs\Tools_Tab();
 		$tools_tab->render_tools_page();
 	}
 	public function render_faqs_page(): void {
+		if ( ! current_user_can('manage_options') ) {
+			return;
+		}
 		require_once SMARTCT_PLUGIN_DIR . 'includes/admin/templates/faqs-page.php';
 	}
 
 	public function render_help_page(): void {
+		if ( ! current_user_can('manage_options') ) {
+			return;
+		}
 		require_once SMARTCT_PLUGIN_DIR . 'includes/admin/templates/help-page.php';
 	}
 }

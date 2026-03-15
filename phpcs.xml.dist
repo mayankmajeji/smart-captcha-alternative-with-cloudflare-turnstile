@@ -61,7 +61,7 @@
 	<!-- Custom rule properties -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" type="array" value="turnstilewp" />
+			<property name="text_domain" type="array" value="smart-cloudflare-turnstile" />
 		</properties>
 	</rule>
 

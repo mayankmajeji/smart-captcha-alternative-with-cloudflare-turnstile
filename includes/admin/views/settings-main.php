@@ -22,7 +22,7 @@ use SmartCT\Settings;
 
 require_once SMARTCT_PLUGIN_DIR . 'includes/settings/field-renderer.php';
 
-$settings = new Settings();
+$settings = Settings::get_instance();
 $fields_structure = $settings->get_fields_structure();
 $values = $settings->get_settings();
 

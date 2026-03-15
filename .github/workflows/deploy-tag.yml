@@ -1,32 +1,288 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+
 name: Deploy to WordPress.org
+run-name: "${{ github.ref_name }}"
+
 on:
     release:
         types: [published]
+
 jobs:
-    tag:
-        name: New release
+    # ─────────────────────────────────────────────
+    # JOB 1: PHPCS
+    # ─────────────────────────────────────────────
+    phpcs:
+        name: PHPCS
         runs-on: ubuntu-latest
+        timeout-minutes: 10
+
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-            - name: Build
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.2"
+                  tools: composer
+                  coverage: none
+
+            - name: Install Composer dependencies
+              run: composer install --prefer-dist --no-progress --no-interaction
+
+            - name: Run PHPCS
+              run: composer run test:phpcs
+
+    # ─────────────────────────────────────────────
+    # JOB 2: PHPStan
+    # ─────────────────────────────────────────────
+    phpstan:
+        name: PHPStan
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.2"
+                  tools: composer
+                  coverage: none
+
+            - name: Install Composer dependencies
+              run: composer install --prefer-dist --no-progress --no-interaction --ignore-platform-reqs
+
+            - name: Run PHPStan
+              run: composer run test:phpstan
+
+    # ─────────────────────────────────────────────
+    # JOB 3: ESLint + Stylelint
+    # ─────────────────────────────────────────────
+    js:
+        name: ESLint + Stylelint
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "npm"
+
+            - name: Install Node dependencies
+              run: npm ci
+
+            - name: Run ESLint
+              run: npm run lint:js
+
+            - name: Run Stylelint
+              run: npm run lint:css
+
+    # ─────────────────────────────────────────────
+    # JOB 4: Deploy to WordPress.org
+    # ─────────────────────────────────────────────
+    deploy:
+        name: WordPress.org Deploy
+        needs: [phpcs, phpstan, js]
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        environment:
+            name: WordPress.org
+            url: https://wordpress.org/plugins/smart-captcha-alternative-with-cloudflare-turnstile/
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Stamp version from release tag
+              env:
+                  TAG: ${{ github.ref_name }}
               run: |
-                  npm install
-                  npm run build
+                  sed -i "s/^ \* Version: .*/ * Version: ${TAG}/" smart-cloudflare-turnstile.php
+                  sed -i "s/define('SMARTCT_VERSION', '.*');/define('SMARTCT_VERSION', '${TAG}');/" smart-cloudflare-turnstile.php
+                  sed -i "s/\"version\": \".*\"/\"version\": \"${TAG}\"/" package.json
+                  sed -i "s/^Stable tag: .*/Stable tag: ${TAG}/" readme.txt
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "npm"
+
+            - name: Set up PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "7.4"
+                  tools: composer
+                  coverage: none
+
+            - name: Install Node dependencies
+              run: npm ci
+
+            - name: Build assets
+              run: npm run build
+
+            - name: Install Composer dependencies (production)
+              run: composer install --no-dev --no-interaction --prefer-dist --ignore-platform-reqs
+
+            - name: Install SVN
+              run: sudo apt-get update -qq && sudo apt-get install -y subversion
+
             - name: WordPress Plugin Deploy
               id: deploy
-              uses: 10up/action-wordpress-plugin-deploy@stable
+              uses: 10up/action-wordpress-plugin-deploy@2.2.2
               with:
                   generate-zip: true
               env:
                   SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
                   SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-            - name: Upload release asset
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Upload ZIP artifact
+              uses: actions/upload-artifact@v4
               with:
-                  upload_url: ${{ github.event.release.upload_url }}
-                  asset_path: ${{ steps.deploy.outputs.zip-path }}
-                  asset_name: ${{ github.event.repository.name }}.zip
-                  asset_content_type: application/zip
+                  name: smart-cloudflare-turnstile
+                  path: ${{ steps.deploy.outputs.zip-path }}
+                  retention-days: 30
+
+    # ─────────────────────────────────────────────
+    # JOB 5: Deploy Assets (readme + banners)
+    # ─────────────────────────────────────────────
+    assets:
+        name: Assets
+        needs: deploy
+        if: needs.deploy.result == 'success'
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: WordPress.org plugin asset/readme update
+              uses: 10up/action-wordpress-plugin-asset-update@stable
+              env:
+                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+                  ASSETS_DIR: .wordpress-org
+                  IGNORE_OTHER_FILES: true
+
+    # ─────────────────────────────────────────────
+    # JOB 6: Stamp version on main branch
+    # ─────────────────────────────────────────────
+    stamp:
+        name: Stamp Version
+        needs: deploy
+        if: needs.deploy.result == 'success'
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout main
+              uses: actions/checkout@v4
+              with:
+                  ref: main
+                  token: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Stamp version and push
+              env:
+                  TAG: ${{ github.ref_name }}
+              run: |
+                  sed -i "s/^ \* Version: .*/ * Version: ${TAG}/" smart-cloudflare-turnstile.php
+                  sed -i "s/define('SMARTCT_VERSION', '.*');/define('SMARTCT_VERSION', '${TAG}');/" smart-cloudflare-turnstile.php
+                  sed -i "s/\"version\": \".*\"/\"version\": \"${TAG}\"/" package.json
+                  sed -i "s/^Stable tag: .*/Stable tag: ${TAG}/" readme.txt
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git add smart-cloudflare-turnstile.php package.json readme.txt
+                  git commit -m "chore: stamp version ${TAG} [skip ci]" || echo "nothing to commit"
+                  git push origin main
+
+    # ─────────────────────────────────────────────
+    # JOB 7: Slack Notification
+    # ─────────────────────────────────────────────
+    notify:
+        name: Slack Notification
+        needs: deploy
+        runs-on: ubuntu-latest
+        if: always()
+        continue-on-error: true
+
+        steps:
+            - name: Checkout (full history)
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Build Slack payload
+              env:
+                  CURRENT_TAG: ${{ github.ref_name }}
+                  ACTOR: ${{ github.actor }}
+                  RAW_DATE: ${{ github.event.release.published_at }}
+                  RELEASE_URL: ${{ github.event.release.html_url }}
+                  REPO: ${{ github.repository }}
+                  DEPLOY_STATUS: ${{ needs.deploy.result }}
+              run: |
+                  FORMATTED_DATE=$(echo "$RAW_DATE" | sed 's/T/ /' | sed 's/Z/ UTC/')
+                  PREV_TAG=$(git tag --sort=-version:refname | grep -v "^${CURRENT_TAG}$" | head -1)
+                  if [ -z "$PREV_TAG" ]; then
+                    COMPARE_URL="$RELEASE_URL"
+                  else
+                    COMPARE_URL="https://github.com/${REPO}/compare/${PREV_TAG}...${CURRENT_TAG}"
+                  fi
+                  if [ -z "$PREV_TAG" ]; then
+                    RAW=$(git log --pretty=format:"%s|%h" -10)
+                  else
+                    RAW=$(git log --pretty=format:"%s|%h" "${PREV_TAG}..${CURRENT_TAG}" | head -10)
+                  fi
+                  CHANGES=""
+                  while IFS='|' read -r msg sha; do
+                    [ -z "$msg" ] && continue
+                    CHANGES="${CHANGES}• ${msg} (<https://github.com/${REPO}/commit/${sha}|${sha}>)"$'\n'
+                  done <<< "$RAW"
+                  CHANGES="${CHANGES%$'\n'}"
+                  if [ ${#CHANGES} -gt 2500 ]; then
+                    CHANGES="${CHANGES:0:2500}…"
+                  fi
+                  if [ "$DEPLOY_STATUS" = "success" ]; then
+                    HEADER="Smart Cloudflare Turnstile ${CURRENT_TAG} — Deployed to WordPress.org"
+                  elif [ "$DEPLOY_STATUS" = "skipped" ]; then
+                    HEADER="Smart Cloudflare Turnstile ${CURRENT_TAG} — Deploy skipped (CI checks failed)"
+                  else
+                    HEADER="Smart Cloudflare Turnstile ${CURRENT_TAG} — Deployment failed"
+                  fi
+                  jq -n \
+                    --arg tag          "$CURRENT_TAG" \
+                    --arg header       "$HEADER" \
+                    --arg actor        "$ACTOR" \
+                    --arg date         "$FORMATTED_DATE" \
+                    --arg changes      "$CHANGES" \
+                    --arg release_url  "$RELEASE_URL" \
+                    --arg compare_url  "$COMPARE_URL" \
+                    --arg wporg_url    "https://wordpress.org/plugins/smart-captcha-alternative-with-cloudflare-turnstile/" \
+                    '{
+                      blocks: [
+                        { type: "header", text: { type: "plain_text", text: $header, emoji: true } },
+                        { type: "section", fields: [
+                            { type: "mrkdwn", text: ("*Released by:* `" + $actor + "`") },
+                            { type: "mrkdwn", text: ("*Date:* " + $date) }
+                        ] },
+                        { type: "section", text: { type: "mrkdwn", text: ("*Changes:*\n" + $changes) } },
+                        { type: "actions", elements: [
+                            { type: "button", text: { type: "plain_text", text: "View Release", emoji: true }, url: $release_url },
+                            { type: "button", text: { type: "plain_text", text: "View Changes", emoji: true }, url: $compare_url },
+                            { type: "button", text: { type: "plain_text", text: "WordPress.org", emoji: true }, url: $wporg_url }
+                        ] }
+                      ]
+                    }' > /tmp/slack-payload.json
+
+            - name: Send Slack notification
+              run: |
+                  curl -X POST "${{ secrets.SLACK_WEBHOOK_URL }}" \
+                    -H "Content-Type: application/json" \
+                    --fail \
+                    -d @/tmp/slack-payload.json

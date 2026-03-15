@@ -13,6 +13,7 @@ if (! defined('WP_UNINSTALL_PLUGIN')) {
 
 // Delete plugin options
 delete_option('smartct_settings');
+delete_option('smartct_keys_verified');
 
 // Clear any transients we've set
 delete_transient('smartct_debug_log');

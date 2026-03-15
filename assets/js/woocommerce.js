@@ -116,7 +116,9 @@
 							callback: window.smartctWooCheckoutCallback,
 						});
 						$submitButton.prop('disabled', true);
-					} catch (e) {}
+					} catch (e) {
+						window.console && window.console.warn && window.console.warn('[SmartCT] Turnstile render error', e);
+					}
 				}
 			}
 			// If still no widget/mount, don't interfere
@@ -285,9 +287,6 @@
 	} else {
 		styleWooTurnstileIframes();
 	}
-
-	// Apply styles repeatedly in case of late loading (e.g., AJAX loaded forms)
-	setInterval(styleWooTurnstileIframes, 300);
 
 	// Observe DOM for dynamically added iframes
 	if (window.MutationObserver && document.body) {

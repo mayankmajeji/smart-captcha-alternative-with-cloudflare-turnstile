@@ -85,7 +85,7 @@ class Tools_Tab
 		}
 
 		$action = sanitize_text_field(wp_unslash($_POST['smartct_tools_action']));
-			$settings = new Settings();
+			$settings = Settings::get_instance();
 
 		// Process the verified action with additional referer check
 			switch ($action) {

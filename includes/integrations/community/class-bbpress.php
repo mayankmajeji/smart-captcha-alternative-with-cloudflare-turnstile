@@ -37,7 +37,7 @@ class bbPress {
 			return;
 		}
 
-		$this->settings = new Settings();
+		$this->settings = Settings::get_instance();
 		$this->verify = new Verify();
 
 		// Register settings fields in centralized system

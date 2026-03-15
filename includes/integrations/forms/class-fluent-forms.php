@@ -27,7 +27,7 @@ class Fluent_Forms {
 			return;
 		}
 
-		$this->settings = new Settings();
+		$this->settings = Settings::get_instance();
 
 		// Register settings fields in centralized system
 		add_filter('smartct_settings', array( $this, 'register_settings_fields' ));
