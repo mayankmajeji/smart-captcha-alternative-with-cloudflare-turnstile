@@ -28,7 +28,7 @@ class Verify
 	 */
 	public function __construct()
 	{
-		$this->settings = new Settings();
+		$this->settings = Settings::get_instance();
 	}
 
 	/**
@@ -49,18 +49,13 @@ class Verify
 			return false;
 		}
 
-		$appearance_mode = $this->settings->get_option('smartct_appearance_mode', 'always');
-		if ($appearance_mode === 'interaction_only') {
-			$appearance_mode = 'interaction-only';
-		}
 		$response = wp_remote_post(
 			'https://challenges.cloudflare.com/turnstile/v0/siteverify',
 			array(
 				'body' => array(
-					'secret' => $secret_key,
+					'secret'   => $secret_key,
 					'response' => $token,
 					'remoteip' => \SmartCT\get_client_ip(),
-					'appearance' => $appearance_mode,
 				),
 			)
 		);
@@ -94,8 +89,7 @@ class Verify
 	private function log_error(string $message): void
 	{
 		if ($this->settings->get_option('smartct_debug_mode')) {
-			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log -- Intentional debug logging when debug mode is enabled
-			// error_log('[SmartCT] ' . $message);
+			error_log('[SmartCT] ' . $message); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional debug logging, guarded by debug mode option
 		}
 	}
 }

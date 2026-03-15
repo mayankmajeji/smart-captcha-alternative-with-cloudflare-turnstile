@@ -40,12 +40,15 @@ class Ajax_Handlers {
 			wp_die('Invalid nonce', 403);
 		}
 
+		// Sensitive keys that must never be included in an export.
+		$excluded = array( 'smartct_secret_key' );
+
 		// Get settings and only export new, prefixed keys
-		$settings = new Settings();
+		$settings = Settings::get_instance();
 		$all = $settings->get_settings();
 		$data = array();
 		foreach ( $all as $key => $val ) {
-			if ( strpos( (string) $key, 'smartct_') === 0 ) {
+			if ( strpos( (string) $key, 'smartct_') === 0 && ! in_array($key, $excluded, true) ) {
 				$data[ $key ] = $val;
 			}
 		}

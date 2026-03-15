@@ -20,7 +20,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 use SmartCT\Settings;
 
-$settings = new Settings();
+$settings = Settings::get_instance();
 $fields_structure = $settings->get_fields_structure();
 $values = $settings->get_settings();
 

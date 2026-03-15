@@ -1,18 +1,28 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+
 name: Deploy Assets to WordPress.org
+run-name: "${{ inputs.version }} | Assets"
+
 on:
-  push:
-    branches:
-      - main
+    workflow_dispatch:
+        inputs:
+            version:
+                description: "Plugin version (e.g., 1.1.2)"
+                required: true
+
 jobs:
-  trunk:
-    name: Deploy Assets
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: WordPress.org plugin asset/readme update
-        uses: 10up/action-wordpress-plugin-asset-update@stable
-        env:
-          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          ASSETS_DIR: .wordpress-org
-          IGNORE_OTHER_FILES: true
+    trunk:
+        name: Assets
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: WordPress.org plugin asset/readme update
+              uses: 10up/action-wordpress-plugin-asset-update@stable
+              env:
+                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+                  ASSETS_DIR: .wordpress-org
+                  IGNORE_OTHER_FILES: true

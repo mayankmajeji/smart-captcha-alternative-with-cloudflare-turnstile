@@ -85,7 +85,7 @@ class Init
 		$this->load_dependencies();
 
 		// Initialize components
-		$this->settings = new Settings();
+		$this->settings = Settings::get_instance();
 		$this->verify = new Verify();
 		$this->ajax_handlers = new Ajax_Handlers();
 
@@ -190,9 +190,18 @@ class Init
 			'smartct',
 			array(
 				'ajaxurl' => admin_url('admin-ajax.php'),
-				'nonce' => wp_create_nonce('smartct_verify_keys'),
-				'siteKey' => (new Settings())->get_option('smartct_site_key', ''),
-				'secretKey' => (new Settings())->get_option('smartct_secret_key', ''),
+				'nonce'   => wp_create_nonce('smartct_verify_keys'),
+				'siteKey' => $this->settings->get_option('smartct_site_key', ''),
+				'i18n'    => array(
+					'enterBothKeys'     => __('Please enter both Site Key and Secret Key.', 'smart-cloudflare-turnstile'),
+					'completeTurnstile' => __('Please complete the Turnstile challenge.', 'smart-cloudflare-turnstile'),
+					'keysVerified'      => __('Keys Verified', 'smart-cloudflare-turnstile'),
+					'keysNotVerified'   => __('Keys Not Verified', 'smart-cloudflare-turnstile'),
+					'verifySuccessMsg'  => __('Success! Turnstile is working correctly with your API keys.', 'smart-cloudflare-turnstile'),
+					'verifyFailed'      => __('Verification failed. Please try again.', 'smart-cloudflare-turnstile'),
+					'verifyKeysButton'  => __('Verify Keys', 'smart-cloudflare-turnstile'),
+					'removalFailed'     => __('Key removal failed.', 'smart-cloudflare-turnstile'),
+				),
 			)
 		);
 
@@ -355,7 +364,7 @@ class Init
 	public function activate(): void
 	{
 		// Initialize settings before using them
-		$this->settings = new Settings();
+		$this->settings = Settings::get_instance();
 
 		// Add default options
 		$this->settings->add_default_options();
@@ -384,10 +393,14 @@ class Init
 			wp_send_json_error(array('message' => __('You do not have permission to perform this action.', 'smart-cloudflare-turnstile')));
 		}
 
-		// Get the keys from the request
-		$site_key = sanitize_text_field(wp_unslash($_POST['site_key'] ?? ''));
-		$secret_key = sanitize_text_field(wp_unslash($_POST['secret_key'] ?? ''));
-		$token = sanitize_text_field(wp_unslash($_POST['response'] ?? ''));
+		// Keys submitted from the form (empty when defined via wp-config.php constants).
+		$posted_site_key   = sanitize_text_field(wp_unslash($_POST['site_key'] ?? ''));
+		$posted_secret_key = sanitize_text_field(wp_unslash($_POST['secret_key'] ?? ''));
+		$token             = sanitize_text_field(wp_unslash($_POST['response'] ?? ''));
+
+		// Fall back to stored/constant values when form fields are empty (constant-defined keys).
+		$site_key   = ! empty($posted_site_key)   ? $posted_site_key   : $this->settings->get_option('smartct_site_key', '');
+		$secret_key = ! empty($posted_secret_key) ? $posted_secret_key : $this->settings->get_option('smartct_secret_key', '');
 
 		if (empty($site_key) || empty($secret_key)) {
 			wp_send_json_error(array('message' => __('Please enter both Site Key and Secret Key.', 'smart-cloudflare-turnstile')));
@@ -396,19 +409,21 @@ class Init
 			wp_send_json_error(array('message' => __('Please complete the Turnstile challenge.', 'smart-cloudflare-turnstile')));
 		}
 
-		// Use the Verify class to check the token with the provided secret key
-		$verify = new Verify();
-		$is_valid = $verify->verify_token($token, $secret_key);
+		$is_valid = $this->verify->verify_token($token, $secret_key);
 
 		if ($is_valid) {
 			$current_settings = get_option('smartct_settings', array());
 			if (! is_array($current_settings)) {
 				$current_settings = array();
 			}
-			$current_settings['smartct_site_key'] = $site_key;
-			$current_settings['smartct_secret_key'] = $secret_key;
+			// Only persist keys that were explicitly submitted — do not overwrite constant-defined keys with empty strings.
+			if (! empty($posted_site_key)) {
+				$current_settings['smartct_site_key'] = $posted_site_key;
+			}
+			if (! empty($posted_secret_key)) {
+				$current_settings['smartct_secret_key'] = $posted_secret_key;
+			}
 			update_option('smartct_settings', $current_settings);
-
 			update_option('smartct_keys_verified', 1);
 
 			wp_send_json_success(array('message' => __('Keys verified successfully.', 'smart-cloudflare-turnstile')));

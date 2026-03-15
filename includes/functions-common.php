@@ -61,36 +61,31 @@ function is_comment_form_page(): bool {
 }
 
 /**
- * Get client IP address with proper fallback and sanitization
+ * Get client IP address
  *
- * This function checks multiple SERVER variables to determine the client's IP address,
- * with proper sanitization and validation. It handles proxy scenarios (HTTP_X_FORWARDED_FOR)
- * and direct connections (REMOTE_ADDR).
+ * Uses REMOTE_ADDR which is set by the web server and cannot be spoofed by
+ * the client. HTTP_CLIENT_IP and HTTP_X_FORWARDED_FOR are deliberately ignored
+ * as they are user-controlled headers and can be trivially forged.
+ *
+ * Use the `smartct_client_ip` filter to override this behaviour on sites
+ * running behind a trusted reverse proxy.
  *
  * @since 1.0.0
  * @return string Sanitized client IP address, or empty string if not available
  */
 function get_client_ip(): string {
-	$ip = '';
-
-	// Check HTTP_CLIENT_IP first (least common but highest priority)
-	if ( ! empty($_SERVER['HTTP_CLIENT_IP']) ) {
-		$ip = sanitize_text_field(wp_unslash($_SERVER['HTTP_CLIENT_IP']));
-	} elseif ( ! empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
-		// For proxied requests, get the first IP in the chain
-		$forwarded = sanitize_text_field(wp_unslash($_SERVER['HTTP_X_FORWARDED_FOR']));
-		// Handle comma-separated list of IPs
-		$ip_list = explode(',', $forwarded);
-		$ip = trim($ip_list[0]);
-	} elseif ( ! empty($_SERVER['REMOTE_ADDR']) ) {
-		$ip = sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR']));
-	}
+	$ip = ! empty($_SERVER['REMOTE_ADDR'])
+		? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR']))
+		: '';
 
 	/**
-	 * Filter the detected client IP address
+	 * Filter the detected client IP address.
+	 *
+	 * Sites behind a trusted reverse proxy can use this filter to read the
+	 * real client IP from a verified header (e.g. HTTP_X_FORWARDED_FOR).
 	 *
 	 * @since 1.0.0
-	 * @param string $ip The detected IP address
+	 * @param string $ip The IP address from REMOTE_ADDR.
 	 */
 	return apply_filters('smartct_client_ip', $ip);
 }

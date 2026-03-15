@@ -1,6 +1,7 @@
 # Directories
 .git/
 .github/
+.wordpress-org/
 node_modules/
 tests/
 bin/
@@ -42,11 +43,9 @@ phpstan.neon
 # Test files
 .phpunit.result.cache
 
-# Source files (keep compiled only)
+# Source SCSS files (keep compiled CSS only)
 *.scss
 *.sass
-!assets/css/turnstile.css
-!assets/css/admin.css
 
 # Documentation files
 CHANGELOG.md

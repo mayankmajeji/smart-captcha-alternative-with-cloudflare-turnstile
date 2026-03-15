@@ -21,12 +21,23 @@ class Turnstile {
 	 */
 	private $settings;
 
-	public function __construct() {
-		$this->settings = new Settings();
+	/**
+	 * Tracks whether wp_enqueue_scripts hooks have been registered to prevent
+	 * duplicate registrations when multiple Turnstile instances are created.
+	 *
+	 * @var bool
+	 */
+	private static bool $hooks_registered = false;
 
-		// Enqueue Turnstile script where needed
-		add_action('wp_enqueue_scripts', array( $this, 'enqueue_script' ));
-		add_action('admin_enqueue_scripts', array( $this, 'enqueue_script' ));
+	public function __construct() {
+		$this->settings = Settings::get_instance();
+
+		// Enqueue Turnstile script where needed — register once only
+		if ( ! static::$hooks_registered ) {
+			add_action('wp_enqueue_scripts', array( $this, 'enqueue_script' ));
+			add_action('admin_enqueue_scripts', array( $this, 'enqueue_script' ));
+			static::$hooks_registered = true;
+		}
 	}
 
 	/**
@@ -59,10 +70,14 @@ class Turnstile {
 			return;
 		}
 
-		$theme = $this->settings->get_option('smartct_theme', 'auto');
-		$size = $this->settings->get_option('smartct_widget_size', 'normal');
-		$language = $this->settings->get_option('smartct_language', 'auto');
+		$theme      = $this->settings->get_option('smartct_theme', 'auto');
+		$size       = $this->settings->get_option('smartct_widget_size', 'normal');
+		$language   = $this->settings->get_option('smartct_language', 'auto');
 		$appearance = $this->settings->get_option('smartct_appearance_mode', 'always');
+		// Cloudflare expects a hyphen; normalise legacy underscore value from DB.
+		if ($appearance === 'interaction_only') {
+			$appearance = 'interaction-only';
+		}
 
 		printf(
 			'<div class="cf-turnstile" data-sitekey="%s" data-theme="%s" data-size="%s" data-language="%s" data-appearance="%s" data-action="%s"></div>',
@@ -144,6 +159,10 @@ class Turnstile {
 		$language   = $this->settings->get_option('smartct_language', 'auto');
 		$size       = $this->settings->get_option('smartct_widget_size', 'normal');
 		$appearance = $this->settings->get_option('smartct_appearance_mode', 'always');
+		// Cloudflare expects a hyphen; normalise legacy underscore value from DB.
+		if ($appearance === 'interaction_only') {
+			$appearance = 'interaction-only';
+		}
 
 		// Allow pre-render hook
 		do_action('smartct_before_field', $args);
@@ -227,8 +246,8 @@ add_filter('smartct_settings', function ( $fields ) {
 		'description' => __('Choose how the Turnstile widget appears.', 'smart-cloudflare-turnstile'),
 		'type'        => 'select',
 		'options'     => array(
-			'always' => __('Always', 'smart-cloudflare-turnstile'),
-			'interaction_only' => __('Interaction Only', 'smart-cloudflare-turnstile'),
+			'always'           => __('Always', 'smart-cloudflare-turnstile'),
+			'interaction-only' => __('Interaction Only', 'smart-cloudflare-turnstile'),
 		),
 		'tab'         => 'turnstile_settings',
 		'section'     => 'widget_options',

@@ -20,7 +20,7 @@ if (! current_user_can('manage_options')) {
 
 use SmartCT\Settings;
 
-$settings      = new Settings();
+$settings      = Settings::get_instance();
 $values        = $settings->get_settings();
 $keys_verified = (int) get_option('smartct_keys_verified', 0) === 1;
 // Respect constants via get_option()

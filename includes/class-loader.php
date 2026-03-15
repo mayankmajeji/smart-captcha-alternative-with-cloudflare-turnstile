@@ -81,7 +81,7 @@ class Loader {
 	 */
 	public static function load_integrations(): void {
 		$integrations_dir = SMARTCT_PLUGIN_DIR . 'includes/integrations/';
-		$categories = array( '.', 'ecommerce', 'forms', 'others', 'community', 'membership', 'newsletters' );
+		$categories = array( '.', 'core', 'ecommerce', 'forms', 'others', 'community', 'membership', 'newsletters' );
 
 		if ( ! is_dir($integrations_dir) ) {
 			return;
@@ -96,10 +96,6 @@ class Loader {
 					$files = array_merge($files, $found);
 				}
 			}
-		}
-
-		if ( $files === false ) {
-			return;
 		}
 
 		foreach ( $files as $file ) {

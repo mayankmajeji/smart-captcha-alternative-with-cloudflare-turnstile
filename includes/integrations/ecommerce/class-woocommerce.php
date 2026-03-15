@@ -30,6 +30,13 @@ class Turnstile_WooCommerce
 	private Settings $settings;
 
 	/**
+	 * Whether login Turnstile has already been verified in this request
+	 *
+	 * @var bool
+	 */
+	private static bool $login_checked = false;
+
+	/**
 	 * Initialize the WooCommerce integration
 	 */
 	public function __construct()
@@ -40,7 +47,7 @@ class Turnstile_WooCommerce
 		}
 
 		// Initialize settings
-		$this->settings = new Settings();
+		$this->settings = Settings::get_instance();
 
 		// Register WooCommerce settings fields into centralized system (only when WooCommerce is active)
 		add_filter('smartct_settings', array($this, 'register_settings_fields'));
@@ -311,9 +318,6 @@ class Turnstile_WooCommerce
 		add_action('woocommerce_checkout_process', array($this, 'validate_checkout'));
 		add_action('woocommerce_store_api_checkout_update_order_from_request', array($this, 'validate_checkout_block'), 10, 2);
 
-		// Clear session after order processing
-		add_action('woocommerce_checkout_order_processed', array($this, 'clear_checkout_session'));
-		add_action('woocommerce_store_api_checkout_order_processed', array($this, 'clear_checkout_session'));
 	}
 
 	/**
@@ -454,8 +458,11 @@ class Turnstile_WooCommerce
 
 	/**
 	 * Validate checkout block
+	 *
+	 * @param \WC_Order        $order   The WooCommerce order.
+	 * @param \WP_REST_Request $request The REST API request.
 	 */
-	public function validate_checkout_block($order, $request): void
+	public function validate_checkout_block(\WC_Order $order, \WP_REST_Request $request): void
 	{
 		if ($this->should_skip_turnstile()) {
 			return;
@@ -469,6 +476,9 @@ class Turnstile_WooCommerce
 
 	/**
 	 * Validate login
+	 *
+	 * @param \WP_User|\WP_Error|null $user WP_User, WP_Error, or null from previous authenticate callbacks.
+	 * @return \WP_User|\WP_Error|null
 	 */
 	public function validate_login($user)
 	{
@@ -478,8 +488,8 @@ class Turnstile_WooCommerce
 			return $user;
 		}
 
-		// Skip if already validated
-		if (isset($_SESSION['turnstile_login_checked'])) {
+		// Skip if already validated in this request (authenticate filter can fire more than once)
+		if (static::$login_checked) {
 			return $user;
 		}
 
@@ -488,12 +498,17 @@ class Turnstile_WooCommerce
 			return new \WP_Error('turnstile_error', __('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'));
 		}
 
-		$_SESSION['turnstile_login_checked'] = true;
+		static::$login_checked = true;
 		return $user;
 	}
 
 	/**
 	 * Validate registration
+	 *
+	 * @param mixed  $errors   Validation errors object.
+	 * @param string $username Username.
+	 * @param string $email    Email address.
+	 * @return mixed Validation errors object.
 	 */
 	public function validate_register($errors, $username, $email)
 	{
@@ -506,6 +521,10 @@ class Turnstile_WooCommerce
 
 	/**
 	 * Validate password reset
+	 *
+	 * @param \WP_Error        $errors Errors object.
+	 * @param \WP_User|false   $user   User object or false.
+	 * @return \WP_Error
 	 */
 	public function validate_reset($errors, $user)
 	{
@@ -518,32 +537,14 @@ class Turnstile_WooCommerce
 
 	/**
 	 * Validate pay order
+	 *
+	 * @param \WC_Order $order The WooCommerce order.
 	 */
-	public function validate_pay_order($order)
+	public function validate_pay_order(\WC_Order $order): void
 	{
 		$turnstile = new Turnstile();
 		if (! $turnstile->verify()) {
 			wc_add_notice(__('Please complete the Turnstile verification.', 'smart-cloudflare-turnstile'), 'error');
-		}
-	}
-
-	/**
-	 * Clear checkout session
-	 */
-	public function clear_checkout_session(): void
-	{
-		if (isset($_SESSION['turnstile_checkout_checked'])) {
-			unset($_SESSION['turnstile_checkout_checked']);
-		}
-	}
-
-	/**
-	 * Clear login session
-	 */
-	public function clear_login_session(): void
-	{
-		if (isset($_SESSION['turnstile_login_checked'])) {
-			unset($_SESSION['turnstile_login_checked']);
 		}
 	}
 

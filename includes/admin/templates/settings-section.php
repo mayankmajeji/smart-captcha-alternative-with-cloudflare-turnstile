@@ -17,7 +17,7 @@ use SmartCT\Settings;
 require_once SMARTCT_PLUGIN_DIR . 'includes/settings/field-renderer.php';
 
 $tab = $tab ?? '';
-$settings = $settings ?? new Settings();
+$settings = $settings ?? Settings::get_instance();
 $fields_structure = $fields_structure ?? $settings->get_fields_structure();
 $values = $values ?? $settings->get_settings();
 $fields = $fields_structure[ $tab ] ?? array();

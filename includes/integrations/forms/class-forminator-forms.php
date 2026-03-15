@@ -26,7 +26,7 @@ class Forminator_Forms {
 		if ( ! $this->is_active() ) {
 		return;
 		}
-		$this->settings = new Settings();
+		$this->settings = Settings::get_instance();
 
 		// Settings
 		add_filter('smartct_settings', array( $this, 'register_settings_fields' ));
