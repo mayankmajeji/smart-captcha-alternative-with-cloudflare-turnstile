@@ -1,8 +1,10 @@
 // Card styles for SmartCT
 .smartct-card {
+
 	@include card;
 	text-align: left;
 }
+
 .smartct-card h2 {
 	margin-top: 0;
 	font-size: 1.3em;
@@ -11,6 +13,7 @@
 	color: #222;
 	letter-spacing: 0.01em;
 }
+
 .smartct-card + .smartct-card {
 	margin-top: 32px;
 }

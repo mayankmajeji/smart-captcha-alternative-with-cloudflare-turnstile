@@ -26,8 +26,8 @@
 }
 
 /* Fix Turnstile widget width on login form */
-body.login form#loginform .smartct-core-form,
-.login form .smartct-core-form {
+.login form .smartct-core-form,
+body.login form#loginform .smartct-core-form {
 	display: flex;
 	justify-content: center;
 	margin: 1em 0;

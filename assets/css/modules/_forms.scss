@@ -2,30 +2,37 @@
 .form-table th {
 	width: 200px;
 }
+
 .form-table td {
 	padding: 15px 10px;
 }
+
 .form-table .description {
 	margin-top: 5px;
 	color: $color-muted;
 }
+
 .form-table input[type="checkbox"] {
 	margin-top: 2px;
 }
+
 .form-table select {
 	min-width: 200px;
 }
+
 .form-table input[type="text"],
 .form-table input[type="password"] {
 	width: 100%;
 	max-width: 400px;
 }
+
 .smartct-verification-status {
 	margin: 10px 0;
 	padding: 10px;
 	background: #f8f9fa;
 	border: 1px solid #ddd;
 	border-radius: 4px;
+
 	.status-indicator {
 		display: inline-block;
 		padding: 4px 8px;
@@ -33,28 +40,34 @@
 		border-radius: 3px;
 		font-weight: 500;
 	}
+
 	.status-indicator.verified {
 		background: #d4edda;
 		color: #155724;
 		border: 1px solid #c3e6cb;
 	}
+
 	.status-indicator.unverified {
 		background: #fff3cd;
 		color: $color-warning;
 		border: 1px solid #ffeeba;
 	}
+
 	.spinner {
 		float: none;
 		margin: 4px 10px;
 		visibility: hidden;
 	}
+
 	.spinner.is-active {
 		visibility: visible;
 	}
+
 	.button {
 		margin-right: 10px;
 	}
 }
+
 .smartct-field-verified {
 	background-color: #f8f8f8 !important;
 	border-color: #ddd !important;
@@ -62,16 +75,19 @@
 	cursor: not-allowed !important;
 	opacity: 0.8;
 	pointer-events: none !important;
+
 	&:focus {
 		box-shadow: none !important;
 		border-color: #ddd !important;
 	}
 }
+
 .smartct-field-verified + .description {
 	color: $color-muted;
 	font-style: italic;
 	margin-top: 0.5em;
 }
+
 .smartct-spinner {
 	display: inline-block;
 	width: 20px;
@@ -83,10 +99,13 @@
 	vertical-align: middle;
 	margin-left: 10px;
 }
+
 @keyframes smartct-spin {
+
 	0% {
 		transform: rotate(0deg);
 	}
+
 	100% {
 		transform: rotate(360deg);
 	}
